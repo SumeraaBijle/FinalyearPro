@@ -1,5 +1,8 @@
 import React from 'react'
 import { Search, ShoppingCart, User, Heart, Filter } from 'lucide-react'
+import AuthForm from '../login/AuthForm'
+import Link from 'next/link';
+
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -37,8 +40,10 @@ export default function AmbikaNoveltySite() {
               <span className="sr-only">Cart</span>
             </Button>
             <Button variant="ghost" size="icon">
-              <User className="h-5 w-5" />
+            <Link href="/login" passHref>
+                          <User className="h-5 w-5" />
               <span className="sr-only">Profile</span>
+            </Link>
             </Button>
             <Button variant="ghost" size="icon">
               <Heart className="h-5 w-5" />
