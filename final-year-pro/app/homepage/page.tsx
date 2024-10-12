@@ -133,7 +133,7 @@ export default function AmbikaNoveltySite() {
         <section className="mb-12">
           <h2 className="text-3xl font-bold text-center mb-4">Latest Arrivals</h2>
           <p className="text-center text-gray-600 mb-8">Discover our newest stationery and gift items!</p>
-          <Button className="block mx-auto">Shop Now</Button>
+          <Link href="/collection"><Button className="block mx-auto">Shop Now</Button></Link>
         </section>
 
         {/* Add your product grid or other content here */}
