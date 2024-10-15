@@ -1,8 +1,28 @@
 'use client'
 
-import { useState } from 'react'
+import React, { useState } from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
+import { Search, ShoppingCart, User, Heart, Filter } from 'lucide-react'
 
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+} from "@/components/ui/navigation-menu"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 
 const products = [
   { id: 1, name: 'Hotwheels', price: 1499, category: 'Boys', image: '/images/boys-tshirt.jpg' },
@@ -23,8 +43,8 @@ export default function ProductPage() {
   const [sortOrder, setSortOrder] = useState('default')
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
 
-  const addToCart = (product) => {
-    setCart([...cart, product])
+  const addToCart = (productId) => {
+    setCart(prevCart => [...prevCart, productId])
   }
 
   const toggleFilter = (category) => {
@@ -45,34 +65,53 @@ export default function ProductPage() {
     return 0
   })
 
-  
   const formatPrice = (price) => {
     return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(price)
   }
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-gray-50">
       <header className="bg-white shadow-sm">
-        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <h1 className="text-2xl font-bold">Our Products</h1>
-          <button className="flex items-center gap-2 px-4 py-2 border rounded-md">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-5 h-5">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-            </svg>
-            <span className="sr-only">Cart</span>
-            <span aria-live="polite">{cart.length} items</span>
-          </button>
+        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
+          <h1 className="text-2xl font-bold text-gray-800">Ambika Novelty</h1>
+          <div className="flex items-center space-x-4">
+            <Input type="search" placeholder="Search..." className="w-64" />
+            <Button variant="ghost" size="icon">
+              <Search className="h-5 w-5" />
+              <span className="sr-only">Search</span>
+            </Button>
+            <Button variant="ghost" size="icon" className="relative">
+              <ShoppingCart className="h-5 w-5" />
+              {cart.length > 0 && (
+                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                  {cart.length}
+                </span>
+              )}
+              <span className="sr-only">Cart</span>
+            </Button>
+            <Button variant="ghost" size="icon">
+              <Link href="/login" passHref>
+                <User className="h-5 w-5" />
+                <span className="sr-only">Profile</span>
+              </Link>
+            </Button>
+            <Button variant="ghost" size="icon">
+              <Heart className="h-5 w-5" />
+              <span className="sr-only">Liked Items</span>
+            </Button>
+          </div>
         </div>
       </header>
+
+      
+
       <main className="container mx-auto px-4 py-8">
         <h2 className="text-3xl font-bold mb-8 text-center">Explore Our Collection</h2>
         <div className="flex flex-col md:flex-row gap-8">
           <aside className="w-full md:w-64">
             <div className="bg-white p-4 rounded-lg shadow">
               <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-5 h-5">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
-                </svg>
+                <Filter className="w-5 h-5" />
                 Filters
               </h3>
               <div className="space-y-4">
@@ -95,48 +134,49 @@ export default function ProductPage() {
           </aside>
           <div className="flex-1">
             <div className="mb-4 flex justify-end relative">
-              <button
+              <Button
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                className="px-4 py-2 border rounded-md flex items-center gap-2"
+                variant="outline"
+                className="px-4 py-2 flex items-center gap-2"
               >
                 Sort by
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-4 h-4">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                 </svg>
-              </button>
+              </Button>
               {isDropdownOpen && (
                 <div className="absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
                   <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
-                    <button
+                    <Button
                       onClick={() => {
                         setSortOrder('default')
                         setIsDropdownOpen(false)
                       }}
+                      variant="ghost"
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 w-full text-left"
-                      role="menuitem"
                     >
                       Default
-                    </button>
-                    <button
+                    </Button>
+                    <Button
                       onClick={() => {
                         setSortOrder('priceLowToHigh')
                         setIsDropdownOpen(false)
                       }}
+                      variant="ghost"
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 w-full text-left"
-                      role="menuitem"
                     >
                       Price: Low to High
-                    </button>
-                    <button
+                    </Button>
+                    <Button
                       onClick={() => {
                         setSortOrder('priceHighToLow')
                         setIsDropdownOpen(false)
                       }}
+                      variant="ghost"
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 w-full text-left"
-                      role="menuitem"
                     >
                       Price: High to Low
-                    </button>
+                    </Button>
                   </div>
                 </div>
               )}
@@ -155,12 +195,12 @@ export default function ProductPage() {
                     <h3 className="text-lg font-semibold">{product.name}</h3>
                     <p className="text-2xl font-bold mt-2">{formatPrice(product.price)}</p>
                     <p className="text-sm text-gray-500">{product.category}</p>
-                    <button
-                      onClick={() => addToCart(product)}
-                      className="mt-4 w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors"
+                    <Button
+                      onClick={() => addToCart(product.id)}
+                      className="mt-4 w-full"
                     >
                       Add to Cart
-                    </button>
+                    </Button>
                   </div>
                 </div>
               ))}
