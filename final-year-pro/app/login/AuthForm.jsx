@@ -3,20 +3,45 @@ import styles from '../../styles/AuthForm.module.css';
 
 export default function AuthForm() {
   const [isRegister, setIsRegister] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [transitionState, setTransitionState] = useState('');
 
   useEffect(() => {
-    // Set the transition state when changing between login and register
     if (isRegister) {
       setTransitionState('enter');
-      const timeout = setTimeout(() => setTransitionState(''), 500); // Duration matches the CSS transition duration
+      const timeout = setTimeout(() => setTransitionState(''), 500);
       return () => clearTimeout(timeout);
     } else {
       setTransitionState('exit');
-      const timeout = setTimeout(() => setTransitionState(''), 500); // Duration matches the CSS transition duration
+      const timeout = setTimeout(() => setTransitionState(''), 500);
       return () => clearTimeout(timeout);
     }
   }, [isRegister]);
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    const response = await fetch(isRegister ? '/api/auth/register' : '/api/auth/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email, password }),
+    });
+
+    // Check for response errors
+    if (!response.ok) {
+      const errorText = await response.text(); // Get the response as text
+      console.error('Error:', errorText); // Log the error text
+      return; // Early exit on error
+    }
+
+    const data = await response.json();
+    console.log(data); // Handle the response
+
+    // Additional logic for successful login or registration
+  };
 
   return (
     <div className={styles.container}>
@@ -30,9 +55,21 @@ export default function AuthForm() {
             </div>
             <div className={styles.signin}>
               <h2>Sign In</h2>
-              <form>
-                <input type="email" placeholder="Email" />
-                <input type="password" placeholder="Password" />
+              <form onSubmit={handleSubmit}>
+                <input
+                  type="email"
+                  placeholder="Email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+                <input
+                  type="password"
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
                 <div>
                   <input type="checkbox" id="rememberMe" />
                   <label htmlFor="rememberMe">Remember me</label>
@@ -46,10 +83,22 @@ export default function AuthForm() {
           <div className={styles.register}>
             <div className={styles.createAccount}>
               <h2>Create Account</h2>
-              <form>
-                <input type="text" placeholder="Name" />
-                <input type="email" placeholder="Email" />
-                <input type="password" placeholder="Password" />
+              <form onSubmit={handleSubmit}>
+                <input
+                  type="text"
+                  placeholder="Name"
+                  required
+                />
+                <input
+                  type="email"
+                  placeholder="Email"
+                  required
+                />
+                <input
+                  type="password"
+                  placeholder="Password"
+                  required
+                />
                 <button type="submit">REGISTER</button>
               </form>
             </div>
