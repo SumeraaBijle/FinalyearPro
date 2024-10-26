@@ -7,22 +7,7 @@ import { Search, ShoppingCart, User, Heart, Filter } from 'lucide-react'
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-} from "@/components/ui/navigation-menu"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+import { useCart } from '../contexts/cartContext'
 
 const products = [
   { id: 1, name: 'Hotwheels', price: 1499, category: 'Boys', image: '/images/boys-tshirt.jpg' },
@@ -38,14 +23,10 @@ const products = [
 const categories = ['Boys', 'Girls', 'Office Gifting', 'Stationery']
 
 export default function ProductPage() {
-  const [cart, setCart] = useState([])
   const [filters, setFilters] = useState([])
   const [sortOrder, setSortOrder] = useState('default')
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
-
-  const addToCart = (productId) => {
-    setCart(prevCart => [...prevCart, productId])
-  }
+  const { cart, addToCart } = useCart()
 
   const toggleFilter = (category) => {
     if (filters.includes(category)) {
@@ -81,13 +62,15 @@ export default function ProductPage() {
               <span className="sr-only">Search</span>
             </Button>
             <Button variant="ghost" size="icon" className="relative">
-              <ShoppingCart className="h-5 w-5" />
-              {cart.length > 0 && (
-                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
-                  {cart.length}
-                </span>
-              )}
-              <span className="sr-only">Cart</span>
+              <Link href="/cart" passHref>
+                <ShoppingCart className="h-5 w-5" />
+                {cart.length > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                    {cart.reduce((total, item) => total + item.quantity, 0)}
+                  </span>
+                )}
+                <span className="sr-only">Cart</span>
+              </Link>
             </Button>
             <Button variant="ghost" size="icon">
               <Link href="/login" passHref>
@@ -102,8 +85,6 @@ export default function ProductPage() {
           </div>
         </div>
       </header>
-
-      
 
       <main className="container mx-auto px-4 py-8">
         <h2 className="text-3xl font-bold mb-8 text-center">Explore Our Collection</h2>
@@ -196,7 +177,7 @@ export default function ProductPage() {
                     <p className="text-2xl font-bold mt-2">{formatPrice(product.price)}</p>
                     <p className="text-sm text-gray-500">{product.category}</p>
                     <Button
-                      onClick={() => addToCart(product.id)}
+                      onClick={() => addToCart(product)}
                       className="mt-4 w-full"
                     >
                       Add to Cart
