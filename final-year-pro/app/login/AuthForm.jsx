@@ -1,8 +1,11 @@
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/router'; // Import useRouter
 import styles from '../../styles/AuthForm.module.css';
 
 export default function AuthForm() {
+  const router = useRouter(); // Initialize router
   const [isRegister, setIsRegister] = useState(false);
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [transitionState, setTransitionState] = useState('');
@@ -22,25 +25,31 @@ export default function AuthForm() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
+    const body = isRegister ? { name, email, password } : { email, password };
+
     const response = await fetch(isRegister ? '/api/auth/register' : '/api/auth/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify(body),
     });
 
-    // Check for response errors
     if (!response.ok) {
-      const errorText = await response.text(); // Get the response as text
-      console.error('Error:', errorText); // Log the error text
-      return; // Early exit on error
+      const errorText = await response.text();
+      console.error('Error:', errorText);
+      return;
     }
 
     const data = await response.json();
-    console.log(data); // Handle the response
+    console.log(data);
 
-    // Additional logic for successful login or registration
+    // Navigate to appropriate page based on action
+    if (isRegister) {
+      router.push('/login'); // Redirect to login after registration
+    } else {
+      router.push('/homepage'); // Redirect to homepage after login
+    }
   };
 
   return (
@@ -87,16 +96,22 @@ export default function AuthForm() {
                 <input
                   type="text"
                   placeholder="Name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
                   required
                 />
                 <input
                   type="email"
                   placeholder="Email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   required
                 />
                 <input
                   type="password"
                   placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   required
                 />
                 <button type="submit">REGISTER</button>
