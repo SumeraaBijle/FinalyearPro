@@ -1,15 +1,12 @@
-// app/api/auth/register/route.js
-import clientPromise from '../../../../lib/mongodb';
+import clientPromise from '../../../../lib/mongodb';  
 import bcrypt from 'bcryptjs';
 
 export async function POST(req) {
   const { name, email, password } = await req.json();
-  const client = await clientPromise;
-  const db = client.db('myWEBSITE'); // Replace 'yourDatabaseName' with the actual database name
+  const client = await clientPromise;  
+  const db = client.db('User'); 
 
-  // Check if the user already exists
-  const existingUser = await db.collection('Users').findOne({ email });
-  console.log('Checking existing user:', existingUser); // Log for debugging
+  const existingUser = await db.collection('register').findOne({ email }); 
   if (existingUser) {
     return new Response(
       JSON.stringify({ message: 'User already exists' }),
@@ -17,10 +14,10 @@ export async function POST(req) {
     );
   }
 
-  // Hash the password and create a new user
   const hashedPassword = await bcrypt.hash(password, 10);
   const newUser = { name, email, password: hashedPassword };
-  await db.collection('Users').insertOne(newUser);
+
+  await db.collection('register').insertOne(newUser); 
 
   return new Response(
     JSON.stringify({ message: 'User registered successfully!' }),
