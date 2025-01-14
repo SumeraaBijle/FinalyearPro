@@ -3,7 +3,7 @@
 import React, { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Search, ShoppingCart, User, Heart, Filter } from 'lucide-react'
+import { Search, ShoppingCart, User, Heart, CheckCircle } from 'lucide-react'
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -25,18 +25,34 @@ const categories = ['Boys', 'Girls', 'Office Gifting', 'Stationery']
 export default function ProductPage() {
   const [filters, setFilters] = useState([])
   const [sortOrder, setSortOrder] = useState('default')
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+  const [wishlist, setWishlist] = useState([])
   const { cart, addToCart } = useCart()
+  const [popup, setPopup] = useState({ visible: false, message: '' })
 
-  const toggleFilter = (category) => {
-    if (filters.includes(category)) {
-      setFilters(filters.filter(f => f !== category))
+  const handleFilterChange = (category) => {
+    if (category === 'All') {
+      setFilters([])
     } else {
-      setFilters([...filters, category])
+      setFilters([category])
     }
   }
 
-  const filteredProducts = products.filter(product => 
+  const toggleWishlist = (product) => {
+    if (wishlist.includes(product.id)) {
+      setWishlist(wishlist.filter(id => id !== product.id))
+      showPopup('Item removed from your wishlist.')
+    } else {
+      setWishlist([...wishlist, product.id])
+      showPopup('Item added to your wishlist.')
+    }
+  }
+
+  const showPopup = (message) => {
+    setPopup({ visible: true, message })
+    setTimeout(() => setPopup({ visible: false, message: '' }), 3000)
+  }
+
+  const filteredProducts = products.filter(product =>
     filters.length === 0 || filters.includes(product.category)
   )
 
@@ -51,7 +67,15 @@ export default function ProductPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 relative">
+      {/* Popup Notification */}
+      {popup.visible && (
+        <div className="fixed bottom-4 right-4 bg-green-500 text-white px-4 py-2 rounded shadow-lg flex items-center gap-2 z-50">
+          <CheckCircle className="h-5 w-5" />
+          <span>{popup.message}</span>
+        </div>
+      )}
+
       <header className="bg-white shadow-sm">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <h1 className="text-2xl font-bold text-gray-800">Ambika Novelty</h1>
@@ -78,115 +102,70 @@ export default function ProductPage() {
                 <span className="sr-only">Profile</span>
               </Link>
             </Button>
-            <Button variant="ghost" size="icon">
-              <Heart className="h-5 w-5" />
-              <span className="sr-only">Liked Items</span>
-            </Button>
           </div>
         </div>
       </header>
 
       <main className="container mx-auto px-4 py-8">
-        <h2 className="text-3xl font-bold mb-8 text-center">Explore Our Collection</h2>
-        <div className="flex flex-col md:flex-row gap-8">
-          <aside className="w-full md:w-64">
-            <div className="bg-white p-4 rounded-lg shadow">
-              <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-                <Filter className="w-5 h-5" />
-                Filters
-              </h3>
-              <div className="space-y-4">
-                {categories.map(category => (
-                  <div key={category} className="flex items-center space-x-2">
-                    <input
-                      type="checkbox"
-                      id={category}
-                      checked={filters.includes(category)}
-                      onChange={() => toggleFilter(category)}
-                      className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+        <div className="flex items-center justify-between mb-8">
+          {/* Filter Dropdown */}
+          <select
+            value={filters[0] || 'All'}
+            onChange={(e) => handleFilterChange(e.target.value)}
+            className="border border-gray-300 rounded p-2"
+          >
+            <option value="All">Filter By</option>
+            {categories.map(category => (
+              <option key={category} value={category}>{category}</option>
+            ))}
+          </select>
+
+          {/* Sort Dropdown */}
+          <select
+            value={sortOrder}
+            onChange={(e) => setSortOrder(e.target.value)}
+            className="border border-gray-300 rounded p-2"
+          >
+            <option value="default">Sort By</option>
+            <option value="priceLowToHigh">Price: Low to High</option>
+            <option value="priceHighToLow">Price: High to Low</option>
+          </select>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {sortedProducts.map(product => (
+            <div key={product.id} className="bg-white rounded-lg shadow-md overflow-hidden">
+              <Image
+                src={product.image}
+                alt={product.name}
+                width={400}
+                height={400}
+                className="w-full h-64 object-cover"
+              />
+              <div className="p-4">
+                <h3 className="text-lg font-medium text-gray-800">{product.name}</h3>
+                <p className="text-sm text-gray-500">{formatPrice(product.price)}</p>
+                <div className="mt-4 flex items-center justify-between">
+                  <button
+                    onClick={() => addToCart(product)}
+                    className="bg-black text-white py-2 px-4 rounded hover:bg-gray-800"
+                  >
+                    Add to Cart
+                  </button>
+                  <button
+                    onClick={() => toggleWishlist(product)}
+                    className="text-gray-500 hover:text-red-500"
+                  >
+                    <Heart
+                      className={`h-6 w-6 ${
+                        wishlist.includes(product.id) ? 'fill-current text-red-500' : ''
+                      }`}
                     />
-                    <label htmlFor={category} className="text-sm font-medium text-gray-700">
-                      {category}
-                    </label>
-                  </div>
-                ))}
+                  </button>
+                </div>
               </div>
             </div>
-          </aside>
-          <div className="flex-1">
-            <div className="mb-4 flex justify-end relative">
-              <Button
-                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                variant="outline"
-                className="px-4 py-2 flex items-center gap-2"
-              >
-                Sort by
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-4 h-4">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </Button>
-              {isDropdownOpen && (
-                <div className="absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
-                  <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
-                    <Button
-                      onClick={() => {
-                        setSortOrder('default')
-                        setIsDropdownOpen(false)
-                      }}
-                      variant="ghost"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 w-full text-left"
-                    >
-                      Default
-                    </Button>
-                    <Button
-                      onClick={() => {
-                        setSortOrder('priceLowToHigh')
-                        setIsDropdownOpen(false)
-                      }}
-                      variant="ghost"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 w-full text-left"
-                    >
-                      Price: Low to High
-                    </Button>
-                    <Button
-                      onClick={() => {
-                        setSortOrder('priceHighToLow')
-                        setIsDropdownOpen(false)
-                      }}
-                      variant="ghost"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 w-full text-left"
-                    >
-                      Price: High to Low
-                    </Button>
-                  </div>
-                </div>
-              )}
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {sortedProducts.map(product => (
-                <div key={product.id} className="bg-white rounded-lg shadow-md overflow-hidden">
-                  <Image
-                    src={product.image}
-                    alt={product.name}
-                    width={300}
-                    height={300}
-                    className="w-full h-48 object-cover"
-                  />
-                  <div className="p-4">
-                    <h3 className="text-lg font-semibold">{product.name}</h3>
-                    <p className="text-2xl font-bold mt-2">{formatPrice(product.price)}</p>
-                    <p className="text-sm text-gray-500">{product.category}</p>
-                    <Button
-                      onClick={() => addToCart(product)}
-                      className="mt-4 w-full"
-                    >
-                      Add to Cart
-                    </Button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+          ))}
         </div>
       </main>
     </div>
