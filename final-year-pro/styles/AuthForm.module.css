@@ -1,125 +1,125 @@
 .container {
-    display: flex;
-    height: 100vh;
-    justify-content: center;
-    align-items: center;
-    background-color: #f0f0f0;
+  display: flex;
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+  background-color: #f0f0f0;
 }
 
 .box {
-    display: flex;
-    width: 900px;
-    height: 500px;
-    background-color: white;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    transition: opacity 3s ease, transform 2s ease; /* Add transition */
+  display: flex;
+  width: 900px;
+  height: 500px;
+  background-color: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  transition: opacity 3s ease, transform 2s ease; /* Add transition */
 }
 
 .box.enter {
-    opacity: 0;
-    transform: translateY(-20px); /* Move it slightly up */
+  opacity: 0;
+  transform: translateY(-20px); /* Move it slightly up */
 }
 
 .box.enter-active {
-    opacity: 1;
-    transform: translateY(0); /* Move it back to its original position */
+  opacity: 1;
+  transform: translateY(0); /* Move it back to its original position */
 }
 
 .box.exit {
-    opacity: 1;
-    transform: translateY(0); /* Initial state for exiting */
+  opacity: 1;
+  transform: translateY(0); /* Initial state for exiting */
 }
 
 .box.exit-active {
-    opacity: 0;
-    transform: translateY(20px); /* Move it slightly down */
+  opacity: 0;
+  transform: translateY(20px); /* Move it slightly down */
 }
 
 .login,
 .register {
-    display: flex;
-    width: 100%;
+  display: flex;
+  width: 100%;
 }
 
 .welcome,
 .helloAgain {
-    background-color: #833488;
-    color: white;
-    width: 50%;
-    display:flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
+  background-color: #833488;
+  color: white;
+  width: 50%;
+  display:flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
 }
 
 .welcome h1,
 .helloAgain h1 {
-    font-size: 2.5rem;
+  font-size: 2.5rem;
 }
 
 .welcome p,
 .helloAgain p {
-    margin-top: 10px;
-    font-size: 1.2rem;
+  margin-top: 10px;
+  font-size: 1.2rem;
 }
 
 .welcome button,
 .helloAgain button {
-    margin-top: 20px;
-    padding: 10px 20px;
-    background-color: white;
-    color: #833488;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: white;
+  color: #833488;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
 .signin,
 .createAccount {
-    padding: 40px;
-    width: 50%;
+  padding: 40px;
+  width: 50%;
 }
 
 .signin h2,
 .createAccount h2 {
-    font-size: 1.8rem;
-    margin-bottom: 20px;
+  font-size: 1.8rem;
+  margin-bottom: 20px;
 }
 
 .signin form,
 .createAccount form {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .signin input,
 .createAccount input {
-    padding: 10px;
-    margin-bottom: 15px;
-    font-size: 1rem;
-    border: 1px solid #ddd;
-    border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 15px;
+  font-size: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
 }
 
 .signin button,
 .createAccount button {
-    padding: 10px;
-    background-color: #833488;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+  padding: 10px;
+  background-color: #833488;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
 .signin a {
-    margin-top: 10px;
-    color: #833488;
-    text-decoration: none;
+  margin-top: 10px;
+  color: #833488;
+  text-decoration: none;
 }
 
 .signin a:hover {
-    text-decoration: underline;
+  text-decoration: underline;
 }

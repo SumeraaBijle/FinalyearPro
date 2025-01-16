@@ -1,8 +1,6 @@
-import React, { JSX } from 'react'
-import { Search, ShoppingCart, User, Heart, Filter } from 'lucide-react'
-import AuthForm from '../login/AuthForm'
-import Link from 'next/link';
-
+import React from 'react'
+import { Search, ShoppingCart, User, Heart, Filter, Shield } from 'lucide-react'
+import Link from 'next/link'
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -28,7 +26,12 @@ export default function AmbikaNoveltySite() {
     <div className="min-h-screen bg-gray-50">
       <header className="bg-white shadow-sm">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <h1 className="text-2xl font-bold text-gray-800">Ambika Novelty</h1>
+        <Link href="/homepage" passHref>
+  <h1 className="text-2xl font-bold text-gray-800 cursor-pointer">
+    Ambika Novelty
+  </h1>
+</Link>
+
           <div className="flex items-center space-x-4">
             <Input type="search" placeholder="Search..." className="w-64" />
             <Button variant="ghost" size="icon">
@@ -39,16 +42,22 @@ export default function AmbikaNoveltySite() {
               <ShoppingCart className="h-5 w-5" />
               <span className="sr-only">Cart</span>
             </Button>
-            <Button variant="ghost" size="icon">
             <Link href="/login" passHref>
-                          <User className="h-5 w-5" />
-              <span className="sr-only">Profile</span>
+              <Button variant="ghost" size="icon">
+                <User className="h-5 w-5" />
+                <span className="sr-only">Profile</span>
+              </Button>
             </Link>
-            </Button>
             <Button variant="ghost" size="icon">
               <Heart className="h-5 w-5" />
-              <span className="sr-only">Liked Items</span>
+              <span className="sr-only">Wishlist</span>
             </Button>
+            <Link href="/admin" passHref>
+              <Button variant="ghost" size="icon">
+                <Shield className="h-5 w-5 text-red-600" />
+                <span className="sr-only">Admin Page</span>
+              </Button>
+            </Link>
           </div>
         </div>
       </header>
@@ -133,71 +142,89 @@ export default function AmbikaNoveltySite() {
         <section className="mb-12">
           <h2 className="text-3xl font-bold text-center mb-4">Latest Arrivals</h2>
           <p className="text-center text-gray-600 mb-8">Discover our newest stationery and gift items!</p>
-          <Link href="/products"><Button className="block mx-auto">Shop Now</Button></Link>
-        </section>
 
-        {/* Add your product grid or other content here */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {[
+              { id: 1, name: "Notebook", price: "$5", image: "/images/notebook.jpg" },
+              { id: 2, name: "Gift Box", price: "$15", image: "/images/giftbox.jpg" },
+              { id: 3, name: "Planner", price: "$10", image: "/images/planner.jpg" },
+              { id: 4, name: "Stationery Kit", price: "$20", image: "/images/stationery.jpg" },
+            ].map((product) => (
+              <div key={product.id} className="bg-white shadow-md rounded-lg overflow-hidden">
+                <img
+                  src={product.image}
+                  alt={product.name}
+                  className="w-full h-48 object-cover"
+                />
+                <div className="p-4">
+                  <h3 className="text-lg font-bold">{product.name}</h3>
+                  <p className="text-gray-600">{product.price}</p>
+                  <button className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700">
+                    Add to Cart
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
       </main>
 
       <footer className="bg-white py-12 border-t border-gray-200">
-      <div className="container mx-auto px-6">
-        
-      <section className="py-16 px-6 bg-gray-200">
-        <div className="max-w-7xl mx-auto text-center">
-          <h2 className="text-3xl font-bold mb-4">Subscribe now & get 20% off</h2>
-          <p className="mb-6">Stay updated with our latest products and offers.</p>
-          <div className="flex justify-center">
-            <input
-              type="email"
-              placeholder="Enter your email"
-              className="p-2 border border-gray-400 rounded-l-md focus:outline-none "
-            />
-            <button className="bg-red-500 text-white p-2 rounded-r-md hover:bg-red-700">
-              Subscribe
-            </button>
-          </div>
-        </div>
-      </section>
-        {/* Footer Bottom Section */}
-        <div className="flex flex-col md:flex-row justify-between items-center text-gray-600">
-          {/* Logo and Description */}
-          <div className="mb-6 md:mb-0">
-            <h1 className="text-3xl font-bold text-gray-800">Ambika Novelty<span className="text-pink-500">.</span></h1>
-            <p className="text-sm max-w-sm mt-3">
-              some more info ....
-            </p>
-          </div>
+        <div className="container mx-auto px-6">
+          <section className="py-16 px-6 bg-gray-200">
+            <div className="max-w-7xl mx-auto text-center">
+              <h2 className="text-3xl font-bold mb-4">Subscribe now & get 20% off</h2>
+              <p className="mb-6">Stay updated with our latest products and offers.</p>
+              <div className="flex justify-center">
+                <input
+                  type="email"
+                  placeholder="Enter your email"
+                  className="p-2 border border-gray-400 rounded-l-md focus:outline-none"
+                />
+                <button className="bg-red-500 text-white p-2 rounded-r-md hover:bg-red-700">
+                  Subscribe
+                </button>
+              </div>
+            </div>
+          </section>
 
-          {/* Company Links */}
-          <div className="flex flex-col md:flex-row gap-8 mb-6 md:mb-0">
-            <div>
-              <h4 className="font-semibold text-gray-800 mb-2">COMPANY</h4>
-              <ul className="space-y-2">
-                <li><a href="#" className="hover:underline">Home</a></li>
-                <li><a href="#" className="hover:underline">About us</a></li>
-                <li><a href="#" className="hover:underline">Delivery</a></li>
-                <li><a href="#" className="hover:underline">Privacy policy</a></li>
-              </ul>
+          <div className="flex flex-col md:flex-row justify-between items-center text-gray-600">
+            <div className="mb-6 md:mb-0">
+              <h1 className="text-3xl font-bold text-gray-800">
+                Ambika Novelty<span className="text-pink-500">.</span>
+              </h1>
+              <p className="text-sm max-w-sm mt-3">
+                some more info ....
+              </p>
             </div>
 
-            {/* Get In Touch */}
-            <div>
-              <h4 className="font-semibold text-gray-800 mb-2">GET IN TOUCH</h4>
-              <ul className="space-y-2">
-                <li>+1-000-000-0000</li>
-                <li>ambikanovelty@gmail.com</li>
-                <li><a href="#" className="hover:underline">Instagram</a></li>
-              </ul>
+            <div className="flex flex-col md:flex-row gap-8 mb-6 md:mb-0">
+              <div>
+                <h4 className="font-semibold text-gray-800 mb-2">COMPANY</h4>
+                <ul className="space-y-2">
+                  <li><a href="http://localhost:3000/homepage" className="hover:underline">Home</a></li>
+                  <li><a href="http://localhost:3000/aboutus" className="hover:underline">About us</a></li>
+                  <li><a href="#" className="hover:underline">Delivery</a></li>
+                  <li><a href="#" className="hover:underline">Privacy policy</a></li>
+                </ul>
+              </div>
+
+              <div>
+                <h4 className="font-semibold text-gray-800 mb-2">GET IN TOUCH</h4>
+                <ul className="space-y-2">
+                  <li>+1-000-000-0000</li>
+                  <li>ambikanovelty@gmail.com</li>
+                  <li><a href="#" className="hover:underline">Instagram</a></li>
+                </ul>
+              </div>
             </div>
           </div>
-        </div>
 
-        {/* Copyright Section */}
-        <div className="text-center mt-10 text-gray-500 text-sm">
-          <p>Copyright 2024© ambikanovelty.com - All Rights Reserved.</p>
+          <div className="text-center mt-10 text-gray-500 text-sm">
+            <p>Copyright 2024© ambikanovelty.com - All Rights Reserved.</p>
+          </div>
         </div>
-      </div>
-    </footer>
+      </footer>
     </div>
   )
 }
