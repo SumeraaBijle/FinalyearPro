@@ -1,130 +1,90 @@
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/router'; // Import useRouter
+import { useRouter } from 'next/router';
+import { signIn } from 'next-auth/react'; // Import next-auth's signIn
 import styles from '../../styles/AuthForm.module.css';
 
+
 export default function AuthForm() {
-  const router = useRouter(); // Initialize router
-  const [isRegister, setIsRegister] = useState(false);
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [transitionState, setTransitionState] = useState('');
+  const [isRegister, setIsRegister] = useState(false)
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [isDarkMode, setIsDarkMode] = useState(false)
 
   useEffect(() => {
-    if (isRegister) {
-      setTransitionState('enter');
-      const timeout = setTimeout(() => setTransitionState(''), 500);
-      return () => clearTimeout(timeout);
-    } else {
-      setTransitionState('exit');
-      const timeout = setTimeout(() => setTransitionState(''), 500);
-      return () => clearTimeout(timeout);
-    }
-  }, [isRegister]);
+    document.documentElement.classList.toggle('dark', isDarkMode)
+  }, [isDarkMode])
 
   const handleSubmit = async (event) => {
-    event.preventDefault();
+    event.preventDefault()
+    // Handle form submission logic here
+    console.log('Form submitted', { isRegister, name, email, password })
+  }
 
-    const body = isRegister ? { name, email, password } : { email, password };
+  const toggleTheme = () => {
+    setIsDarkMode(!isDarkMode)
+  }
 
-    const response = await fetch(isRegister ? '/api/auth/register' : '/api/auth/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(body),
-    });
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error('Error:', errorText);
-      return;
-    }
-
-    const data = await response.json();
-    console.log(data);
-
-    // Navigate to appropriate page based on action
-    if (isRegister) {
-      router.push('/login'); // Redirect to login after registration
-    } else {
-      router.push('/homepage'); // Redirect to homepage after login
-    }
-  };
+  const handleGoogleLogin = () => {
+    signIn('google')
+  }
 
   return (
     <div className={styles.container}>
-      <div className={`${styles.box} ${transitionState}`}>
-        {!isRegister ? (
-          <div className={styles.login}>
-            <div className={styles.welcome}>
-              <h1>Welcome</h1>
-              <p>Join Our Unique Platform, Explore a New Experience</p>
-              <button onClick={() => setIsRegister(true)}>REGISTER</button>
+      <div className={`${styles.box} ${isDarkMode ? styles.dark : ''}`}>
+        <div className={styles.header}>
+          <h2>{isRegister ? 'Create Account' : 'Sign In'}</h2>
+          <button onClick={toggleTheme} className={styles.themeToggle} aria-label="Toggle dark mode">
+            {isDarkMode ? '☀️' : '🌙'}
+          </button>
+        </div>
+        <form onSubmit={handleSubmit} className={styles.form}>
+          {isRegister && (
+            <div className={styles.inputGroup}>
+              <label htmlFor="name">Name</label>
+              <input
+                id="name"
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+              />
             </div>
-            <div className={styles.signin}>
-              <h2>Sign In</h2>
-              <form onSubmit={handleSubmit}>
-                <input
-                  type="email"
-                  placeholder="Email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
-                <input
-                  type="password"
-                  placeholder="Password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                />
-                <div>
-                  <input type="checkbox" id="rememberMe" />
-                  <label htmlFor="rememberMe">Remember me</label>
-                </div>
-                <a href="#">Forgot password?</a>
-                <button type="submit">LOGIN</button>
-              </form>
-            </div>
+          )}
+          <div className={styles.inputGroup}>
+            <label htmlFor="email">Email</label>
+            <input
+              id="email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
           </div>
-        ) : (
-          <div className={styles.register}>
-            <div className={styles.createAccount}>
-              <h2>Create Account</h2>
-              <form onSubmit={handleSubmit}>
-                <input
-                  type="text"
-                  placeholder="Name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  required
-                />
-                <input
-                  type="email"
-                  placeholder="Email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
-                <input
-                  type="password"
-                  placeholder="Password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                />
-                <button type="submit">REGISTER</button>
-              </form>
-            </div>
-            <div className={styles.helloAgain}>
-              <h1>Hello, Again</h1>
-              <p>We are happy to see you back</p>
-              <button onClick={() => setIsRegister(false)}>LOGIN</button>
-            </div>
+          <div className={styles.inputGroup}>
+            <label htmlFor="password">Password</label>
+            <input
+              id="password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
           </div>
-        )}
+          <button type="submit" className={styles.submitButton}>
+            {isRegister ? 'Register' : 'Sign In'}
+          </button>
+        </form>
+        <button onClick={handleGoogleLogin} className={styles.googleBtn}>
+          Login with Google
+        </button>
+        <div className={styles.switchMode}>
+          <button onClick={() => setIsRegister(!isRegister)}>
+            {isRegister ? 'Already have an account? Sign In' : "Don't have an account? Register"}
+          </button>
+        </div>
       </div>
     </div>
-  );
+  )
 }
+

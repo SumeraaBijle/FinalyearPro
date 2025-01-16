@@ -1,125 +1,136 @@
 .container {
   display: flex;
-  height: 100vh;
   justify-content: center;
   align-items: center;
+  min-height: 100vh;
   background-color: #f0f0f0;
+  transition: background-color 0.3s;
+}
+
+:global(.dark) .container {
+  background-color: #1a1a1a;
 }
 
 .box {
-  display: flex;
-  width: 900px;
-  height: 500px;
-  background-color: white;
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-  transition: opacity 3s ease, transform 2s ease; /* Add transition */
-}
-
-.box.enter {
-  opacity: 0;
-  transform: translateY(-20px); /* Move it slightly up */
-}
-
-.box.enter-active {
-  opacity: 1;
-  transform: translateY(0); /* Move it back to its original position */
-}
-
-.box.exit {
-  opacity: 1;
-  transform: translateY(0); /* Initial state for exiting */
-}
-
-.box.exit-active {
-  opacity: 0;
-  transform: translateY(20px); /* Move it slightly down */
-}
-
-.login,
-.register {
-  display: flex;
   width: 100%;
+  max-width: 400px;
+  padding: 2rem;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s, color 0.3s;
 }
 
-.welcome,
-.helloAgain {
-  background-color: #833488;
-  color: white;
-  width: 50%;
-  display:flex;
-  flex-direction: column;
-  justify-content: center;
+.dark {
+  background-color: #333333;
+  color: #ffffff;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
   align-items: center;
-  padding: 20px;
+  margin-bottom: 1.5rem;
 }
 
-.welcome h1,
-.helloAgain h1 {
-  font-size: 2.5rem;
+.header h2 {
+  font-size: 1.5rem;
+  font-weight: bold;
 }
 
-.welcome p,
-.helloAgain p {
-  margin-top: 10px;
-  font-size: 1.2rem;
-}
-
-.welcome button,
-.helloAgain button {
-  margin-top: 20px;
-  padding: 10px 20px;
-  background-color: white;
-  color: #833488;
+.themeToggle {
+  background: none;
   border: none;
-  border-radius: 5px;
+  font-size: 1.5rem;
   cursor: pointer;
 }
 
-.signin,
-.createAccount {
-  padding: 40px;
-  width: 50%;
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
-.signin h2,
-.createAccount h2 {
-  font-size: 1.8rem;
-  margin-bottom: 20px;
-}
-
-.signin form,
-.createAccount form {
+.inputGroup {
   display: flex;
   flex-direction: column;
 }
 
-.signin input,
-.createAccount input {
-  padding: 10px;
-  margin-bottom: 15px;
+.inputGroup label {
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+}
+
+.inputGroup input {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
   font-size: 1rem;
-  border: 1px solid #ddd;
-  border-radius: 5px;
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
 }
 
-.signin button,
-.createAccount button {
-  padding: 10px;
-  background-color: #833488;
-  color: white;
+.dark .inputGroup input {
+  background-color: #444444;
+  color: #ffffff;
+  border-color: #444444; /* Change from #555555 to match the input background */
+  outline: none;
+}
+
+.dark .inputGroup input:focus {
+  border-color: #666666;
+  outline: none;
+  box-shadow: 0 0 0 1px #666666;
+}
+
+.submitButton {
+  padding: 0.75rem;
+  background-color: #000000;
+  color: #ffffff;
   border: none;
-  border-radius: 5px;
+  border-radius: 4px;
+  font-size: 1rem;
   cursor: pointer;
+  transition: background-color 0.3s;
 }
 
-.signin a {
-  margin-top: 10px;
-  color: #833488;
-  text-decoration: none;
+.submitButton:hover {
+  background-color: #333333;
 }
 
-.signin a:hover {
+.googleBtn {
+  display: block;
+  width: 100%;
+  padding: 0.75rem;
+  margin-top: 1rem;
+  background-color: #4285F4;
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.googleBtn:hover {
+  background-color: #357AE8;
+}
+
+.switchMode {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.switchMode button {
+  background: none;
+  border: none;
+  color: #000000;
   text-decoration: underline;
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: color 0.3s;
 }
+
+.dark .switchMode button {
+  color: #ffffff;
+}
+
