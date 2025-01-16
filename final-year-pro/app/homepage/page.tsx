@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { JSX } from 'react'
 import { Search, ShoppingCart, User, Heart, Filter } from 'lucide-react'
 import AuthForm from '../login/AuthForm'
 import Link from 'next/link';
@@ -139,21 +139,47 @@ export default function AmbikaNoveltySite() {
         {/* Add your product grid or other content here */}
       </main>
 
-      <footer className="bg-gray-800 text-white py-8">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+      <footer className="bg-white py-12 border-t border-gray-200">
+      <div className="container mx-auto px-6">
+        
+      <section className="py-16 px-6 bg-gray-200">
+        <div className="max-w-7xl mx-auto text-center">
+          <h2 className="text-3xl font-bold mb-4">Subscribe now & get 20% off</h2>
+          <p className="mb-6">Stay updated with our latest products and offers.</p>
+          <div className="flex justify-center">
+            <input
+              type="email"
+              placeholder="Enter your email"
+              className="p-2 border border-gray-400 rounded-l-md focus:outline-none "
+            />
+            <button className="bg-red-500 text-white p-2 rounded-r-md hover:bg-red-700">
+              Subscribe
+            </button>
+          </div>
+        </div>
+      </section>
+        {/* Footer Bottom Section */}
+        <div className="flex flex-col md:flex-row justify-between items-center text-gray-600">
+          {/* Logo and Description */}
+          <div className="mb-6 md:mb-0">
+            <h1 className="text-3xl font-bold text-gray-800">Ambika Novelty<span className="text-pink-500">.</span></h1>
+            <p className="text-sm max-w-sm mt-3">
+              some more info ....
+            </p>
+          </div>
+
+          {/* Company Links */}
+          <div className="flex flex-col md:flex-row gap-8 mb-6 md:mb-0">
             <div>
-              <h3 className="font-semibold mb-2">Easy Exchange Policy</h3>
-              <p className="text-sm">Hassle-free exchanges within 30 days</p>
+              <h4 className="font-semibold text-gray-800 mb-2">COMPANY</h4>
+              <ul className="space-y-2">
+                <li><a href="#" className="hover:underline">Home</a></li>
+                <li><a href="#" className="hover:underline">About us</a></li>
+                <li><a href="#" className="hover:underline">Delivery</a></li>
+                <li><a href="#" className="hover:underline">Privacy policy</a></li>
+              </ul>
             </div>
-            <div>
-              <h3 className="font-semibold mb-2">7 Days Return Policy</h3>
-              <p className="text-sm">Full refunds for unopened items</p>
-            </div>
-            <div>
-              <h3 className="font-semibold mb-2">Best Customer Support</h3>
-              <p className="text-sm">Available 24/7 to assist you</p>
-            </div>
+
             {/* Get In Touch */}
             <div>
               <h4 className="font-semibold text-gray-800 mb-2">GET IN TOUCH</h4>
@@ -165,7 +191,13 @@ export default function AmbikaNoveltySite() {
             </div>
           </div>
         </div>
-      </footer>
+
+        {/* Copyright Section */}
+        <div className="text-center mt-10 text-gray-500 text-sm">
+          <p>Copyright 2024© ambikanovelty.com - All Rights Reserved.</p>
+        </div>
+      </div>
+    </footer>
     </div>
   )
 }
