@@ -5,21 +5,23 @@ import { useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react'; // Import next-auth's signIn
 import styles from '../../styles/AuthForm.module.css';
 
-
 export default function AuthForm() {
-  const [isRegister, setIsRegister] = useState(false)
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [isDarkMode, setIsDarkMode] = useState(false)
+  const [isRegister, setIsRegister] = useState(false);
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [message, setMessage] = useState('');  // To store the message
+  const router = useRouter();
 
   useEffect(() => {
-    document.documentElement.classList.toggle('dark', isDarkMode)
-  }, [isDarkMode])
+    document.documentElement.classList.toggle('dark', isDarkMode);
+  }, [isDarkMode]);
 
   const handleSubmit = async (event) => {
-    event.preventDefault()
-    
+    event.preventDefault();
+    setMessage('');  // Clear any previous messages
+
     if (isRegister) {
       // Handle registration
       try {
@@ -27,42 +29,53 @@ export default function AuthForm() {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ name, email, password }),
-        })
+        });
+
+        const result = await res.json();
+
         if (res.ok) {
-          // After successful registration, sign in the user
-          await signIn('credentials', {
-            email,
-            password,
-            callbackUrl: '/',
-          })
+          // After successful registration, show success message
+          setMessage('User registered successfully!');
+          router.push('/login');  // Redirect to the login page
+        } else {
+          setMessage(result.message || 'Registration failed. Please try again.');
         }
       } catch (error) {
-        console.error('Registration error:', error)
+        console.error('Registration error:', error);
+        setMessage('An error occurred during registration.');
       }
     } else {
       // Handle sign in
       try {
-        const result = await signIn('credentials', {
-          redirect: false,
-          email,
-          password,
-        })
-        if (result?.error) {
-          console.error('Authentication error:', result.error)
+        const res = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password }),
+        });
+
+        const result = await res.json();
+
+        if (res.ok) {
+          // After successful login, show success message
+          setMessage('Login successful!');
+          router.push('/');  // Redirect to homepage/dashboard
+        } else {
+          setMessage(result.message || 'Invalid email or password.');
         }
       } catch (error) {
-        console.error('Sign in error:', error)
+        console.error('Sign-in error:', error);
+        setMessage('An error occurred during login.');
       }
     }
-  }
+  };
 
   const toggleTheme = () => {
-    setIsDarkMode(!isDarkMode)
-  }
+    setIsDarkMode(!isDarkMode);
+  };
 
   const handleGoogleLogin = () => {
-    signIn('google')
-  }
+    signIn('google'); // Trigger the Google login
+  };
 
   return (
     <div className={styles.container}>
@@ -110,6 +123,7 @@ export default function AuthForm() {
             {isRegister ? 'Register' : 'Sign In'}
           </button>
         </form>
+        {/* Google Login Button */}
         <button onClick={handleGoogleLogin} className={styles.googleBtn}>
           Login with Google
         </button>
@@ -118,8 +132,14 @@ export default function AuthForm() {
             {isRegister ? 'Already have an account? Sign In' : "Don't have an account? Register"}
           </button>
         </div>
+
+        {/* Display the message */}
+        {message && (
+          <div className={styles.message}>
+            <p>{message}</p>
+          </div>
+        )}
       </div>
     </div>
-  )
+  );
 }
-
