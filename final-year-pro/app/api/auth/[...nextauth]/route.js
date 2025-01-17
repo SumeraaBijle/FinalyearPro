@@ -1,51 +1,39 @@
 // pages/api/auth/[...nextauth].js
 
 import NextAuth from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
-import clientPromise from "../../../../lib/mongodb"; // Make sure this points to your MongoDB connection
+
+import clientPromise from "@/lib/mongodb";
 
 export const authOptions = {
   providers: [
-    CredentialsProvider({
-      name: "Credentials",
-      credentials: {
-        email: { label: "Email", type: "email" },
-        password: { label: "Password", type: "password" },
-      },
-      async authorize(credentials) {
-        const { email, password } = credentials;
-        // Implement your login logic (e.g., checking against a database)
-        const user = await checkUserCredentials(email, password);
-        if (user) {
-          return user;
-        } else {
-          return null;
-        }
-      },
-    }),
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     }),
   ],
-  session: {
-    strategy: "jwt", // or "database" if using database for session storage
-  },
+  secret: process.env.NEXTAUTH_SECRET,
+  adapter: MongoDBAdapter(clientPromise),
   callbacks: {
-    async session({ session, token }) {
-      if (token) {
-        session.user.id = token.id; // Add the user ID to the session
+    async signIn({ account, profile }) {
+      if (account.provider === "google") {
+        return true;
       }
-      return session;
+      return true;
+    },
+    async redirect({ url, baseUrl }) {
+      if (url.startsWith("/")) return `${baseUrl}${url}`;
+      else if (new URL(url).origin === baseUrl) return url;
+      return baseUrl;
     },
   },
   pages: {
     signIn: "/login",
     error: "/auth/error",
   },
-  adapter: MongoDBAdapter(clientPromise),
+  debug: process.env.NODE_ENV === "development",
 };
 
-export default NextAuth(authOptions);
+const handler = NextAuth(authOptions);
+export { handler as GET, handler as POST };

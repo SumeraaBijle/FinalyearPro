@@ -47,23 +47,17 @@ export default function AuthForm() {
     } else {
       // Handle sign in
       try {
-        const res = await fetch('/api/auth/login', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, password }),
+        const result = await signIn('credentials', {
+          redirect: false,
+          email,
+          password,
+          callbackUrl: '/dashboard',
         });
-
-        const result = await res.json();
-
-        if (res.ok) {
-          // After successful login, show success message
-          setMessage('Login successful!');
-          router.push('/');  // Redirect to homepage/dashboard
-        } else {
-          setMessage(result.message || 'Invalid email or password.');
+        if (!result?.error) {
+          router.push('/dashboard');
         }
       } catch (error) {
-        console.error('Sign-in error:', error);
+        console.error('Sign in error:', error);
         setMessage('An error occurred during login.');
       }
     }
@@ -73,8 +67,12 @@ export default function AuthForm() {
     setIsDarkMode(!isDarkMode);
   };
 
-  const handleGoogleLogin = () => {
-    signIn('google'); // Trigger the Google login
+  const handleGoogleSignIn = async () => {
+    try {
+      await signIn('google', { callbackUrl: '/dashboard' });
+    } catch (error) {
+      console.error('Google sign in error:', error);
+    }
   };
 
   return (
@@ -124,8 +122,11 @@ export default function AuthForm() {
           </button>
         </form>
         {/* Google Login Button */}
-        <button onClick={handleGoogleLogin} className={styles.googleBtn}>
-          Login with Google
+        <button
+          onClick={handleGoogleSignIn}
+          className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700"
+        >
+          Sign in with Google
         </button>
         <div className={styles.switchMode}>
           <button onClick={() => setIsRegister(!isRegister)}>

@@ -141,14 +141,21 @@ export default function AmbikaNoveltySite() {
       <main className="container mx-auto px-4 py-8">
         <section className="mb-12">
           <h2 className="text-3xl font-bold text-center mb-4">Latest Arrivals</h2>
+          <div className="text-center mt-8">
+            <Link href="/products" passHref>
+              <button className="bg-black text-white px-7 py-2 font-semibold hover:bg-gray-800 transform hover:scale-105 transition-all duration-200 shadow-lg">
+                Shop Now
+              </button>
+            </Link>
+          </div>
           <p className="text-center text-gray-600 mb-8">Discover our newest stationery and gift items!</p>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {[
-              { id: 1, name: "Notebook", price: "$5", image: "/images/notebook.jpg" },
-              { id: 2, name: "Gift Box", price: "$15", image: "/images/giftbox.jpg" },
-              { id: 3, name: "Planner", price: "$10", image: "/images/planner.jpg" },
-              { id: 4, name: "Stationery Kit", price: "$20", image: "/images/stationery.jpg" },
+              { id: 1, name: "Notebook", price: "₹50", image: "/images/notebook.jpg" },
+              { id: 2, name: "Messi keychain", price: "₹199", image: "/images/model.jpg" },
+              { id: 3, name: "Barbie kit", price: "₹700", image: "/images/barbie.jpg" },
+              { id: 4, name: "Stationery Kit", price: "₹149", image: "/images/kit.jpg" },
             ].map((product) => (
               <div key={product.id} className="bg-white shadow-md rounded-lg overflow-hidden">
                 <img

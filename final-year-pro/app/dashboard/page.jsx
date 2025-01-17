@@ -2,9 +2,9 @@
 
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import AuthForm from './AuthForm'
+import UserDashboard from './components/UserDashboard'
 
-export default function LoginPage() {
+export default function DashboardPage() {
   const { data: session, status } = useSession()
   const router = useRouter()
 
@@ -12,10 +12,10 @@ export default function LoginPage() {
     return <div>Loading...</div>
   }
 
-  if (session) {
-    router.push('/dashboard')
+  if (!session) {
+    router.push('/login')
     return null
   }
 
-  return <AuthForm />
+  return <UserDashboard user={session.user} />
 }
