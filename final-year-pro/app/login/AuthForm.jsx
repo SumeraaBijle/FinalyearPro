@@ -1,5 +1,7 @@
+'use client'
+
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react'; // Import next-auth's signIn
 import styles from '../../styles/AuthForm.module.css';
 
@@ -17,8 +19,41 @@ export default function AuthForm() {
 
   const handleSubmit = async (event) => {
     event.preventDefault()
-    // Handle form submission logic here
-    console.log('Form submitted', { isRegister, name, email, password })
+    
+    if (isRegister) {
+      // Handle registration
+      try {
+        const res = await fetch('/api/auth/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, email, password }),
+        })
+        if (res.ok) {
+          // After successful registration, sign in the user
+          await signIn('credentials', {
+            email,
+            password,
+            callbackUrl: '/',
+          })
+        }
+      } catch (error) {
+        console.error('Registration error:', error)
+      }
+    } else {
+      // Handle sign in
+      try {
+        const result = await signIn('credentials', {
+          redirect: false,
+          email,
+          password,
+        })
+        if (result?.error) {
+          console.error('Authentication error:', result.error)
+        }
+      } catch (error) {
+        console.error('Sign in error:', error)
+      }
+    }
   }
 
   const toggleTheme = () => {
