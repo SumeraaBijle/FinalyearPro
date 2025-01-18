@@ -20,6 +20,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { GiftFinderQuiz } from '@/components/ui/GiftFinderQuiz'
 
 export default function AmbikaNoveltySite() {
   return (
@@ -159,7 +160,7 @@ export default function AmbikaNoveltySite() {
             ].map((product) => (
               <div key={product.id} className="bg-white shadow-md rounded-lg overflow-hidden">
                 <img
-                  src={product.image}
+                  src={product.image || "/placeholder.svg"}
                   alt={product.name}
                   className="w-full h-48 object-cover"
                 />
@@ -175,7 +176,7 @@ export default function AmbikaNoveltySite() {
           </div>
         </section>
       </main>
-
+      <GiftFinderQuiz />
       <footer className="bg-white py-12 border-t border-gray-200">
         <div className="container mx-auto px-6">
           <section className="py-16 px-6 bg-gray-200">
@@ -235,3 +236,4 @@ export default function AmbikaNoveltySite() {
     </div>
   )
 }
+
