@@ -6,6 +6,7 @@ import { motion } from 'framer-motion'
 import { FiUser, FiShoppingBag, FiSettings, FiLogOut } from 'react-icons/fi'
 import Header from '@/app/aboutus/Header'
 import styles from '../../../styles/UserDashboard.module.css'
+import Link from 'next/link'
 
 
 export default function UserDashboard({ user }) {
@@ -93,17 +94,14 @@ export default function UserDashboard({ user }) {
                 <h2>Profile Information</h2>
                 <div className={styles.profileInfo}>
                   <div className={styles.infoCard}>
-                    <label>Name</label>
+                    <label>Name: </label>
                     <span>{user.name}</span>
                   </div>
                   <div className={styles.infoCard}>
-                    <label>Email</label>
+                    <label>Email: </label>
                     <span>{user.email}</span>
                   </div>
-                  <div className={styles.infoCard}>
-                    <label>Member Since</label>
-                    <span>{new Date().toLocaleDateString()}</span>
-                  </div>
+                  
                 </div>
               </motion.div>
             )}
@@ -119,7 +117,9 @@ export default function UserDashboard({ user }) {
                   <div className={styles.emptyState}>
                     <FiShoppingBag size={48} />
                     <p>No orders found</p>
-                    <button className={styles.primaryButton}>Start Shopping</button>
+                    <Link href="/products">
+                      <button className={styles.primaryButton}>Start Shopping</button>
+                    </Link>
                   </div>
                 </div>
               </motion.div>

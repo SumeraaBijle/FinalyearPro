@@ -11,13 +11,13 @@ import { Input } from "@/components/ui/input"
 import { useCart } from '../contexts/cartContext'
 
 const products = [
-  { id: 1, name: 'Hotwheels', price: 1499, category: 'Boys', image: '/images/boys-tshirt.jpg', images: [
-    '/images/boys-tshirt.jpg',
-    '/images/boys-tshirt-2.jpg',
-    '/images/boys-tshirt-3.jpg',
-    '/images/boys-tshirt-4.jpg',
-    '/images/boys-tshirt-5.jpg'
-  ], description: 'Classic die-cast toy cars perfect for young racing enthusiasts.' },
+  { id: 1, name: 'Hotwheels', price: 1499, category: 'Boys', image: '/images/hotwheelsmain.jpg', images: [
+    '/images/hotwheelsmain.jpg',
+    '/images/view2.jpg',
+    '/images/hwview3.jpg',
+    '/images/hwview4.jpg',
+    '/images/hotwheelsmain.jpg'
+  ], description: 'The Hot Wheels 2019 Dino Riders series unleashes the thrill of prehistoric power with the speed and excitement of high-performance cars. This collection features dinosaur-themed vehicles, blending ferocious beastly designs with sleek Hot Wheels engineering.' },
   { id: 2, name: 'Barbie set', price: 2299, category: 'Girls', image: '/images/girls-dress.jpg', images: [
     '/images/girls-dress.jpg',
     '/images/girls-dress-2.jpg',

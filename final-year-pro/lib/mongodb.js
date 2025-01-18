@@ -7,8 +7,8 @@ if (!process.env.MONGODB_URI) {
 const uri = process.env.MONGODB_URI;
 const options = {
   ssl: true,
-  sslValidate: false, // Disable SSL certificate validation
-  directConnection: true,
+  tlsAllowInvalidCertificates: true, // Disable SSL certificate validation
+ 
   retryWrites: true,
 };
 
