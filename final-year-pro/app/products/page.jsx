@@ -5,6 +5,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { Search, ShoppingCart, User, Heart, CheckCircle } from 'lucide-react'
 
+
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { useCart } from '../contexts/cartContext'
@@ -194,7 +195,9 @@ export default function ProductPage() {
 
       <header className="bg-white shadow-sm">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <h1 className="text-2xl font-bold text-gray-800">Ambika Novelty</h1>
+        <a href="/homepage" className="text-2xl font-bold text-gray-800 cursor-pointer">
+          Ambika Novelty
+        </a>
           <div className="flex items-center space-x-4">
             <Input type="search" placeholder="Search..." className="w-64" />
             <Button variant="ghost" size="icon">
