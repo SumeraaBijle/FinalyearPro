@@ -1,39 +1,50 @@
-// pages/api/auth/[...nextauth].js
-
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
-
 import clientPromise from "@/lib/mongodb";
 
 export const authOptions = {
+  // Add Google as the authentication provider
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     }),
   ],
-  secret: process.env.NEXTAUTH_SECRET,
+
+  // MongoDB Adapter for NextAuth
   adapter: MongoDBAdapter(clientPromise),
+
+  // Secret for token encryption
+  secret: process.env.NEXTAUTH_SECRET,
+
+  // Callbacks to handle custom behavior
   callbacks: {
+    // Allow or deny sign-in
     async signIn({ account, profile }) {
       if (account.provider === "google") {
-        return true;
+        return true; // Allow Google sign-ins
       }
-      return true;
+      return false; // Block other providers if necessary
     },
+
+    // Redirect users to a specific page after login
     async redirect({ url, baseUrl }) {
-      if (url.startsWith("/")) return `${baseUrl}${url}`;
-      else if (new URL(url).origin === baseUrl) return url;
-      return baseUrl;
+      // Always redirect to homepage
+      return "/homepage";
     },
   },
+
+  // Custom authentication pages
   pages: {
-    signIn: "/login",
-    error: "/auth/error",
+    signIn: "/login", // Custom login page
+    error: "/auth/error", // Custom error page
   },
+
+  // Enable debug mode for detailed logs in development
   debug: process.env.NODE_ENV === "development",
 };
 
+// Export the handler for NextAuth
 const handler = NextAuth(authOptions);
 export { handler as GET, handler as POST };

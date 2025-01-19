@@ -16,9 +16,11 @@ export default function AdminLogin() {
     name: '',
     description: '',
     price: '',
-    images: Array(5).fill(null),
+    quantity: '',
+    category: '',
+    images: Array(2).fill(null),
   })
-  const [imagePreview, setImagePreview] = useState(Array(5).fill(null))
+  const [imagePreview, setImagePreview] = useState(Array(2).fill(null))
   const [showAddProduct, setShowAddProduct] = useState(true)
 
   const router = useRouter()
@@ -69,9 +71,11 @@ export default function AdminLogin() {
       name: '',
       description: '',
       price: '',
-      images: Array(5).fill(null),
+      quantity: '',
+      category: '',
+      images: Array(2).fill(null),
     })
-    setImagePreview(Array(5).fill(null))
+    setImagePreview(Array(2).fill(null))
     setIsEditing(false)
   }
 
@@ -82,6 +86,8 @@ export default function AdminLogin() {
       formData.append('name', productData.name)
       formData.append('description', productData.description)
       formData.append('price', productData.price)
+      formData.append('quantity', productData.quantity)
+      formData.append('category', productData.category)
 
       productData.images.forEach((image, index) => {
         if (image) {
@@ -89,7 +95,7 @@ export default function AdminLogin() {
         }
       })
 
-      const url = isEditing 
+      const url = isEditing
         ? `/api/products/${productData._id}`
         : '/api/products'
 
@@ -113,7 +119,7 @@ export default function AdminLogin() {
       ...product,
       price: product.price.toString(),
     })
-    setImagePreview(product.images.concat(Array(5 - product.images.length).fill(null)))
+    setImagePreview(product.images.concat(Array(2 - product.images.length).fill(null)))
     setIsEditing(true)
   }
 
@@ -123,7 +129,7 @@ export default function AdminLogin() {
         const response = await fetch(`/api/products/${id}`, {
           method: 'DELETE',
         })
-        
+
         if (response.ok) {
           alert('Product deleted successfully!')
           fetchProducts()
@@ -245,23 +251,38 @@ export default function AdminLogin() {
                         required
                       />
                     </div>
-                  </div>
-                  <div>
-                    <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
-                      Product Description
-                    </label>
-                    <textarea
-                      id="description"
-                      value={productData.description}
-                      onChange={(e) => setProductData({ ...productData, description: e.target.value })}
-                      placeholder="Enter product description"
-                      className="w-full p-3 border border-gray-300 rounded-md h-32 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                      required
-                    />
+                    <div>
+                      <label htmlFor="quantity" className="block text-sm font-medium text-gray-700 mb-1">
+                        Quantity
+                      </label>
+                      <input
+                        id="quantity"
+                        type="number"
+                        value={productData.quantity}
+                        onChange={(e) => setProductData({ ...productData, quantity: e.target.value })}
+                        placeholder="Enter quantity"
+                        className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-1">
+                        Category
+                      </label>
+                      <input
+                        id="category"
+                        type="text"
+                        value={productData.category}
+                        onChange={(e) => setProductData({ ...productData, category: e.target.value })}
+                        placeholder="Enter category"
+                        className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                        required
+                      />
+                    </div>
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-3">Product Images</label>
-                    <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+                    <div className="grid grid-cols-2 gap-4">
                       {productData.images.map((_, index) => (
                         <div key={index} className="space-y-2">
                           <div className="relative border-2 border-dashed border-gray-300 rounded-lg p-4 hover:border-blue-500 transition-all">
@@ -273,7 +294,7 @@ export default function AdminLogin() {
                             />
                             {imagePreview[index] ? (
                               <img
-                                src={imagePreview[index]}
+                                src={imagePreview[index] || "/placeholder.svg"}
                                 alt={`Preview ${index + 1}`}
                                 className="w-full h-full object-cover rounded-md"
                               />
@@ -318,6 +339,7 @@ export default function AdminLogin() {
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quantity</th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                     </tr>
                   </thead>
@@ -325,18 +347,25 @@ export default function AdminLogin() {
                     {products.map((product) => (
                       <tr key={product._id}>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <img src={product.images[0]} alt={product.name} className="h-16 w-16 object-cover" />
+                          <img src={product.images[0] || "/placeholder.svg"} alt={product.name} className="h-16 w-16 object-cover" />
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">{product.name}</td>
                         <td className="px-6 py-4 whitespace-nowrap">{product.category}</td>
                         <td className="px-6 py-4 whitespace-nowrap">₹{product.price}</td>
+                        <td className="px-6 py-4 whitespace-nowrap">{product.quantity}</td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex gap-2">
+                            <button
+                              onClick={() => handleEdit(product)}
+                              className="text-blue-600 hover:text-blue-900"
+                            >
+                              <Pencil className="h-5 w-5" />
+                            </button>
                             <button
                               onClick={() => handleDelete(product._id)}
                               className="text-red-600 hover:text-red-900"
                             >
-                              <span className="material-icons">close</span>
+                              <Trash2 className="h-5 w-5" />
                             </button>
                           </div>
                         </td>
@@ -355,3 +384,4 @@ export default function AdminLogin() {
     </div>
   )
 }
+

@@ -1,6 +1,6 @@
-import React from 'react'
-import { Search, ShoppingCart, User, Heart, Filter, Shield } from 'lucide-react'
-import Link from 'next/link'
+import React from "react"
+import { Search, ShoppingCart, User, Heart, Filter, Shield } from "lucide-react"
+import Link from "next/link"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -20,18 +20,16 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { GiftFinderQuiz } from '@/components/ui/GiftFinderQuiz'
+import { GiftFinderQuiz } from "@/components/ui/GiftFinderQuiz"
 
 export default function AmbikaNoveltySite() {
   return (
     <div className="min-h-screen bg-gray-50">
       <header className="bg-white shadow-sm">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-        <Link href="/homepage" passHref>
-  <h1 className="text-2xl font-bold text-gray-800 cursor-pointer">
-    Ambika Novelty
-  </h1>
-</Link>
+          <Link href="/homepage" passHref>
+            <h1 className="text-2xl font-bold text-gray-800 cursor-pointer">Ambika Novelty</h1>
+          </Link>
 
           <div className="flex items-center space-x-4">
             <Input type="search" placeholder="Search..." className="w-64" />
@@ -77,9 +75,7 @@ export default function AmbikaNoveltySite() {
                           className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
                           href="/"
                         >
-                          <div className="mb-2 mt-4 text-lg font-medium">
-                            Featured Products
-                          </div>
+                          <div className="mb-2 mt-4 text-lg font-medium">Featured Products</div>
                           <p className="text-sm leading-tight text-muted-foreground">
                             Check out our latest stationery items!
                           </p>
@@ -175,24 +171,168 @@ export default function AmbikaNoveltySite() {
             ))}
           </div>
         </section>
+
+        {/* Special Offers Banner */}
+        <section className="mb-12 bg-gradient-to-r from-pink-500 to-red-500 text-white py-8 rounded-lg">
+          <div className="container mx-auto px-4 text-center">
+            <h2 className="text-3xl font-bold mb-4">Special Offers!</h2>
+            <p className="text-xl mb-6">Get up to 50% off on selected items</p>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="bg-white/20 p-4 rounded-lg">
+                <h3 className="font-bold mb-2">Buy 2 Get 1 Free</h3>
+                <p>On all notebooks</p>
+              </div>
+              <div className="bg-white/20 p-4 rounded-lg">
+                <h3 className="font-bold mb-2">20% Student Discount</h3>
+                <p>With valid ID</p>
+              </div>
+              <div className="bg-white/20 p-4 rounded-lg">
+                <h3 className="font-bold mb-2">Free Shipping</h3>
+                <p>On orders above ₹999</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Trending Products */}
+        <section className="mb-12">
+          <h2 className="text-3xl font-bold text-center mb-8">Trending Now</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {[
+              { id: 5, name: "Premium Diary", price: "₹299", image: "/placeholder.svg?height=200&width=200" },
+              { id: 6, name: "Art Set", price: "₹599", image: "/placeholder.svg?height=200&width=200" },
+              { id: 7, name: "Gift Hamper", price: "₹999", image: "/placeholder.svg?height=200&width=200" },
+              { id: 8, name: "School Bundle", price: "₹799", image: "/placeholder.svg?height=200&width=200" },
+            ].map((product) => (
+              <div key={product.id} className="bg-white shadow-md rounded-lg overflow-hidden">
+                <img
+                  src={product.image || "/placeholder.svg"}
+                  alt={product.name}
+                  className="w-full h-48 object-cover"
+                />
+                <div className="p-4">
+                  <h3 className="text-lg font-bold">{product.name}</h3>
+                  <p className="text-gray-600">{product.price}</p>
+                  <button className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700">
+                    Add to Cart
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Categories Banner */}
+        <section className="mb-12">
+          <h2 className="text-3xl font-bold text-center mb-8">Shop by Category</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="relative h-64 rounded-lg overflow-hidden group">
+              <img
+                src="/placeholder.svg?height=300&width=400"
+                alt="School Supplies"
+                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+              />
+              <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+                <div className="text-center text-white">
+                  <h3 className="text-2xl font-bold mb-2">School Supplies</h3>
+                  <button className="bg-white text-black px-6 py-2 rounded-full hover:bg-gray-200">Shop Now</button>
+                </div>
+              </div>
+            </div>
+            <div className="relative h-64 rounded-lg overflow-hidden group">
+              <img
+                src="/placeholder.svg?height=300&width=400"
+                alt="Office Essentials"
+                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+              />
+              <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+                <div className="text-center text-white">
+                  <h3 className="text-2xl font-bold mb-2">Office Essentials</h3>
+                  <button className="bg-white text-black px-6 py-2 rounded-full hover:bg-gray-200">Shop Now</button>
+                </div>
+              </div>
+            </div>
+            <div className="relative h-64 rounded-lg overflow-hidden group">
+              <img
+                src="/placeholder.svg?height=300&width=400"
+                alt="Gift Items"
+                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+              />
+              <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+                <div className="text-center text-white">
+                  <h3 className="text-2xl font-bold mb-2">Gift Items</h3>
+                  <button className="bg-white text-black px-6 py-2 rounded-full hover:bg-gray-200">Shop Now</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Featured Collection */}
+        <section className="mb-12">
+          <h2 className="text-3xl font-bold text-center mb-8">Featured Collection</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {[
+              { id: 9, name: "Designer Notebook", price: "₹199", image: "/placeholder.svg?height=200&width=200" },
+              { id: 10, name: "Birthday Pack", price: "₹499", image: "/placeholder.svg?height=200&width=200" },
+              { id: 11, name: "Premium Pen Set", price: "₹899", image: "/placeholder.svg?height=200&width=200" },
+              { id: 12, name: "Party Supplies", price: "₹1299", image: "/placeholder.svg?height=200&width=200" },
+            ].map((product) => (
+              <div key={product.id} className="bg-white shadow-md rounded-lg overflow-hidden">
+                <div className="relative">
+                  <img
+                    src={product.image || "/placeholder.svg"}
+                    alt={product.name}
+                    className="w-full h-48 object-cover"
+                  />
+                  <div className="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded-full text-sm">New</div>
+                </div>
+                <div className="p-4">
+                  <h3 className="text-lg font-bold">{product.name}</h3>
+                  <p className="text-gray-600">{product.price}</p>
+                  <button className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700">
+                    Add to Cart
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Limited Time Offer Banner */}
+        <section className="mb-12 bg-yellow-100 p-8 rounded-lg">
+          <div className="container mx-auto">
+            <div className="flex flex-col md:flex-row items-center justify-between">
+              <div className="text-center md:text-left mb-6 md:mb-0">
+                <h2 className="text-3xl font-bold text-gray-800 mb-2">Limited Time Offer!</h2>
+                <p className="text-lg text-gray-600">Get an extra 10% off on your first purchase</p>
+                <p className="text-sm text-gray-500 mt-2">Use code: WELCOME10</p>
+              </div>
+              <button className="bg-black text-white px-8 py-3 rounded-full hover:bg-gray-800 transform hover:scale-105 transition-all duration-200">
+                Shop Now
+              </button>
+            </div>
+          </div>
+        </section>
       </main>
       <GiftFinderQuiz />
       <footer className="bg-white py-12 border-t border-gray-200">
         <div className="container mx-auto px-6">
-          <section className="py-16 px-6 bg-gray-200">
-            <div className="max-w-7xl mx-auto text-center">
-              <h2 className="text-3xl font-bold mb-4">Subscribe now & get 20% off</h2>
-              <p className="mb-6">Stay updated with our latest products and offers.</p>
-              <div className="flex justify-center">
+          <section className="py-16 px-6 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg mb-12">
+            <div className="max-w-7xl mx-auto text-center text-white">
+              <h2 className="text-3xl font-bold mb-4">Join Our Newsletter</h2>
+              <p className="mb-6 text-lg">Subscribe now and get 20% off on your first order!</p>
+              <div className="flex justify-center max-w-md mx-auto">
                 <input
                   type="email"
                   placeholder="Enter your email"
-                  className="p-2 border border-gray-400 rounded-l-md focus:outline-none"
+                  className="p-3 w-full border-2 border-white bg-white/10 rounded-l-md focus:outline-none text-white placeholder:text-white/70"
                 />
-                <button className="bg-red-500 text-white p-2 rounded-r-md hover:bg-red-700">
+                <button className="bg-white text-purple-600 px-6 py-3 rounded-r-md font-semibold hover:bg-gray-100 transition-colors">
                   Subscribe
                 </button>
               </div>
+              <p className="mt-4 text-sm text-white/80">By subscribing, you agree to our Privacy Policy</p>
             </div>
           </section>
 
@@ -201,19 +341,33 @@ export default function AmbikaNoveltySite() {
               <h1 className="text-3xl font-bold text-gray-800">
                 Ambika Novelty<span className="text-pink-500">.</span>
               </h1>
-              <p className="text-sm max-w-sm mt-3">
-                some more info ....
-              </p>
+              <p className="text-sm max-w-sm mt-3">some more info ....</p>
             </div>
 
             <div className="flex flex-col md:flex-row gap-8 mb-6 md:mb-0">
               <div>
                 <h4 className="font-semibold text-gray-800 mb-2">COMPANY</h4>
                 <ul className="space-y-2">
-                  <li><a href="http://localhost:3000/homepage" className="hover:underline">Home</a></li>
-                  <li><a href="http://localhost:3000/aboutus" className="hover:underline">About us</a></li>
-                  <li><a href="#" className="hover:underline">Delivery</a></li>
-                  <li><a href="#" className="hover:underline">Privacy policy</a></li>
+                  <li>
+                    <a href="http://localhost:3000/homepage" className="hover:underline">
+                      Home
+                    </a>
+                  </li>
+                  <li>
+                    <a href="http://localhost:3000/aboutus" className="hover:underline">
+                      About us
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" className="hover:underline">
+                      Delivery
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" className="hover:underline">
+                      Privacy policy
+                    </a>
+                  </li>
                 </ul>
               </div>
 
@@ -222,7 +376,11 @@ export default function AmbikaNoveltySite() {
                 <ul className="space-y-2">
                   <li>+1-000-000-0000</li>
                   <li>ambikanovelty@gmail.com</li>
-                  <li><a href="#" className="hover:underline">Instagram</a></li>
+                  <li>
+                    <a href="#" className="hover:underline">
+                      Instagram
+                    </a>
+                  </li>
                 </ul>
               </div>
             </div>
