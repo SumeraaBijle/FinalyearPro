@@ -47,10 +47,12 @@ export default function AmbikaNoveltySite() {
                 <span className="sr-only">Profile</span>
               </Button>
             </Link>
+            <Link href="/wishlist" passHref>
             <Button variant="ghost" size="icon">
               <Heart className="h-5 w-5" />
               <span className="sr-only">Wishlist</span>
             </Button>
+            </Link>
             <Link href="/admin" passHref>
               <Button variant="ghost" size="icon">
                 <Shield className="h-5 w-5 text-red-600" />
