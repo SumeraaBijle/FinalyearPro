@@ -1,171 +1,395 @@
 .container {
-    padding: 2rem;
-    max-width: 1200px;
-    margin: 0 auto;
     min-height: 100vh;
-    background: #f0f2f5;  /* Light gray background */
-  }
-  
-  .dashboard {
-    display: flex;
-    gap: 2rem;
-    background: white;
-    border-radius: 16px;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    overflow: hidden;
-  }
-  
-  .sidebar {
-    width: 280px;
+    background-color: #f0f2f5;
     padding: 2rem;
-    background: #551635;  /* Dark background for sidebar */
-    color: white;
-  }
-  
-  .userInfo {
+}
+
+.dashboard {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 24px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+}
+
+.sidebar {
+    background: #1a1a2e;
+    padding: 2rem;
+    border-right: none;
+    color: #fff;
+}
+
+.userInfo {
     text-align: center;
-    margin-bottom: 2rem;
     padding-bottom: 2rem;
-    border-bottom: 1px solid #333;  /* Darker border */
-  }
-  
-  .userName {
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: white;  /* White text for contrast */
-    margin: 0.5rem 0;
-  }
-  
-  .userEmail {
-    color: #a3a3a3;  /* Light gray text */
-    font-size: 0.875rem;
-  }
-  
-  .navButton {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.avatarWrapper {
+    position: relative;
+    width: fit-content;
+    margin: 0 auto;
+}
+
+.avatarContainer {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 1rem;
+    border-radius: 50%;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.avatar {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border: 3px solid #4a90e2;
+}
+
+.editOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(26, 26, 46, 0.7);
     display: flex;
     align-items: center;
-    gap: 0.75rem;
-    padding: 0.75rem 1rem;
-    text-align: left;
+    justify-content: center;
+    color: white;
+    font-size: 1.5rem;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.avatarContainer:hover .editOverlay {
+    opacity: 1;
+}
+
+.onlineStatus {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    width: 12px;
+    height: 12px;
+    background: #22c55e;
+    border: 2px solid #1a1a2e;
+    border-radius: 50%;
+    box-shadow: 0 0 0 2px white;
+}
+
+.userName {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0.5rem 0;
+    color: #fff;
+}
+
+.userEmail {
+    color: #a0aec0;
+    font-size: 0.9rem;
+}
+
+.userStats {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 1.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 1rem;
+    border-radius: 12px;
+}
+
+.statItem {
+    text-align: center;
+}
+
+.statNumber {
+    display: block;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #4a90e2;
+}
+
+.statLabel {
+    font-size: 0.8rem;
+    color: #a0aec0;
+}
+
+.nav {
+    margin-top: 2rem;
+}
+
+.navButton {
+    width: 100%;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
     background: none;
     border: none;
-    border-radius: 8px;
+    border-radius: 12px;
+    color: #a0aec0;
     cursor: pointer;
-    transition: all 0.2s;
-    color: #a3a3a3;  /* Light gray text */
-  }
-  
-  .navButton:hover {
-    background-color: #333;  /* Darker background on hover */
-    color: white;
-  }
-  
-  .navButton.active {
-    background-color: #c92a8c;  /* Blue for active state */
-    color: white;
+    transition: all 0.3s ease;
+}
+
+.navButton:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: #fff;
+    transform: translateX(5px);
+}
+
+.navButton.active {
+    background: #4a90e2;
+    color: #fff;
     font-weight: 500;
-  }
-  
-  .signOutButton {
+    box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
+}
+
+.signOutButton {
+    width: 100%;
     margin-top: 2rem;
-    padding: 0.75rem 1rem;
+    padding: 1rem;
     display: flex;
     align-items: center;
-    gap: 0.75rem;
-    background-color: #c92a8c;   /* Red background */
-    color: white;
+    gap: 1rem;
+    background: rgba(220, 38, 38, 0.1);
     border: none;
-    border-radius: 8px;
+    border-radius: 12px;
+    color: #dc2626;
     cursor: pointer;
-    transition: all 0.2s;
-    font-weight: 500;
-  }
-  
-  .signOutButton:hover {
-    background-color: #7a0959;  /* Darker red on hover */
-  }
-  
-  .content {
-    flex: 1;
+    transition: all 0.3s ease;
+}
+
+.signOutButton:hover {
+    background: rgba(220, 38, 38, 0.2);
+    transform: translateX(5px);
+}
+
+.content {
     padding: 2rem;
-    background: white;
-  }
-  
-  .infoCard {
-    background: #f8fafc;  /* Very light blue-gray */
-    padding: 1.5rem;
-    border-radius: 12px;
-    border: 1px solid #e2e8f0;
-    transition: all 0.2s;
-  }
-  
-  .infoCard:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 6px -1px rgb(151, 14, 121);
-  }
-  
-  .settingsCard {
-    background: #f8fafc;
-    padding: 1.5rem;
-    border-radius: 12px;
-    border: 1px solid #e2e8f0;
-  }
-  
-  .primaryButton {
-    margin-top: 1rem;
-    padding: 0.75rem 1.5rem;
-    background: #c92a8c;  /* Blue button */
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background-color 0.2s;
-  }
-  
-  .primaryButton:hover {
-    background: #b61987;  /* Darker blue on hover */
-  }
-  
-  .settingsCard {
-    background: #f8f9fa;
-    padding: 1.5rem;
-    border-radius: 12px;
-    border: 1px solid #eee;
-    margin-bottom: 1rem;
-  }
-  
-  .settingsCard h3 {
-    margin-bottom: 1rem;
-    font-weight: 500;
-  }
-  
-  .settingOption {
-    margin-bottom: 0.75rem;
-  }
-  
-  .settingOption label {
+    background: #fff;
+}
+
+.sectionHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.sectionHeader h2 {
+    color: #1a1a2e;
+    font-size: 1.8rem;
+    font-weight: 600;
+}
+
+.editButton {
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    background: #4a90e2;
+    color: white;
+    border: none;
+    border-radius: 12px;
     cursor: pointer;
-  }
-  
-  .settingOption input[type="checkbox"] {
-    width: 1rem;
-    height: 1rem;
-  }
-  
-  @media (max-width: 768px) {
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.editButton:hover {
+    background: #357abd;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
+}
+
+.profileGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.profileCard {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 16px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease;
+}
+
+.profileCard:hover {
+    transform: translateY(-5px);
+}
+
+.profileCard h3 {
+    color: #1a1a2e;
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
+}
+
+.infoField {
+    margin: 1.5rem 0;
+}
+
+.infoField label {
+    display: block;
+    font-size: 0.9rem;
+    color: #64748b;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+.editInput {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.editInput:focus {
+    border-color: #4a90e2;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+}
+
+.statsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1.5rem;
+}
+
+.statCard {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.5rem;
+    background: #f8fafc;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+
+.statCard:hover {
+    background: #f1f5f9;
+    transform: translateY(-3px);
+}
+
+.statIcon {
+    font-size: 1.8rem;
+    color: #4a90e2;
+}
+
+.settingsGrid {
+    display: grid;
+    gap: 2rem;
+}
+
+.settingsCard {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 16px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+}
+
+.toggleLabel {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    padding: 0.5rem 0;
+}
+
+.toggleWrapper {
+    position: relative;
+    width: 56px;
+    height: 28px;
+}
+
+.toggleSlider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #cbd5e1;
+    transition: .4s;
+    border-radius: 34px;
+}
+
+.toggleSlider:before {
+    position: absolute;
+    content: "";
+    height: 24px;
+    width: 24px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.toggleInput:checked + .toggleSlider {
+    background-color: #4a90e2;
+}
+
+.toggleInput:checked + .toggleSlider:before {
+    transform: translateX(28px);
+}
+
+.emptyState {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: #64748b;
+}
+
+.emptyState svg {
+    color: #4a90e2;
+    margin-bottom: 1.5rem;
+}
+
+.primaryButton {
+    margin-top: 1.5rem;
+    padding: 0.75rem 2rem;
+    background: #4a90e2;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.primaryButton:hover {
+    background: #357abd;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
+}
+
+@media (max-width: 768px) {
     .dashboard {
-      flex-direction: column;
+        grid-template-columns: 1fr;
     }
-  
+    
     .sidebar {
-      width: 100%;
+        border-right: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     }
-  
-    .profileInfo {
-      grid-template-columns: 1fr;
+
+    .container {
+        padding: 1rem;
     }
-  }
+
+    .profileGrid {
+        grid-template-columns: 1fr;
+    }
+}
