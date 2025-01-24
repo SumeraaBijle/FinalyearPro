@@ -23,7 +23,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "dotenv": "^16.4.7",
-    "framer-motion": "^11.18.1",
+    "framer-motion": "^11.18.2",
     "lucide-react": "^0.451.0",
     "mongodb": "^5.4.0",
     "mongoose": "^8.7.2",
