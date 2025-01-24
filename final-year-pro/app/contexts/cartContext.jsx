@@ -1,19 +1,55 @@
-'use client'
+"use client"
 
-import React, { createContext, useContext, useState } from 'react'
+import React, { createContext, useContext, useState, useEffect } from "react"
 
 const CartContext = createContext()
 
+/**
+ * @typedef {Object} CartItem
+ * @property {string} id
+ * @property {string} name
+ * @property {number} price
+ * @property {number} quantity
+ */
+
+/**
+ * @typedef {Object} CartContextType
+ * @property {CartItem[]} cart
+ * @property {(product: CartItem) => void} addToCart
+ * @property {(productId: string) => void} removeFromCart
+ * @property {(productId: string, newQuantity: number) => void} updateQuantity
+ * @property {() => void} clearCart
+ */
+
+/**
+ * @param {{ children: React.ReactNode }} props
+ */
 export function CartProvider({ children }) {
   const [cart, setCart] = useState([])
 
+  // Load cart from localStorage on initial render
+  useEffect(() => {
+    const savedCart = localStorage.getItem("cart")
+    if (savedCart) {
+      setCart(JSON.parse(savedCart))
+    }
+  }, [])
+
+  // Save cart to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem("cart", JSON.stringify(cart))
+  }, [cart])
+
   const addToCart = (product) => {
     setCart((prevCart) => {
-      const existingItem = prevCart.find((item) => item.id === product.id)
-      if (existingItem) {
-        return prevCart.map((item) =>
-          item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
-        )
+      const existingItemIndex = prevCart.findIndex((item) => item.id === product.id)
+      if (existingItemIndex > -1) {
+        const newCart = [...prevCart]
+        newCart[existingItemIndex] = {
+          ...newCart[existingItemIndex],
+          quantity: newCart[existingItemIndex].quantity + 1,
+        }
+        return newCart
       }
       return [...prevCart, { ...product, quantity: 1 }]
     })
@@ -24,20 +60,33 @@ export function CartProvider({ children }) {
   }
 
   const updateQuantity = (productId, newQuantity) => {
-    setCart((prevCart) =>
-      prevCart.map((item) =>
-        item.id === productId ? { ...item, quantity: newQuantity } : item
-      )
-    )
+    setCart((prevCart) => prevCart.map((item) => (item.id === productId ? { ...item, quantity: newQuantity } : item)))
   }
 
-  return (
-    <CartContext.Provider value={{ cart, addToCart, removeFromCart, updateQuantity }}>
-      {children}
-    </CartContext.Provider>
-  )
+  const clearCart = () => {
+    setCart([])
+  }
+
+  /** @type {CartContextType} */
+  const contextValue = {
+    cart,
+    addToCart,
+    removeFromCart,
+    updateQuantity,
+    clearCart,
+  }
+
+  return <CartContext.Provider value={contextValue}>{children}</CartContext.Provider>
 }
 
+/**
+ * @returns {CartContextType}
+ */
 export function useCart() {
-  return useContext(CartContext)
+  const context = useContext(CartContext)
+  if (context === undefined) {
+    throw new Error("useCart must be used within a CartProvider")
+  }
+  return context
 }
+

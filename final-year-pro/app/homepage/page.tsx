@@ -318,81 +318,112 @@ export default function AmbikaNoveltySite() {
         </section>
       </main>
       <GiftFinderQuiz />
-      <footer className="bg-white py-12 border-t border-gray-200">
-        <div className="container mx-auto px-6">
-          <section className="py-16 px-6 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg mb-12">
-            <div className="max-w-7xl mx-auto text-center text-white">
-              <h2 className="text-3xl font-bold mb-4">Join Our Newsletter</h2>
-              <p className="mb-6 text-lg">Subscribe now and get 20% off on your first order!</p>
-              <div className="flex justify-center max-w-md mx-auto">
-                <input
-                  type="email"
-                  placeholder="Enter your email"
-                  className="p-3 w-full border-2 border-white bg-white/10 rounded-l-md focus:outline-none text-white placeholder:text-white/70"
-                />
-                <button className="bg-white text-purple-600 px-6 py-3 rounded-r-md font-semibold hover:bg-gray-100 transition-colors">
-                  Subscribe
-                </button>
-              </div>
-              <p className="mt-4 text-sm text-white/80">By subscribing, you agree to our Privacy Policy</p>
-            </div>
-          </section>
+      <footer className="bg-gradient-to-r from-gray-100 via-gray-200 to-gray-300 py-10">
+  <div className="container mx-auto px-4">
+    <div className="flex flex-col md:flex-row justify-between items-start text-gray-700">
+      {/* Logo and Description */}
+      <div className="mb-8 md:mb-0">
+        <h1 className="text-4xl font-extrabold text-gray-800">
+          Ambika<span className="text-pink-500">Novelty</span>
+        </h1>
+        <p className="text-sm mt-3 max-w-sm text-gray-600">
+          Discover a wide range of products with unique designs and quality, made just for you.
+        </p>
+      </div>
 
-          <div className="flex flex-col md:flex-row justify-between items-center text-gray-600">
-            <div className="mb-6 md:mb-0">
-              <h1 className="text-3xl font-bold text-gray-800">
-                Ambika Novelty<span className="text-pink-500">.</span>
-              </h1>
-              <p className="text-sm max-w-sm mt-3">some more info ....</p>
-            </div>
-
-            <div className="flex flex-col md:flex-row gap-8 mb-6 md:mb-0">
-              <div>
-                <h4 className="font-semibold text-gray-800 mb-2">COMPANY</h4>
-                <ul className="space-y-2">
-                  <li>
-                    <a href="http://localhost:3000/homepage" className="hover:underline">
-                      Home
-                    </a>
-                  </li>
-                  <li>
-                    <a href="http://localhost:3000/aboutus" className="hover:underline">
-                      About us
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" className="hover:underline">
-                      Delivery
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" className="hover:underline">
-                      Privacy policy
-                    </a>
-                  </li>
-                </ul>
-              </div>
-
-              <div>
-                <h4 className="font-semibold text-gray-800 mb-2">GET IN TOUCH</h4>
-                <ul className="space-y-2">
-                  <li>+1-000-000-0000</li>
-                  <li>ambikanovelty@gmail.com</li>
-                  <li>
-                    <a href="#" className="hover:underline">
-                      Instagram
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-
-          <div className="text-center mt-10 text-gray-500 text-sm">
-            <p>Copyright 2024© ambikanovelty.com - All Rights Reserved.</p>
-          </div>
+      {/* Company Links */}
+      <div className="flex flex-col md:flex-row gap-12">
+        <div>
+          <h4 className="font-semibold text-gray-800 text-lg mb-4">Company</h4>
+          <ul className="space-y-3">
+            <li>
+              <a
+                href="http://localhost:3000/homepage"
+                className="hover:text-pink-500 hover:underline transition duration-300"
+              >
+                Home
+              </a>
+            </li>
+            <li>
+              <a
+                href="http://localhost:3000/aboutus"
+                className="hover:text-pink-500 hover:underline transition duration-300"
+              >
+                About Us
+              </a>
+            </li>
+            <li>
+              <a
+                href="#"
+                className="hover:text-pink-500 hover:underline transition duration-300"
+              >
+                Delivery
+              </a>
+            </li>
+            <li>
+              <a
+                href="#"
+                className="hover:text-pink-500 hover:underline transition duration-300"
+              >
+                Privacy Policy
+              </a>
+            </li>
+          </ul>
         </div>
-      </footer>
+
+        {/* Get in Touch */}
+        <div>
+          <h4 className="font-semibold text-gray-800 text-lg mb-4">Get in Touch</h4>
+          <ul className="space-y-3">
+            <li className="flex items-center gap-2">
+              <span className="font-medium">Phone:</span> 
+              <span className="text-pink-500">+1-000-000-0000</span>
+            </li>
+            <li className="flex items-center gap-2">
+              <span className="font-medium">Email:</span>
+              <a
+                href="mailto:ambikanovelty@gmail.com"
+                className="text-pink-500 hover:underline transition duration-300"
+              >
+                ambikanovelty@gmail.com
+              </a>
+            </li>
+            <li>
+              <a
+                href="#"
+                className="flex items-center gap-2 text-pink-500 hover:underline transition duration-300"
+              >
+                <img
+                  src="/images/insta.jpg"
+                  alt="Instagram"
+                  className="h-5 w-5"
+                />
+                Instagram
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    {/* Footer Bottom */}
+    <div className="mt-10 text-center text-gray-600 text-sm">
+      <p className="flex flex-col md:flex-row justify-center items-center gap-2">
+        <span>
+          Copyright 2025©{" "}
+          <a
+            href="http://localhost:3000"
+            className="text-pink-500 hover:underline transition duration-300"
+          >
+            ambikanovelty.com
+          </a>
+        </span>
+        <span className="hidden md:inline-block">|</span>
+        <span>All Rights Reserved.</span>
+      </p>
+    </div>
+  </div>
+</footer>
     </div>
   )
 }
