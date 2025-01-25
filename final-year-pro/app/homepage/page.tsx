@@ -24,8 +24,16 @@ import { GiftFinderQuiz } from "@/components/ui/GiftFinderQuiz"
 
 export default function AmbikaNoveltySite() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
-      <header className="bg-white shadow-sm">
+    <div className="min-h-screen bg-gradient-to-br from-purple-100 via-pink-100 to-violet-100 relative">
+      {/* Enhanced background blur elements */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-40 -right-40 w-[500px] h-[500px] bg-pink-300 rounded-full mix-blend-multiply filter blur-[80px] opacity-30 animate-pulse"></div>
+        <div className="absolute top-20 -left-40 w-[600px] h-[600px] bg-violet-300 rounded-full mix-blend-multiply filter blur-[80px] opacity-30 animate-pulse delay-300"></div>
+        <div className="absolute bottom-40 right-40 w-[550px] h-[550px] bg-purple-300 rounded-full mix-blend-multiply filter blur-[80px] opacity-30 animate-pulse delay-700"></div>
+      </div>
+
+      {/* Enhanced header with better glassmorphism */}
+      <header className="sticky top-0 z-50 backdrop-blur-xl bg-white/60 border-b border-white/20 shadow-lg">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <Link href="/homepage" passHref>
             <h1 className="text-2xl font-bold text-gray-800 cursor-pointer">Ambika Novelty</h1>
@@ -63,7 +71,8 @@ export default function AmbikaNoveltySite() {
         </div>
       </header>
 
-      <nav className="relative bg-white border-b border-gray-200 shadow-sm">
+      {/* Enhanced navigation */}
+      <nav className="relative backdrop-blur-xl bg-white/50 border-b border-white/20 shadow-md">
         <div className="absolute inset-0 opacity-[0.03]" 
              style={{ 
                backgroundImage: `linear-gradient(#000 1px, transparent 1px), linear-gradient(to right, #000 1px, transparent 1px)`,
@@ -244,75 +253,78 @@ export default function AmbikaNoveltySite() {
         </div>
       </nav>
 
-      <main className="container mx-auto px-4 py-8">
+      <main className="container mx-auto px-4 py-8 relative">
+        {/* Enhanced Latest Arrivals section */}
         <section className="mb-12">
-          <h2 className="text-4xl font-bold text-center mb-4 text-gray-800">
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-violet-500">
+          <h2 className="text-5xl font-bold text-center mb-4 animate-in">
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-pink-600 via-purple-600 to-violet-600">
               Latest Arrivals
             </span>
           </h2>
-          <div className="text-center mt-8">
-            <Link href="/products" passHref>
-              <button className="bg-black text-white px-7 py-2 font-semibold hover:bg-gray-800 transform hover:scale-105 transition-all duration-200 shadow-lg">
-                Shop Now
-              </button>
-            </Link>
-          </div>
-          <p className="text-center text-gray-600 mb-8">Discover our newest stationery and gift items!</p>
+          <p className="text-center text-gray-700 mb-8 text-lg">
+            Discover our newest stationery and gift items!
+          </p>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {/* Enhanced Product cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
             {[
               { 
-                id: 1, 
-                name: "Premium Notebook", 
-                price: "₹50", 
-                image: "https://images.unsplash.com/photo-1531346680769-a1d79b57de5c?ixlib=rb-4.0.3",
-                description: "High-quality paper, hardbound cover"
+                id: 5, 
+                name: "Premium Diary", 
+                price: "₹299", 
+                image: "https://images.unsplash.com/photo-1544816155-12df9643f363?ixlib=rb-4.0.3",
+                description: "Leather-bound premium diary",
+                badge: "New"
               },
               { 
-                id: 2, 
-                name: "Messi Keychain", 
-                price: "₹199", 
-                image: "https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?ixlib=rb-4.0.3",
-                description: "Official licensed merchandise"
+                id: 6, 
+                name: "Professional Art Set", 
+                price: "₹599", 
+                image: "https://images.unsplash.com/photo-1513364776144-60967b0f800f?ixlib=rb-4.0.3",
+                description: "Complete art supplies kit",
+                badge: "Limited Edition"
               },
               { 
-                id: 3, 
-                name: "Barbie Stationery Kit", 
-                price: "₹700", 
-                image: "https://images.unsplash.com/photo-1628359355624-855775b5c9c8?ixlib=rb-4.0.3",
-                description: "Complete set with pencils and accessories"
+                id: 7, 
+                name: "Luxury Gift Hamper", 
+                price: "₹999", 
+                image: "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?ixlib=rb-4.0.3",
+                description: "Curated premium gift collection",
+                badge: "Bestseller"
               },
               { 
-                id: 4, 
-                name: "Premium Stationery Kit", 
-                price: "₹149", 
-                image: "https://images.unsplash.com/photo-1608889476561-6242cfdbf622?ixlib=rb-4.0.3",
-                description: "Essential school supplies bundle"
+                id: 8, 
+                name: "School Essentials Bundle", 
+                price: "₹799", 
+                image: "https://images.unsplash.com/photo-1452860606245-08befc0ff44b?ixlib=rb-4.0.3",
+                description: "Complete school supplies set",
+                badge: "Trending"
               },
             ].map((product) => (
               <div 
                 key={product.id} 
-                className="bg-white shadow-lg rounded-xl overflow-hidden transform transition-all duration-300 hover:scale-105 hover:shadow-xl"
+                className="group backdrop-blur-xl bg-white/40 border border-white/30 shadow-lg rounded-2xl overflow-hidden transform transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:bg-white/60"
               >
-                <div className="relative">
+                <div className="relative overflow-hidden">
                   <img
                     src={product.image}
                     alt={product.name}
-                    className="w-full h-48 object-cover"
+                    className="w-full h-48 object-cover transform transition-transform duration-500 group-hover:scale-110"
                   />
-                  <div className="absolute top-0 right-0 m-2">
-                    <button className="p-2 bg-white rounded-full shadow-md hover:bg-gray-100 transition-colors">
-                      <Heart className="h-4 w-4 text-gray-600" />
-                    </button>
+                  <div className="absolute top-2 right-2">
+                    <span className="backdrop-blur-md bg-white/30 px-3 py-1 rounded-full text-sm font-medium text-gray-800">
+                      {product.badge}
+                    </span>
                   </div>
                 </div>
                 <div className="p-4">
-                  <h3 className="text-lg font-bold text-gray-800">{product.name}</h3>
-                  <p className="text-sm text-gray-600 mb-2">{product.description}</p>
+                  <h3 className="text-lg font-bold text-gray-800 group-hover:text-pink-600 transition-colors duration-300">
+                    {product.name}
+                  </h3>
+                  <p className="text-sm text-gray-700 mb-3">{product.description}</p>
                   <div className="flex items-center justify-between">
                     <p className="text-lg font-bold text-pink-600">{product.price}</p>
-                    <button className="bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition-colors">
+                    <button className="backdrop-blur-md bg-black/80 hover:bg-gradient-to-r hover:from-pink-500 hover:to-violet-500 text-white px-4 py-2 rounded-lg transition-all duration-300 transform hover:scale-105">
                       Add to Cart
                     </button>
                   </div>
@@ -322,8 +334,8 @@ export default function AmbikaNoveltySite() {
           </div>
         </section>
 
-        {/* Special Offers Banner */}
-        <section className="mb-12 bg-gradient-to-r from-violet-500 to-pink-500 text-white py-8 rounded-xl shadow-lg">
+        {/* Enhanced Special Offers Banner */}
+        <section className="mb-12 backdrop-blur-xl bg-gradient-to-r from-violet-500/80 via-purple-500/80 to-pink-500/80 text-white py-12 rounded-2xl shadow-xl transform hover:scale-[1.02] transition-transform duration-300">
           <div className="container mx-auto px-4 text-center">
             <h2 className="text-3xl font-bold mb-4">Special Offers!</h2>
             <p className="text-xl mb-6">Get up to 50% off on selected items</p>
@@ -344,58 +356,208 @@ export default function AmbikaNoveltySite() {
           </div>
         </section>
 
-        {/* Trending Products */}
+        {/* Enhanced Trending Products */}
         <section className="mb-12">
-          <h2 className="text-4xl font-bold text-center mb-8">
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-violet-500 to-pink-500">
-              Trending Now
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {[
+              { 
+                id: 1, 
+                name: "Messi Sports Keychain", 
+                price: "₹199", 
+                image: "https://images.unsplash.com/photo-1597248881519-db089d3744a5?ixlib=rb-4.0.3",
+                description: "Official licensed merchandise",
+                badge: "New"
+              },
+              { 
+                id: 2, 
+                name: "Barbie Dream Collection", 
+                price: "₹700", 
+                image: "https://images.unsplash.com/photo-1595750773001-a414c5ed2307?ixlib=rb-4.0.3",
+                description: "Complete set with pencils and accessories",
+                badge: "Limited Edition"
+              },
+              { 
+                id: 3, 
+                name: "Spider-Man Stationery Set", 
+                price: "₹499", 
+                image: "https://images.unsplash.com/photo-1608889825103-eb5ed706fc64?ixlib=rb-4.0.3",
+                description: "Marvel themed school supplies",
+                badge: "Trending"
+              },
+              { 
+                id: 4, 
+                name: "Premium Diary", 
+                price: "₹299", 
+                image: "https://images.unsplash.com/photo-1544816155-12df9643f363?ixlib=rb-4.0.3",
+                description: "Leather-bound premium diary",
+                badge: "Bestseller"
+              },
+            ].map((product) => (
+              <div 
+                key={product.id} 
+                className="group bg-white shadow-lg rounded-xl overflow-hidden transform transition-all duration-300 hover:scale-105 hover:shadow-2xl"
+              >
+                <div className="relative overflow-hidden">
+                  <img
+                    src={product.image}
+                    alt={product.name}
+                    className="w-full h-48 object-cover transform transition-transform duration-500 group-hover:scale-110"
+                  />
+                  <div className="absolute top-2 right-2">
+                    <span className={`
+                      px-3 py-1 rounded-full text-sm font-medium
+                      ${product.badge === 'New' ? 'bg-gradient-to-r from-pink-500 to-violet-500' : ''}
+                      ${product.badge === 'Bestseller' ? 'bg-gradient-to-r from-yellow-400 to-orange-500' : ''}
+                      ${product.badge === 'Limited Edition' ? 'bg-gradient-to-r from-purple-500 to-indigo-500' : ''}
+                      ${product.badge === 'Trending' ? 'bg-gradient-to-r from-red-500 to-pink-500' : ''}
+                      text-white
+                    `}>
+                      {product.badge}
+                    </span>
+                  </div>
+                </div>
+                <div className="p-4">
+                  <h3 className="text-lg font-bold text-gray-800 group-hover:text-pink-600 transition-colors duration-300">
+                    {product.name}
+                  </h3>
+                  <p className="text-sm text-gray-600 mb-3">{product.description}</p>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-lg font-bold text-pink-600">{product.price}</p>
+                      <p className="text-xs text-gray-500">Inclusive of taxes</p>
+                    </div>
+                    <button className="bg-black hover:bg-gradient-to-r hover:from-pink-500 hover:to-violet-500 text-white px-4 py-2 rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg">
+                      Add to Cart
+                    </button>
+                  </div>
+                </div>
+                <div className="px-4 pb-4">
+                  <div className="flex items-center justify-between text-sm text-gray-500">
+                    <span className="flex items-center">
+                      <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M8 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM15 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" />
+                        <path d="M3 4h1.5l1.8 8.7a2 2 0 002 1.3h8.4a2 2 0 002-1.3L20 4h-1.5l-1.8 8.7a.5.5 0 01-.5.3H7.7a.5.5 0 01-.5-.3L5.5 4z" />
+                      </svg>
+                      Free Delivery
+                    </span>
+                    <span className="flex items-center">
+                      <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                      </svg>
+                      4.5/5
+                    </span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Enhanced Categories Banner */}
+        <section className="mb-16">
+          <h2 className="text-4xl font-bold text-center mb-10">
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-violet-600 via-purple-600 to-pink-600">
+              Shop by Category
+            </span>
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="relative h-80 rounded-2xl overflow-hidden group transform hover:scale-105 transition-transform duration-300 shadow-xl">
+              <img
+                src="https://images.unsplash.com/photo-1497633762265-9d179a990aa6"
+                alt="School Supplies"
+                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+              />
+              <div className="absolute inset-0 backdrop-blur-sm bg-black/40 flex items-center justify-center group-hover:bg-black/50 transition-colors">
+                <div className="text-center text-white transform translate-y-4 group-hover:translate-y-0 transition-transform">
+                  <h3 className="text-2xl font-bold mb-2">School Supplies</h3>
+                  <button className="backdrop-blur-md bg-white/80 text-black px-6 py-2 rounded-full hover:bg-white transform hover:scale-105 transition-all duration-300">
+                    Shop Now
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div className="relative h-80 rounded-2xl overflow-hidden group transform hover:scale-105 transition-transform duration-300 shadow-xl">
+              <img
+                src="https://images.unsplash.com/photo-1497032628192-86f99bcd76bc"
+                alt="Office Essentials"
+                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+              />
+              <div className="absolute inset-0 backdrop-blur-sm bg-black/40 flex items-center justify-center group-hover:bg-black/50 transition-colors">
+                <div className="text-center text-white transform translate-y-4 group-hover:translate-y-0 transition-transform">
+                  <h3 className="text-2xl font-bold mb-2">Office Essentials</h3>
+                  <button className="backdrop-blur-md bg-white/80 text-black px-6 py-2 rounded-full hover:bg-white transform hover:scale-105 transition-all duration-300">
+                    Shop Now
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div className="relative h-80 rounded-2xl overflow-hidden group transform hover:scale-105 transition-transform duration-300 shadow-xl">
+              <img
+                src="https://images.unsplash.com/photo-1549465220-1a8b9238cd48"
+                alt="Gift Items"
+                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+              />
+              <div className="absolute inset-0 backdrop-blur-sm bg-black/40 flex items-center justify-center group-hover:bg-black/50 transition-colors">
+                <div className="text-center text-white transform translate-y-4 group-hover:translate-y-0 transition-transform">
+                  <h3 className="text-2xl font-bold mb-2">Gift Items</h3>
+                  <button className="backdrop-blur-md bg-white/80 text-black px-6 py-2 rounded-full hover:bg-white transform hover:scale-105 transition-all duration-300">
+                    Shop Now
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Enhanced Featured Collection */}
+        <section className="mb-16">
+          <h2 className="text-4xl font-bold text-center mb-10">
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-violet-600 via-purple-600 to-pink-600">
+              Featured Collection
             </span>
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {[
               { 
-                id: 5, 
-                name: "Premium Diary", 
-                price: "₹299", 
-                image: "https://images.unsplash.com/photo-1544816155-12df9643f363?ixlib=rb-4.0.3",
-                description: "Leather-bound premium diary"
+                id: 9, 
+                name: "Marvel Avengers Diary", 
+                price: "₹399", 
+                image: "https://images.unsplash.com/photo-1608889825103-eb5ed706fc64?ixlib=rb-4.0.3",
+                description: "Limited Edition Superhero Collection"
               },
               { 
-                id: 6, 
-                name: "Professional Art Set", 
-                price: "₹599", 
-                image: "https://images.unsplash.com/photo-1513364776144-60967b0f800f?ixlib=rb-4.0.3",
-                description: "Complete art supplies kit"
-              },
-              { 
-                id: 7, 
-                name: "Luxury Gift Hamper", 
-                price: "₹999", 
-                image: "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?ixlib=rb-4.0.3",
-                description: "Curated premium gift collection"
-              },
-              { 
-                id: 8, 
-                name: "School Essentials Bundle", 
+                id: 10, 
+                name: "Birthday Surprise Box", 
                 price: "₹799", 
-                image: "https://images.unsplash.com/photo-1452860606245-08befc0ff44b?ixlib=rb-4.0.3",
-                description: "Complete school supplies set"
+                image: "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?ixlib=rb-4.0.3",
+                description: "Curated Gift Box with Premium Items"
+              },
+              { 
+                id: 11, 
+                name: "Parker Premium Set", 
+                price: "₹1299", 
+                image: "https://images.unsplash.com/photo-1583485088034-697b5bc54ccd?ixlib=rb-4.0.3",
+                description: "Luxury Pen & Pencil Collection"
+              },
+              { 
+                id: 12, 
+                name: "Disney Princess Pack", 
+                price: "₹899", 
+                image: "https://images.unsplash.com/photo-1535572290543-960a8046f5af?ixlib=rb-4.0.3",
+                description: "Complete School Stationery Set"
               },
             ].map((product) => (
-              <div 
-                key={product.id} 
-                className="bg-white shadow-lg rounded-xl overflow-hidden transform transition-all duration-300 hover:scale-105 hover:shadow-xl"
-              >
+              <div key={product.id} className="bg-white shadow-lg rounded-xl overflow-hidden transform transition-all duration-300 hover:scale-105 hover:shadow-xl">
                 <div className="relative">
                   <img
                     src={product.image}
                     alt={product.name}
                     className="w-full h-48 object-cover"
                   />
-                  <div className="absolute top-0 right-0 m-2">
-                    <button className="p-2 bg-white rounded-full shadow-md hover:bg-gray-100 transition-colors">
-                      <Heart className="h-4 w-4 text-gray-600" />
-                    </button>
+                  <div className="absolute top-2 right-2">
+                    <span className="bg-gradient-to-r from-pink-500 to-violet-500 text-white px-3 py-1 rounded-full text-sm font-medium">
+                      New
+                    </span>
                   </div>
                 </div>
                 <div className="p-4">
@@ -403,7 +565,7 @@ export default function AmbikaNoveltySite() {
                   <p className="text-sm text-gray-600 mb-2">{product.description}</p>
                   <div className="flex items-center justify-between">
                     <p className="text-lg font-bold text-pink-600">{product.price}</p>
-                    <button className="bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition-colors">
+                    <button className="bg-gradient-to-r from-pink-500 to-violet-500 text-white px-4 py-2 rounded-lg hover:from-pink-600 hover:to-violet-600 transition-colors">
                       Add to Cart
                     </button>
                   </div>
@@ -413,95 +575,8 @@ export default function AmbikaNoveltySite() {
           </div>
         </section>
 
-        {/* Categories Banner */}
-        <section className="mb-12">
-          <h2 className="text-3xl font-bold text-center mb-8">
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-violet-500 to-pink-500">
-              Shop by Category
-            </span>
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="relative h-64 rounded-xl overflow-hidden group">
-              <img
-                src="https://images.unsplash.com/photo-1497633762265-9d179a990aa6"
-                alt="School Supplies"
-                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/50 to-transparent flex items-center justify-center group-hover:bg-black/60 transition-colors">
-                <div className="text-center text-white transform translate-y-4 group-hover:translate-y-0 transition-transform">
-                  <h3 className="text-2xl font-bold mb-2">School Supplies</h3>
-                  <button className="bg-white text-black px-6 py-2 rounded-full hover:bg-gray-200 transform hover:scale-105 transition-all duration-300">
-                    Shop Now
-                  </button>
-                </div>
-              </div>
-            </div>
-            <div className="relative h-64 rounded-xl overflow-hidden group">
-              <img
-                src="https://images.unsplash.com/photo-1497032628192-86f99bcd76bc"
-                alt="Office Essentials"
-                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/50 to-transparent flex items-center justify-center group-hover:bg-black/60 transition-colors">
-                <div className="text-center text-white transform translate-y-4 group-hover:translate-y-0 transition-transform">
-                  <h3 className="text-2xl font-bold mb-2">Office Essentials</h3>
-                  <button className="bg-white text-black px-6 py-2 rounded-full hover:bg-gray-200 transform hover:scale-105 transition-all duration-300">
-                    Shop Now
-                  </button>
-                </div>
-              </div>
-            </div>
-            <div className="relative h-64 rounded-xl overflow-hidden group">
-              <img
-                src="https://images.unsplash.com/photo-1549465220-1a8b9238cd48"
-                alt="Gift Items"
-                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/50 to-transparent flex items-center justify-center group-hover:bg-black/60 transition-colors">
-                <div className="text-center text-white transform translate-y-4 group-hover:translate-y-0 transition-transform">
-                  <h3 className="text-2xl font-bold mb-2">Gift Items</h3>
-                  <button className="bg-white text-black px-6 py-2 rounded-full hover:bg-gray-200 transform hover:scale-105 transition-all duration-300">
-                    Shop Now
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Featured Collection */}
-        <section className="mb-12">
-          <h2 className="text-3xl font-bold text-center mb-8">Featured Collection</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {[
-              { id: 9, name: "Designer Notebook", price: "₹199", image: "/placeholder.svg?height=200&width=200" },
-              { id: 10, name: "Birthday Pack", price: "₹499", image: "/placeholder.svg?height=200&width=200" },
-              { id: 11, name: "Premium Pen Set", price: "₹899", image: "/placeholder.svg?height=200&width=200" },
-              { id: 12, name: "Party Supplies", price: "₹1299", image: "/placeholder.svg?height=200&width=200" },
-            ].map((product) => (
-              <div key={product.id} className="bg-white shadow-md rounded-lg overflow-hidden">
-                <div className="relative">
-                  <img
-                    src={product.image || "/placeholder.svg"}
-                    alt={product.name}
-                    className="w-full h-48 object-cover"
-                  />
-                  <div className="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded-full text-sm">New</div>
-                </div>
-                <div className="p-4">
-                  <h3 className="text-lg font-bold">{product.name}</h3>
-                  <p className="text-gray-600">{product.price}</p>
-                  <button className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700">
-                    Add to Cart
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Limited Time Offer Banner */}
-        <section className="mb-12 bg-yellow-100 p-8 rounded-lg">
+        {/* Enhanced Limited Time Offer Banner */}
+        <section className="mb-16 backdrop-blur-xl bg-gradient-to-r from-yellow-100/70 via-orange-100/70 to-pink-100/70 p-12 rounded-2xl border border-yellow-200/50 shadow-xl transform hover:scale-[1.02] transition-transform duration-300">
           <div className="container mx-auto">
             <div className="flex flex-col md:flex-row items-center justify-between">
               <div className="text-center md:text-left mb-6 md:mb-0">
@@ -517,112 +592,112 @@ export default function AmbikaNoveltySite() {
         </section>
       </main>
       <GiftFinderQuiz />
-      <footer className="bg-gradient-to-r from-gray-100 via-gray-200 to-gray-300 py-10">
-  <div className="container mx-auto px-4">
-    <div className="flex flex-col md:flex-row justify-between items-start text-gray-700">
-      {/* Logo and Description */}
-      <div className="mb-8 md:mb-0">
-        <h1 className="text-4xl font-extrabold text-gray-800">
-          Ambika<span className="text-pink-500">Novelty</span>
-        </h1>
-        <p className="text-sm mt-3 max-w-sm text-gray-600">
-          Discover a wide range of products with unique designs and quality, made just for you.
-        </p>
-      </div>
+      <footer className="backdrop-blur-xl bg-gradient-to-r from-gray-100/90 via-gray-200/90 to-gray-300/90 py-16 border-t border-white/20 shadow-inner">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-col md:flex-row justify-between items-start text-gray-700">
+            {/* Logo and Description */}
+            <div className="mb-8 md:mb-0">
+              <h1 className="text-4xl font-extrabold text-gray-800">
+                Ambika<span className="text-pink-500">Novelty</span>
+              </h1>
+              <p className="text-sm mt-3 max-w-sm text-gray-600">
+                Discover a wide range of products with unique designs and quality, made just for you.
+              </p>
+            </div>
 
-      {/* Company Links */}
-      <div className="flex flex-col md:flex-row gap-12">
-        <div>
-          <h4 className="font-semibold text-gray-800 text-lg mb-4">Company</h4>
-          <ul className="space-y-3">
-            <li>
-              <a
-                href="http://localhost:3000/homepage"
-                className="hover:text-pink-500 hover:underline transition duration-300"
-              >
-                Home
-              </a>
-            </li>
-            <li>
-              <a
-                href="http://localhost:3000/aboutus"
-                className="hover:text-pink-500 hover:underline transition duration-300"
-              >
-                About Us
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                className="hover:text-pink-500 hover:underline transition duration-300"
-              >
-                Delivery
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                className="hover:text-pink-500 hover:underline transition duration-300"
-              >
-                Privacy Policy
-              </a>
-            </li>
-          </ul>
+            {/* Company Links */}
+            <div className="flex flex-col md:flex-row gap-12">
+              <div>
+                <h4 className="font-semibold text-gray-800 text-lg mb-4">Company</h4>
+                <ul className="space-y-3">
+                  <li>
+                    <a
+                      href="http://localhost:3000/homepage"
+                      className="hover:text-pink-500 hover:underline transition duration-300"
+                    >
+                      Home
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="http://localhost:3000/aboutus"
+                      className="hover:text-pink-500 hover:underline transition duration-300"
+                    >
+                      About Us
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="#"
+                      className="hover:text-pink-500 hover:underline transition duration-300"
+                    >
+                      Delivery
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="#"
+                      className="hover:text-pink-500 hover:underline transition duration-300"
+                    >
+                      Privacy Policy
+                    </a>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Get in Touch */}
+              <div>
+                <h4 className="font-semibold text-gray-800 text-lg mb-4">Get in Touch</h4>
+                <ul className="space-y-3">
+                  <li className="flex items-center gap-2">
+                    <span className="font-medium">Phone:</span> 
+                    <span className="text-pink-500">+1-000-000-0000</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="font-medium">Email:</span>
+                    <a
+                      href="mailto:ambikanovelty@gmail.com"
+                      className="text-pink-500 hover:underline transition duration-300"
+                    >
+                      ambikanovelty@gmail.com
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="#"
+                      className="flex items-center gap-2 text-pink-500 hover:underline transition duration-300"
+                    >
+                      <img
+                        src="/images/insta.jpg"
+                        alt="Instagram"
+                        className="h-5 w-5"
+                      />
+                      Instagram
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          {/* Footer Bottom */}
+          <div className="mt-10 text-center text-gray-600 text-sm">
+            <p className="flex flex-col md:flex-row justify-center items-center gap-2">
+              <span>
+                Copyright 2025©{" "}
+                <a
+                  href="http://localhost:3000"
+                  className="text-pink-500 hover:underline transition duration-300"
+                >
+                  ambikanovelty.com
+                </a>
+              </span>
+              <span className="hidden md:inline-block">|</span>
+              <span>All Rights Reserved.</span>
+            </p>
+          </div>
         </div>
-
-        {/* Get in Touch */}
-        <div>
-          <h4 className="font-semibold text-gray-800 text-lg mb-4">Get in Touch</h4>
-          <ul className="space-y-3">
-            <li className="flex items-center gap-2">
-              <span className="font-medium">Phone:</span> 
-              <span className="text-pink-500">+1-000-000-0000</span>
-            </li>
-            <li className="flex items-center gap-2">
-              <span className="font-medium">Email:</span>
-              <a
-                href="mailto:ambikanovelty@gmail.com"
-                className="text-pink-500 hover:underline transition duration-300"
-              >
-                ambikanovelty@gmail.com
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                className="flex items-center gap-2 text-pink-500 hover:underline transition duration-300"
-              >
-                <img
-                  src="/images/insta.jpg"
-                  alt="Instagram"
-                  className="h-5 w-5"
-                />
-                Instagram
-              </a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </div>
-
-    {/* Footer Bottom */}
-    <div className="mt-10 text-center text-gray-600 text-sm">
-      <p className="flex flex-col md:flex-row justify-center items-center gap-2">
-        <span>
-          Copyright 2025©{" "}
-          <a
-            href="http://localhost:3000"
-            className="text-pink-500 hover:underline transition duration-300"
-          >
-            ambikanovelty.com
-          </a>
-        </span>
-        <span className="hidden md:inline-block">|</span>
-        <span>All Rights Reserved.</span>
-      </p>
-    </div>
-  </div>
-</footer>
+      </footer>
     </div>
   )
 }
