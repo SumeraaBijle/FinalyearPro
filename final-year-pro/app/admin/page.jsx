@@ -159,8 +159,9 @@ export default function AdminDashboard() {
           </div>
         ) : (
           <div className="max-w-4xl mx-auto">
+            <h1 className="text-4xl font-bold text-center mb-8">Admin Dashboard</h1>
             <div className="flex justify-between items-center mb-6">
-              <h1 className="text-2xl font-bold">Ambika Novelty</h1>
+              <h2 className="text-2xl font-bold">Ambika Novelty</h2>
               <div className="flex items-center space-x-4">
                 <button
                   onClick={() => setShowAddProduct(!showAddProduct)}
@@ -194,7 +195,7 @@ export default function AdminDashboard() {
                   <tbody className="divide-y divide-gray-200">
                     {users.map((user) => (
                       <tr key={user.id}>
-                        <td className="px-6 py-4">{user.id}</td>
+                        <td className="px-6 py-4">#{user.id.substring(user.id.length - 6)}</td>
                         <td className="px-6 py-4">{user.name}</td>
                         <td className="px-6 py-4">{user.email}</td>
                         <td className="px-6 py-4">{new Date(user.createdAt).toLocaleString()}</td>
