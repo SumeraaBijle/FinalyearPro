@@ -1,72 +1,132 @@
-'use client'
+"use client"
 
-import { useState } from 'react'
-import { signOut } from 'next-auth/react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { FiUser, FiShoppingBag, FiSettings, FiLogOut, FiEdit2, FiBell } from 'react-icons/fi'
-import Header from '@/app/aboutus/Header'
-import styles from '../../../styles/UserDashboard.module.css'
-import Link from 'next/link'
+import { useState, useEffect } from "react"
+import { signOut, useSession } from "next-auth/react"
+import { motion, AnimatePresence } from "framer-motion"
+import { FiUser, FiShoppingBag, FiSettings, FiLogOut, FiEdit2, FiBell, FiPhone, FiMapPin } from "react-icons/fi"
+import Header from "@/app/aboutus/Header"
+import styles from "../../../styles/UserDashboard.module.css"
+import Link from "next/link"
 
-export default function UserDashboard({ user }) {
-  const [activeTab, setActiveTab] = useState('profile')
+export default function UserDashboard() {
+  const { data: session, status, update } = useSession()
+  const [activeTab, setActiveTab] = useState("profile")
   const [isLoading, setIsLoading] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
   const [notifications, setNotifications] = useState(true)
   const [orderUpdates, setOrderUpdates] = useState(true)
+  const [profileData, setProfileData] = useState({
+    name: "",
+    phone: "",
+    address: "",
+  })
+  const [updateStatus, setUpdateStatus] = useState("")
+
+  useEffect(() => {
+    if (session?.user) {
+      setProfileData({
+        name: session.user.name || "",
+        phone: session.user.phone || "",
+        address: session.user.address || "",
+      })
+    }
+  }, [session])
 
   const handleSignOut = async () => {
     setIsLoading(true)
-    await signOut({ callbackUrl: '/' })
+    await signOut({ callbackUrl: "/" })
+  }
+
+  const handleProfileUpdate = async () => {
+    try {
+      setUpdateStatus("")
+
+      if (!profileData.phone || !profileData.address) {
+        setUpdateStatus("Phone number and address are required")
+        return
+      }
+
+      const response = await fetch("/api/user/update", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId: session?.user?.id,
+          phone: profileData.phone,
+          address: profileData.address,
+        }),
+      })
+
+      if (!response.ok) {
+        const errorText = await response.text()
+        console.error("Server response:", errorText)
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+
+      const data = await response.json()
+
+      if (data.success) {
+        setUpdateStatus("Profile updated successfully")
+        setIsEditing(false)
+
+        // Update the session
+        await update({
+          ...session,
+          user: {
+            ...session?.user,
+            phone: profileData.phone,
+            address: profileData.address,
+          },
+        })
+      } else {
+        setUpdateStatus(data.message || "Failed to update profile")
+      }
+    } catch (error) {
+      console.error("Error updating profile:", error)
+      setUpdateStatus("Error connecting to server. Please try again.")
+    }
   }
 
   const tabs = [
-    { id: 'profile', label: 'Profile', icon: <FiUser /> },
-    { id: 'orders', label: 'Order History', icon: <FiShoppingBag /> },
-    { id: 'settings', label: 'Settings', icon: <FiSettings /> },
+    { id: "profile", label: "Profile", icon: <FiUser /> },
+    { id: "orders", label: "Order History", icon: <FiShoppingBag /> },
+    { id: "settings", label: "Settings", icon: <FiSettings /> },
   ]
 
   const fadeInUp = {
     initial: { opacity: 0, y: 20 },
     animate: { opacity: 1, y: 0 },
-    exit: { opacity: 0, y: -20 }
+    exit: { opacity: 0, y: -20 },
+  }
+
+  if (status === "loading") {
+    return <div>Loading...</div>
+  }
+
+  if (status === "unauthenticated") {
+    return <div>Access Denied</div>
   }
 
   return (
     <>
       <Header />
       <div className={styles.container}>
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className={styles.dashboard}
-        >
-          {/* Enhanced Sidebar Navigation */}
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className={styles.dashboard}>
+          {/* Sidebar Navigation */}
           <motion.div className={styles.sidebar}>
-            <motion.div 
-              initial={{ scale: 0.9 }}
-              animate={{ scale: 1 }}
-              className={styles.userInfo}
-            >
+            <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} className={styles.userInfo}>
               <div className={styles.avatarWrapper}>
                 <div className={styles.avatarContainer}>
-                  <img 
-                    src={user.image || '/default-avatar.png'} 
-                    alt="Profile" 
-                    className={styles.avatar}
-                  />
-                  <motion.div 
-                    className={styles.editOverlay}
-                    whileHover={{ opacity: 1 }}
-                    initial={{ opacity: 0 }}
-                  >
+                  <img src={session?.user?.image || "/default-avatar.png"} alt="Profile" className={styles.avatar} />
+                  <motion.div className={styles.editOverlay} whileHover={{ opacity: 1 }} initial={{ opacity: 0 }}>
                     <FiEdit2 />
                   </motion.div>
                 </div>
                 <div className={styles.onlineStatus} />
               </div>
-              <h3 className={styles.userName}>{user.name}</h3>
-              <p className={styles.userEmail}>{user.email}</p>
+              <h3 className={styles.userName}>{session?.user?.name}</h3>
+              <p className={styles.userEmail}>{session?.user?.email}</p>
               <div className={styles.userStats}>
                 <div className={styles.statItem}>
                   <span className={styles.statNumber}>0</span>
@@ -78,21 +138,21 @@ export default function UserDashboard({ user }) {
                 </div>
               </div>
             </motion.div>
-            
+
             <nav className={styles.nav}>
               {tabs.map((tab) => (
-                <motion.button 
+                <motion.button
                   key={tab.id}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  className={`${styles.navButton} ${activeTab === tab.id ? styles.active : ''}`}
+                  className={`${styles.navButton} ${activeTab === tab.id ? styles.active : ""}`}
                   onClick={() => setActiveTab(tab.id)}
                 >
                   <span className={styles.navIcon}>{tab.icon}</span>
                   {tab.label}
                 </motion.button>
               ))}
-              <motion.button 
+              <motion.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 className={styles.signOutButton}
@@ -100,19 +160,15 @@ export default function UserDashboard({ user }) {
                 disabled={isLoading}
               >
                 <FiLogOut />
-                <span>{isLoading ? 'Signing out...' : 'Sign Out'}</span>
+                <span>{isLoading ? "Signing out..." : "Sign Out"}</span>
               </motion.button>
             </nav>
           </motion.div>
 
-          {/* Enhanced Content Area */}
-          <AnimatePresence mode='wait'>
-            <motion.div 
-              key={activeTab}
-              {...fadeInUp}
-              className={styles.content}
-            >
-              {activeTab === 'profile' && (
+          {/* Content Area */}
+          <AnimatePresence mode="wait">
+            <motion.div key={activeTab} {...fadeInUp} className={styles.content}>
+              {activeTab === "profile" && (
                 <div className={styles.section}>
                   <div className={styles.sectionHeader}>
                     <h2>Profile Information</h2>
@@ -120,11 +176,20 @@ export default function UserDashboard({ user }) {
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                       className={styles.editButton}
-                      onClick={() => setIsEditing(!isEditing)}
+                      onClick={() => (isEditing ? handleProfileUpdate() : setIsEditing(true))}
                     >
-                      <FiEdit2 /> {isEditing ? 'Save' : 'Edit Profile'}
+                      <FiEdit2 /> {isEditing ? "Save Changes" : "Edit Profile"}
                     </motion.button>
                   </div>
+                  {updateStatus && (
+                    <div
+                      className={`${styles.updateStatus} ${
+                        updateStatus.includes("Error") ? styles.error : styles.success
+                      }`}
+                    >
+                      {updateStatus}
+                    </div>
+                  )}
                   <div className={styles.profileGrid}>
                     <div className={styles.profileCard}>
                       <h3>Personal Details</h3>
@@ -132,14 +197,51 @@ export default function UserDashboard({ user }) {
                         <div className={styles.infoField}>
                           <label>Name</label>
                           {isEditing ? (
-                            <input type="text" defaultValue={user.name} className={styles.editInput} />
+                            <input
+                              type="text"
+                              value={profileData.name}
+                              onChange={(e) => setProfileData({ ...profileData, name: e.target.value })}
+                              className={styles.editInput}
+                            />
                           ) : (
-                            <span>{user.name}</span>
+                            <span>{profileData.name}</span>
                           )}
                         </div>
                         <div className={styles.infoField}>
                           <label>Email</label>
-                          <span>{user.email}</span>
+                          <span>{session?.user?.email}</span>
+                        </div>
+                        <div className={styles.infoField}>
+                          <label>
+                            <FiPhone className={styles.fieldIcon} /> Phone Number
+                          </label>
+                          {isEditing ? (
+                            <input
+                              type="tel"
+                              value={profileData.phone}
+                              onChange={(e) => setProfileData({ ...profileData, phone: e.target.value })}
+                              className={styles.editInput}
+                              placeholder="Enter your phone number"
+                            />
+                          ) : (
+                            <span>{profileData.phone || "Not provided"}</span>
+                          )}
+                        </div>
+                        <div className={styles.infoField}>
+                          <label>
+                            <FiMapPin className={styles.fieldIcon} /> Address
+                          </label>
+                          {isEditing ? (
+                            <textarea
+                              value={profileData.address}
+                              onChange={(e) => setProfileData({ ...profileData, address: e.target.value })}
+                              className={`${styles.editInput} ${styles.textArea}`}
+                              placeholder="Enter your address"
+                              rows={3}
+                            />
+                          ) : (
+                            <span>{profileData.address || "Not provided"}</span>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -166,7 +268,7 @@ export default function UserDashboard({ user }) {
                 </div>
               )}
 
-              {activeTab === 'orders' && (
+              {activeTab === "orders" && (
                 <div className={styles.section}>
                   <div className={styles.sectionHeader}>
                     <h2>Order History</h2>
@@ -179,16 +281,12 @@ export default function UserDashboard({ user }) {
                     </div>
                   </div>
                   <div className={styles.ordersList}>
-                    <motion.div 
-                      className={styles.emptyState}
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                    >
+                    <motion.div className={styles.emptyState} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
                       <FiShoppingBag size={64} />
                       <h3>No Orders Yet</h3>
                       <p>Start shopping to see your orders here</p>
                       <Link href="/products">
-                        <motion.button 
+                        <motion.button
                           className={styles.primaryButton}
                           whileHover={{ scale: 1.05 }}
                           whileTap={{ scale: 0.95 }}
@@ -201,7 +299,7 @@ export default function UserDashboard({ user }) {
                 </div>
               )}
 
-              {activeTab === 'settings' && (
+              {activeTab === "settings" && (
                 <div className={styles.section}>
                   <h2>Account Settings</h2>
                   <div className={styles.settingsGrid}>
@@ -248,3 +346,4 @@ export default function UserDashboard({ user }) {
     </>
   )
 }
+

@@ -7,7 +7,7 @@ module.exports = {
     description: String,
     price: Number,
     quantity: Number,
-    images: [String],
+    image: String,
     createdAt: Date,
     updatedAt: Date,
   }
