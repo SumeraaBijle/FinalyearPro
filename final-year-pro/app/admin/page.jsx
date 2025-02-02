@@ -4,13 +4,13 @@ import { useState, useEffect } from "react"
 import { Plus } from "lucide-react"
 import Header from "../head/foot/Header"
 import Footer from "../head/foot/Footer"
+import { useRouter } from "next/navigation"
 
 export default function AdminDashboard() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
   const [isLoggedIn, setIsLoggedIn] = useState(false)
-  const [showAddProduct, setShowAddProduct] = useState(true)
   const [productData, setProductData] = useState({
     name: "",
     description: "",
@@ -21,46 +21,23 @@ export default function AdminDashboard() {
   })
   const [imagePreview, setImagePreview] = useState(null)
   const [isLoggingOut, setIsLoggingOut] = useState(false)
-
-  // Hardcoded products data
-  const [products] = useState([
-    {
-      _id: "1",
-      name: "Sample Product 1",
-      category: "Electronics",
-      price: "999",
-      quantity: "10",
-      image: "/placeholder.svg",
-    },
-    {
-      _id: "2",
-      name: "Sample Product 2",
-      category: "Clothing",
-      price: "499",
-      quantity: "20",
-      image: "/placeholder.svg",
-    },
-  ])
-
-  // State for users from MongoDB
+  const [products, setProducts] = useState([])
   const [users, setUsers] = useState([])
+  const router = useRouter()
 
-  // Hardcoded orders and stocks
   const [orders] = useState([
     { id: 101, user: "John Doe", status: "Pending" },
     { id: 102, user: "Jane Smith", status: "Delivered" },
   ])
 
-  const [stocks] = useState([
-    { id: "S1", product: "Laptop", quantity: 10 },
-    { id: "S2", product: "Phone", quantity: 15 },
-  ])
-
   useEffect(() => {
-    if (isLoggedIn) {
+    const loggedIn = localStorage.getItem("isAdminLoggedIn") === "true"
+    setIsLoggedIn(loggedIn)
+    if (loggedIn) {
       fetchUsers()
+      fetchProducts()
     }
-  }, [isLoggedIn])
+  }, [])
 
   const fetchUsers = async () => {
     try {
@@ -74,10 +51,23 @@ export default function AdminDashboard() {
     }
   }
 
+  const fetchProducts = async () => {
+    try {
+      const response = await fetch("/api/products")
+      const data = await response.json()
+      if (data.products) {
+        setProducts(data.products)
+      }
+    } catch (error) {
+      console.error("Error fetching products:", error)
+    }
+  }
+
   const handleLogin = (e) => {
     e.preventDefault()
     if (email === "admin@gmail.com" && password === "admin") {
       setIsLoggedIn(true)
+      localStorage.setItem("isAdminLoggedIn", "true")
       setError("")
     } else {
       setError("Invalid credentials")
@@ -94,15 +84,50 @@ export default function AdminDashboard() {
 
   const handleSubmitProduct = async (e) => {
     e.preventDefault()
-    // Just show an alert for now since we're not handling product submission
-    alert("Product form submission is currently disabled")
+    try {
+      const formData = new FormData()
+      formData.append("name", productData.name)
+      formData.append("description", productData.description)
+      formData.append("price", productData.price)
+      formData.append("quantity", productData.quantity)
+      formData.append("category", productData.category)
+      if (productData.image) {
+        formData.append("image", productData.image)
+      }
+
+      const response = await fetch("/api/products", {
+        method: "POST",
+        body: formData,
+      })
+
+      const data = await response.json()
+
+      if (response.ok) {
+        alert("Product added successfully")
+        setProductData({
+          name: "",
+          description: "",
+          price: "",
+          quantity: "",
+          category: "",
+          image: null,
+        })
+        setImagePreview(null)
+        fetchProducts()
+      } else {
+        throw new Error(data.error || "Failed to add product")
+      }
+    } catch (error) {
+      console.error("Error adding product:", error)
+      alert("Failed to add product: " + error.message)
+    }
   }
 
   const handleLogout = () => {
     setIsLoggingOut(true)
-    // Simulate a logout process
     setTimeout(() => {
       setIsLoggedIn(false)
+      localStorage.removeItem("isAdminLoggedIn")
       setIsLoggingOut(false)
       setEmail("")
       setPassword("")
@@ -164,12 +189,6 @@ export default function AdminDashboard() {
               <h2 className="text-2xl font-bold">Ambika Novelty</h2>
               <div className="flex items-center space-x-4">
                 <button
-                  onClick={() => setShowAddProduct(!showAddProduct)}
-                  className="bg-blue-500 text-white px-4 py-2 rounded-md"
-                >
-                  {showAddProduct ? "View Product List" : "Add Product"}
-                </button>
-                <button
                   onClick={handleLogout}
                   disabled={isLoggingOut}
                   className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 focus:ring-2 focus:ring-red-300 disabled:opacity-50"
@@ -179,7 +198,6 @@ export default function AdminDashboard() {
               </div>
             </div>
 
-            {/* Users Section - Fetched from MongoDB */}
             <div className="bg-white p-6 rounded-lg shadow-md mb-6">
               <h2 className="text-xl font-semibold mb-4">Users</h2>
               <div className="overflow-x-auto">
@@ -206,7 +224,6 @@ export default function AdminDashboard() {
               </div>
             </div>
 
-            {/* Orders Section - Hardcoded */}
             <div className="bg-white p-6 rounded-lg shadow-md mb-6">
               <h2 className="text-xl font-semibold mb-4">Orders</h2>
               <div className="overflow-x-auto">
@@ -231,24 +248,33 @@ export default function AdminDashboard() {
               </div>
             </div>
 
-            {/* Stock Section - Hardcoded */}
             <div className="bg-white p-6 rounded-lg shadow-md mb-6">
-              <h2 className="text-xl font-semibold mb-4">Stock</h2>
+              <h2 className="text-xl font-semibold mb-4">Products</h2>
               <div className="overflow-x-auto">
                 <table className="min-w-full divide-y divide-gray-200">
                   <thead>
                     <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">ID</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Product</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Image</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Category</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Price</th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Quantity</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200">
-                    {stocks.map((stock) => (
-                      <tr key={stock.id}>
-                        <td className="px-6 py-4">{stock.id}</td>
-                        <td className="px-6 py-4">{stock.product}</td>
-                        <td className="px-6 py-4">{stock.quantity}</td>
+                    {products.map((product) => (
+                      <tr key={product._id}>
+                        <td className="px-6 py-4">
+                          <img
+                            src={product.image || "/placeholder.svg"}
+                            alt={product.name}
+                            className="h-16 w-16 object-cover rounded"
+                          />
+                        </td>
+                        <td className="px-6 py-4">{product.name}</td>
+                        <td className="px-6 py-4">{product.category}</td>
+                        <td className="px-6 py-4">₹{product.price}</td>
+                        <td className="px-6 py-4">{product.quantity}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -256,140 +282,101 @@ export default function AdminDashboard() {
               </div>
             </div>
 
-            {showAddProduct ? (
-              <div className="bg-white p-6 rounded-lg shadow-md">
-                <h2 className="text-xl font-semibold mb-6">Add New Product</h2>
-                <form onSubmit={handleSubmitProduct} className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Product Name</label>
-                      <input
-                        type="text"
-                        value={productData.name}
-                        onChange={(e) => setProductData({ ...productData, name: e.target.value })}
-                        placeholder="Enter product name"
-                        className="w-full p-2 border border-gray-300 rounded-md"
-                        required
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
-                      <textarea
-                        value={productData.description}
-                        onChange={(e) => setProductData({ ...productData, description: e.target.value })}
-                        placeholder="Enter product description"
-                        className="w-full p-2 border border-gray-300 rounded-md min-h-[100px]"
-                        required
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Price (₹)</label>
-                      <input
-                        type="number"
-                        value={productData.price}
-                        onChange={(e) => setProductData({ ...productData, price: e.target.value })}
-                        placeholder="0.00"
-                        className="w-full p-2 border border-gray-300 rounded-md"
-                        required
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Quantity</label>
-                      <input
-                        type="number"
-                        value={productData.quantity}
-                        onChange={(e) => setProductData({ ...productData, quantity: e.target.value })}
-                        placeholder="Enter quantity"
-                        className="w-full p-2 border border-gray-300 rounded-md"
-                        required
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
-                      <input
-                        type="text"
-                        value={productData.category}
-                        onChange={(e) => setProductData({ ...productData, category: e.target.value })}
-                        placeholder="Enter category"
-                        className="w-full p-2 border border-gray-300 rounded-md"
-                        required
-                      />
-                    </div>
-                  </div>
-
+            <div className="bg-white p-6 rounded-lg shadow-md">
+              <h2 className="text-xl font-semibold mb-6">Add New Product</h2>
+              <form onSubmit={handleSubmitProduct} className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Product Image</label>
-                    <div className="border-2 border-dashed border-gray-300 rounded-lg p-4">
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={(e) => handleImageChange(e.target.files[0])}
-                        className="hidden"
-                        id="image-upload"
-                      />
-                      <label
-                        htmlFor="image-upload"
-                        className="cursor-pointer flex flex-col items-center justify-center"
-                      >
-                        {imagePreview ? (
-                          <img
-                            src={imagePreview || "/placeholder.svg"}
-                            alt="Preview"
-                            className="max-h-40 object-contain"
-                          />
-                        ) : (
-                          <div className="text-center">
-                            <Plus className="mx-auto h-12 w-12 text-gray-400" />
-                            <p className="mt-1 text-sm text-gray-500">Upload image</p>
-                          </div>
-                        )}
-                      </label>
-                    </div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Product Name</label>
+                    <input
+                      type="text"
+                      value={productData.name}
+                      onChange={(e) => setProductData({ ...productData, name: e.target.value })}
+                      placeholder="Enter product name"
+                      className="w-full p-2 border border-gray-300 rounded-md"
+                      required
+                    />
                   </div>
-
-                  <button
-                    type="submit"
-                    className="w-full bg-green-500 text-white p-3 rounded-md hover:bg-green-600 focus:ring-2 focus:ring-green-300"
-                  >
-                    Add Product
-                  </button>
-                </form>
-              </div>
-            ) : (
-              <div className="bg-white p-6 rounded-lg shadow-md">
-                <h2 className="text-xl font-semibold mb-6">Products List</h2>
-                <div className="overflow-x-auto">
-                  <table className="min-w-full divide-y divide-gray-200">
-                    <thead>
-                      <tr>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Image</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Category</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Price</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Quantity</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-200">
-                      {products.map((product) => (
-                        <tr key={product._id}>
-                          <td className="px-6 py-4">
-                            <img
-                              src={product.image || "/placeholder.svg"}
-                              alt={product.name}
-                              className="h-16 w-16 object-cover rounded"
-                            />
-                          </td>
-                          <td className="px-6 py-4">{product.name}</td>
-                          <td className="px-6 py-4">{product.category}</td>
-                          <td className="px-6 py-4">₹{product.price}</td>
-                          <td className="px-6 py-4">{product.quantity}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                    <textarea
+                      value={productData.description}
+                      onChange={(e) => setProductData({ ...productData, description: e.target.value })}
+                      placeholder="Enter product description"
+                      className="w-full p-2 border border-gray-300 rounded-md min-h-[100px]"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Price (₹)</label>
+                    <input
+                      type="number"
+                      value={productData.price}
+                      onChange={(e) => setProductData({ ...productData, price: e.target.value })}
+                      placeholder="0.00"
+                      className="w-full p-2 border border-gray-300 rounded-md"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Quantity</label>
+                    <input
+                      type="number"
+                      value={productData.quantity}
+                      onChange={(e) => setProductData({ ...productData, quantity: e.target.value })}
+                      placeholder="Enter quantity"
+                      className="w-full p-2 border border-gray-300 rounded-md"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
+                    <input
+                      type="text"
+                      value={productData.category}
+                      onChange={(e) => setProductData({ ...productData, category: e.target.value })}
+                      placeholder="Enter category"
+                      className="w-full p-2 border border-gray-300 rounded-md"
+                      required
+                    />
+                  </div>
                 </div>
-              </div>
-            )}
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Product Image</label>
+                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-4">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => handleImageChange(e.target.files[0])}
+                      className="hidden"
+                      id="image-upload"
+                    />
+                    <label htmlFor="image-upload" className="cursor-pointer flex flex-col items-center justify-center">
+                      {imagePreview ? (
+                        <img
+                          src={imagePreview || "/placeholder.svg"}
+                          alt="Preview"
+                          className="max-h-40 object-contain"
+                        />
+                      ) : (
+                        <div className="text-center">
+                          <Plus className="mx-auto h-12 w-12 text-gray-400" />
+                          <p className="mt-1 text-sm text-gray-500">Upload image</p>
+                        </div>
+                      )}
+                    </label>
+                  </div>
+                </div>
+
+                <button
+                  type="submit"
+                  className="w-full bg-green-500 text-white p-3 rounded-md hover:bg-green-600 focus:ring-2 focus:ring-green-300"
+                >
+                  Add Product
+                </button>
+              </form>
+            </div>
           </div>
         )}
       </main>

@@ -1,50 +1,84 @@
 import { NextResponse } from "next/server"
-import connectToDatabase from "../../../lib/mongodb"
+import clientPromise from "@/lib/mongodb"
+import { v2 as cloudinary } from "cloudinary"
 
-export async function GET() {
-  try {
-    const client = await connectToDatabase()
-    const db = client.db()
-    const products = await db.collection("products").find({}).toArray()
-    return NextResponse.json({ success: true, products })
-  } catch (error) {
-    console.error("Error fetching products:", error)
-    return NextResponse.json({ success: false, error: "Failed to fetch products" }, { status: 500 })
-  }
-}
+// Configure Cloudinary
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+})
 
 export async function POST(request) {
   try {
-    const client = await connectToDatabase()
-    const db = client.db()
+    const client = await clientPromise
+    const db = client.db("User")
 
     const formData = await request.formData()
-    const name = formData.get("name")
-    const description = formData.get("description")
-    const price = Number.parseFloat(formData.get("price"))
-    const quantity = Number.parseInt(formData.get("quantity"))
-    const category = formData.get("category")
     const image = formData.get("image")
 
-    // Here you would typically handle file upload and store the image
-    // For this example, we'll just store the file name
-    const imagePath = image ? image.name : null
+    // Upload image to Cloudinary if present
+    let imageUrl = null
+    if (image) {
+      // Convert the file to base64
+      const bytes = await image.arrayBuffer()
+      const buffer = Buffer.from(bytes)
+      const base64Image = buffer.toString("base64")
 
-    const newProduct = {
-      name,
-      description,
-      price,
-      quantity,
-      category,
-      image: imagePath,
+      // Upload to Cloudinary
+      const result = await cloudinary.uploader.upload(`data:${image.type};base64,${base64Image}`, {
+        folder: "products",
+      })
+      imageUrl = result.secure_url
+    }
+
+    const product = {
+      name: formData.get("name"),
+      description: formData.get("description"),
+      price: Number(formData.get("price")),
+      quantity: Number(formData.get("quantity")),
+      category: formData.get("category"),
+      image: imageUrl,
       createdAt: new Date(),
     }
 
-    const result = await db.collection("products").insertOne(newProduct)
-    return NextResponse.json({ success: true, product: result.ops[0] })
+    const result = await db.collection("products").insertOne(product)
+
+    return NextResponse.json(
+      {
+        message: "Product added successfully",
+        productId: result.insertedId,
+        imageUrl: imageUrl,
+      },
+      { status: 201 },
+    )
   } catch (error) {
     console.error("Error adding product:", error)
-    return NextResponse.json({ success: false, error: "Failed to add product" }, { status: 500 })
+    return NextResponse.json(
+      {
+        message: "Error adding product",
+        error: error.message,
+      },
+      { status: 500 },
+    )
+  }
+}
+
+export async function GET() {
+  try {
+    const client = await clientPromise
+    const db = client.db("User")
+    const products = await db.collection("products").find({}).toArray()
+    return NextResponse.json({ products }, { status: 200 })
+  } catch (error) {
+    console.error("Error fetching products:", error)
+    return NextResponse.json(
+      {
+        message: "Error fetching products",
+        error: error.message,
+      },
+      { status: 500 },
+    )
   }
 }
 
