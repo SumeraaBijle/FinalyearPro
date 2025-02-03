@@ -1,3 +1,4 @@
+"use client"
 import React from "react"
 import { Search, ShoppingCart, User, Heart, Filter, Shield } from "lucide-react"
 import Link from "next/link"
@@ -20,7 +21,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { GiftFinderQuiz } from "@/components/ui/GiftFinderQuiz"
+import StationeryGiftChatBot from "@/components/ui/StationeryGiftChatBot"
 
 export default function AmbikaNoveltySite() {
   return (
@@ -591,7 +592,7 @@ export default function AmbikaNoveltySite() {
           </div>
         </section>
       </main>
-      <GiftFinderQuiz />
+      <StationeryGiftChatBot />
       <footer className="backdrop-blur-xl bg-gradient-to-r from-gray-100/90 via-gray-200/90 to-gray-300/90 py-16 border-t border-white/20 shadow-inner">
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row justify-between items-start text-gray-700">

@@ -24,6 +24,10 @@ export default function AdminDashboard() {
   const [products, setProducts] = useState([])
   const [users, setUsers] = useState([])
   const router = useRouter()
+  const [isEditing, setIsEditing] = useState(false)
+  const [editingProduct, setEditingProduct] = useState(null)
+  const [formTitle, setFormTitle] = useState("Add New Product")
+  const [submitButtonText, setSubmitButtonText] = useState("Add Product")
 
   const [orders] = useState([
     { id: 101, user: "John Doe", status: "Pending" },
@@ -81,45 +85,108 @@ export default function AdminDashboard() {
       setImagePreview(previewUrl)
     }
   }
-
   const handleSubmitProduct = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
+  
     try {
-      const formData = new FormData()
-      formData.append("name", productData.name)
-      formData.append("description", productData.description)
-      formData.append("price", productData.price)
-      formData.append("quantity", productData.quantity)
-      formData.append("category", productData.category)
-      if (productData.image) {
-        formData.append("image", productData.image)
-      }
-
-      const response = await fetch("/api/products", {
-        method: "POST",
-        body: formData,
-      })
-
-      const data = await response.json()
-
-      if (response.ok) {
-        alert("Product added successfully")
-        setProductData({
-          name: "",
-          description: "",
-          price: "",
-          quantity: "",
-          category: "",
-          image: null,
-        })
-        setImagePreview(null)
-        fetchProducts()
+      const formData = new FormData();
+      formData.append("name", productData.name);
+      formData.append("description", productData.description);
+      formData.append("price", productData.price);
+      formData.append("quantity", productData.quantity);
+      formData.append("category", productData.category);
+  
+      // Append image if it's a File
+      if (productData.image instanceof File) {
+        formData.append("image", productData.image);
       } else {
-        throw new Error(data.error || "Failed to add product")
+        console.warn("Image is not a File. Value:", productData.image);
       }
+  
+      // Debugging: Log FormData entries
+      console.log("FormData Entries:");
+      for (let [key, value] of formData.entries()) {
+        console.log(key, value);
+      }
+  
+      let response;
+      if (isEditing && editingProduct) {
+        // Ensure ID is passed as a query parameter
+        response = await fetch(`/api/products?id=${editingProduct._id}`, {
+          method: "PUT",
+          body: formData,
+        });
+      } else {
+        response = await fetch("/api/products", {
+          method: "POST",
+          body: formData,
+        });
+      }
+  
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to process product");
+      }
+  
+      alert(isEditing ? "Product updated successfully" : "Product added successfully");
+  
+      // Reset form
+      setProductData({
+        name: "",
+        description: "",
+        price: "",
+        quantity: "",
+        category: "",
+        image: null,
+      });
+  
+      setImagePreview(null);
+      fetchProducts();
+      setIsEditing(false);
+      setEditingProduct(null);
+      setFormTitle("Add New Product");
+      setSubmitButtonText("Add Product");
     } catch (error) {
-      console.error("Error adding product:", error)
-      alert("Failed to add product: " + error.message)
+      console.error("Error processing product:", error);
+      alert("Failed to process product: " + error.message);
+    }
+  };
+  
+  
+  const handleEditProduct = (product) => {
+    setIsEditing(true)
+    setEditingProduct(product)
+    setProductData({
+      name: product.name,
+      description: product.description,
+      price: product.price.toString(),
+      quantity: product.quantity.toString(),
+      category: product.category,
+      image: null,
+    })
+    setImagePreview(product.image)
+    setFormTitle("Edit Product")
+    setSubmitButtonText("Update Product")
+  }
+
+  const handleDeleteProduct = async (productId) => {
+    if (window.confirm("Are you sure you want to delete this product?")) {
+      try {
+        const response = await fetch(`/api/products?id=${productId}`, {
+          method: "DELETE",
+        })
+
+        if (!response.ok) {
+          const errorData = await response.json()
+          throw new Error(errorData.message || "Failed to delete product")
+        }
+
+        alert("Product deleted successfully")
+        fetchProducts()
+      } catch (error) {
+        console.error("Error deleting product:", error)
+        alert("Failed to delete product: " + error.message)
+      }
     }
   }
 
@@ -259,6 +326,7 @@ export default function AdminDashboard() {
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Category</th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Price</th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Quantity</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200">
@@ -275,6 +343,20 @@ export default function AdminDashboard() {
                         <td className="px-6 py-4">{product.category}</td>
                         <td className="px-6 py-4">₹{product.price}</td>
                         <td className="px-6 py-4">{product.quantity}</td>
+                        <td className="px-6 py-4">
+                          <button
+                            onClick={() => handleEditProduct(product)}
+                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
+                          >
+                            Edit
+                          </button>
+                          <button
+                            onClick={() => handleDeleteProduct(product._id)}
+                            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                          >
+                            Delete
+                          </button>
+                        </td>
                       </tr>
                     ))}
                   </tbody>
@@ -283,7 +365,7 @@ export default function AdminDashboard() {
             </div>
 
             <div className="bg-white p-6 rounded-lg shadow-md">
-              <h2 className="text-xl font-semibold mb-6">Add New Product</h2>
+              <h2 className="text-xl font-semibold mb-6">{formTitle}</h2>
               <form onSubmit={handleSubmitProduct} className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
@@ -373,8 +455,31 @@ export default function AdminDashboard() {
                   type="submit"
                   className="w-full bg-green-500 text-white p-3 rounded-md hover:bg-green-600 focus:ring-2 focus:ring-green-300"
                 >
-                  Add Product
+                  {submitButtonText}
                 </button>
+                {isEditing && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsEditing(false)
+                      setEditingProduct(null)
+                      setProductData({
+                        name: "",
+                        description: "",
+                        price: "",
+                        quantity: "",
+                        category: "",
+                        image: null,
+                      })
+                      setImagePreview(null)
+                      setFormTitle("Add New Product")
+                      setSubmitButtonText("Add Product")
+                    }}
+                    className="w-full bg-gray-300 text-gray-800 p-3 rounded-md hover:bg-gray-400 focus:ring-2 focus:ring-gray-300 mt-2"
+                  >
+                    Cancel Editing
+                  </button>
+                )}
               </form>
             </div>
           </div>
