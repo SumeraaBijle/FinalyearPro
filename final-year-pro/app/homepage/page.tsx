@@ -1,26 +1,6 @@
 "use client"
-import React from "react"
-import { Search, ShoppingCart, User, Heart, Filter, Shield } from "lucide-react"
-import Link from "next/link"
-
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-} from "@/components/ui/navigation-menu"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+import Header from "../head/foot/Header"
+import Footer from "../head/foot/Footer"
 import StationeryGiftChatBot from "@/components/ui/StationeryGiftChatBot"
 
 export default function AmbikaNoveltySite() {
@@ -33,226 +13,7 @@ export default function AmbikaNoveltySite() {
         <div className="absolute bottom-40 right-40 w-[550px] h-[550px] bg-purple-300 rounded-full mix-blend-multiply filter blur-[80px] opacity-30 animate-pulse delay-700"></div>
       </div>
 
-      {/* Enhanced header with better glassmorphism */}
-      <header className="sticky top-0 z-50 backdrop-blur-xl bg-white/60 border-b border-white/20 shadow-lg">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <Link href="/homepage" passHref>
-            <h1 className="text-2xl font-bold text-gray-800 cursor-pointer">Ambika Novelty</h1>
-          </Link>
-
-          <div className="flex items-center space-x-4">
-            <Input type="search" placeholder="Search..." className="w-64" />
-            <Button variant="ghost" size="icon">
-              <Search className="h-5 w-5" />
-              <span className="sr-only">Search</span>
-            </Button>
-            <Button variant="ghost" size="icon">
-              <ShoppingCart className="h-5 w-5" />
-              <span className="sr-only">Cart</span>
-            </Button>
-            <Link href="/login" passHref>
-              <Button variant="ghost" size="icon">
-                <User className="h-5 w-5" />
-                <span className="sr-only">Profile</span>
-              </Button>
-            </Link>
-            <Link href="/wishlist" passHref>
-            <Button variant="ghost" size="icon">
-              <Heart className="h-5 w-5" />
-              <span className="sr-only">Wishlist</span>
-            </Button>
-            </Link>
-            <Link href="/admin" passHref>
-              <Button variant="ghost" size="icon">
-                <Shield className="h-5 w-5 text-red-600" />
-                <span className="sr-only">Admin Page</span>
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </header>
-
-      {/* Enhanced navigation */}
-      <nav className="relative backdrop-blur-xl bg-white/50 border-b border-white/20 shadow-md">
-        <div className="absolute inset-0 opacity-[0.03]" 
-             style={{ 
-               backgroundImage: `linear-gradient(#000 1px, transparent 1px), linear-gradient(to right, #000 1px, transparent 1px)`,
-               backgroundSize: '20px 20px'
-             }}>
-        </div>
-        <div className="container mx-auto px-4 py-3 relative">
-          <div className="flex items-center justify-between">
-            <NavigationMenu className="animate-in">
-              <NavigationMenuList className="flex gap-6">
-                <NavigationMenuItem>
-                  <NavigationMenuTrigger className="bg-transparent hover:bg-purple-100 text-purple-600 group">
-                    <span className="flex items-center gap-2">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-                      </svg>
-                      Stationery
-                    </span>
-                  </NavigationMenuTrigger>
-                  <NavigationMenuContent className="bg-white rounded-xl shadow-lg border border-purple-700 ">
-                    <div className="grid grid-cols-2 gap-4 p-6 w-[500px]">
-                      <div className="col-span-2">
-                        <div className="relative overflow-hidden rounded-lg">
-                          <img 
-                            src="https://images.unsplash.com/photo-1456735190827-d1262f71b8a3" 
-                            alt="Featured Stationery"
-                            className="w-full h-48 object-cover"
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-4">
-                            <h3 className="text-white text-xl font-bold">New Arrivals</h3>
-                          </div>
-                        </div>
-                      </div>
-                      <div>
-                        <h4 className="font-medium mb-2 text-gray-700">Categories</h4>
-                        <ul className="space-y-2">
-                          <li>
-                            <NavigationMenuLink href="#" className="text-gray-600 hover:text-pink-500 flex items-center gap-2">
-                              <span>Premium Notebooks</span>
-                            </NavigationMenuLink>
-                          </li>
-                          <li>
-                            <NavigationMenuLink href="#" className="text-gray-600 hover:text-pink-500 flex items-center gap-2">
-                              <span>Writing Instruments</span>
-                            </NavigationMenuLink>
-                          </li>
-                          <li>
-                            <NavigationMenuLink href="#" className="text-gray-600 hover:text-pink-500 flex items-center gap-2">
-                              <span>Art Supplies</span>
-                            </NavigationMenuLink>
-                          </li>
-                        </ul>
-                      </div>
-                      <div>
-                        <h4 className="font-medium mb-2 text-gray-700">Collections</h4>
-                        <ul className="space-y-2">
-                          <li>
-                            <NavigationMenuLink href="#" className="text-gray-600 hover:text-pink-500 flex items-center gap-2">
-                              <span>Student Essentials</span>
-                            </NavigationMenuLink>
-                          </li>
-                          <li>
-                            <NavigationMenuLink href="#" className="text-gray-600 hover:text-pink-500 flex items-center gap-2">
-                              <span>Professional Series</span>
-                            </NavigationMenuLink>
-                          </li>
-                          <li>
-                            <NavigationMenuLink href="#" className="text-gray-600 hover:text-pink-500 flex items-center gap-2">
-                              <span>Limited Editions</span>
-                            </NavigationMenuLink>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                  </NavigationMenuContent>
-                </NavigationMenuItem>
-
-                <NavigationMenuItem>
-                  <NavigationMenuTrigger className="bg-transparent hover:bg-purple-100 text-purple-600 group">
-                    <span className="flex items-center gap-2">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12v6a2 2 0 01-2 2H6a2 2 0 01-2-2v-6M12 2v8m0 0l4-4m-4 4L8 6" />
-                      </svg>
-                      Gifts
-                    </span>
-                  </NavigationMenuTrigger>
-                  <NavigationMenuContent className="bg-white rounded-xl shadow-lg border border-gray-200">
-                    <div className="grid grid-cols-3 gap-4 p-6 w-[600px]">
-                      {[
-                        { name: "Birthday", image: "https://images.unsplash.com/photo-1513885535751-8b9238bd345a?ixlib=rb-4.0.3" },
-                        { name: "Anniversary", image: "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?ixlib=rb-4.0.3" },
-                        { name: "Corporate", image: "https://images.unsplash.com/photo-1512909006721-3d6018887383?ixlib=rb-4.0.3" }
-                      ].map((category) => (
-                        <div key={category.name} className="group relative overflow-hidden rounded-lg">
-                          <img src={category.image} alt={category.name} className="w-full h-32 object-cover group-hover:scale-110 transition-transform duration-300" />
-                          <div className="absolute inset-0 bg-black/40 group-hover:bg-black/50 transition-colors flex items-center justify-center">
-                            <span className="text-white font-medium">{category.name}</span>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </NavigationMenuContent>
-                </NavigationMenuItem>
-
-                <NavigationMenuItem>
-                  <NavigationMenuLink href="#" className="text-purple-600 hover:text-pink-500 flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                    </svg>
-                    Office Stationery
-                  </NavigationMenuLink>
-                </NavigationMenuItem>
-
-                <NavigationMenuItem>
-                  <NavigationMenuLink href="#" className="text-purple-600 hover:text-pink-500 flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
-                    </svg>
-                    Packing Supplies
-                  </NavigationMenuLink>
-                </NavigationMenuItem>
-
-                <NavigationMenuItem>
-                  <NavigationMenuLink href="#" className="text-purple-600 hover:text-pink-500 flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-                    </svg>
-                    Craft Materials
-                  </NavigationMenuLink>
-                </NavigationMenuItem>
-              </NavigationMenuList>
-            </NavigationMenu>
-
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="bg-white hover:bg-gray-100 text-gray-700">
-                  <Filter className="mr-2 h-4 w-4" /> Filter
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-56 bg-white rounded-xl shadow-lg border border-gray-200">
-                <DropdownMenuLabel className="text-gray-700">Categories</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem className="hover:bg-gray-100">
-                  <span className="flex items-center gap-2">
-                    <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-                    </svg>
-                    Kids - Boy
-                  </span>
-                </DropdownMenuItem>
-                <DropdownMenuItem className="hover:bg-gray-100">
-                  <span className="flex items-center gap-2">
-                    <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-                    </svg>
-                    Kids - Girl
-                  </span>
-                </DropdownMenuItem>
-                <DropdownMenuItem className="hover:bg-gray-100">
-                  <span className="flex items-center gap-2">
-                    <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                    </svg>
-                    Adults - Men
-                  </span>
-                </DropdownMenuItem>
-                <DropdownMenuItem className="hover:bg-gray-100">
-                  <span className="flex items-center gap-2">
-                    <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                    </svg>
-                    Adults - Women
-                  </span>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-        </div>
-      </nav>
+      <Header />
 
       <main className="container mx-auto px-4 py-8 relative">
         {/* Enhanced Latest Arrivals section */}
@@ -578,128 +339,27 @@ export default function AmbikaNoveltySite() {
 
         {/* Enhanced Limited Time Offer Banner */}
         <section className="mb-16 backdrop-blur-xl bg-gradient-to-r from-yellow-100/70 via-orange-100/70 to-pink-100/70 p-12 rounded-2xl border border-yellow-200/50 shadow-xl transform hover:scale-[1.02] transition-transform duration-300">
-          <div className="container mx-auto">
-            <div className="flex flex-col md:flex-row items-center justify-between">
-              <div className="text-center md:text-left mb-6 md:mb-0">
-                <h2 className="text-3xl font-bold text-gray-800 mb-2">Limited Time Offer!</h2>
-                <p className="text-lg text-gray-600">Get an extra 10% off on your first purchase</p>
-                <p className="text-sm text-gray-500 mt-2">Use code: WELCOME10</p>
-              </div>
-              <button className="bg-black text-white px-8 py-3 rounded-full hover:bg-gray-800 transform hover:scale-105 transition-all duration-200">
-                Shop Now
-              </button>
-            </div>
-          </div>
-        </section>
-      </main>
-      <StationeryGiftChatBot />
-      <footer className="backdrop-blur-xl bg-gradient-to-r from-gray-100/90 via-gray-200/90 to-gray-300/90 py-16 border-t border-white/20 shadow-inner">
-        <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row justify-between items-start text-gray-700">
-            {/* Logo and Description */}
-            <div className="mb-8 md:mb-0">
-              <h1 className="text-4xl font-extrabold text-gray-800">
-                Ambika<span className="text-pink-500">Novelty</span>
-              </h1>
-              <p className="text-sm mt-3 max-w-sm text-gray-600">
-                Discover a wide range of products with unique designs and quality, made just for you.
-              </p>
-            </div>
-
-            {/* Company Links */}
-            <div className="flex flex-col md:flex-row gap-12">
-              <div>
-                <h4 className="font-semibold text-gray-800 text-lg mb-4">Company</h4>
-                <ul className="space-y-3">
-                  <li>
-                    <a
-                      href="http://localhost:3000/homepage"
-                      className="hover:text-pink-500 hover:underline transition duration-300"
-                    >
-                      Home
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="http://localhost:3000/aboutus"
-                      className="hover:text-pink-500 hover:underline transition duration-300"
-                    >
-                      About Us
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      className="hover:text-pink-500 hover:underline transition duration-300"
-                    >
-                      Delivery
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      className="hover:text-pink-500 hover:underline transition duration-300"
-                    >
-                      Privacy Policy
-                    </a>
-                  </li>
-                </ul>
-              </div>
-
-              {/* Get in Touch */}
-              <div>
-                <h4 className="font-semibold text-gray-800 text-lg mb-4">Get in Touch</h4>
-                <ul className="space-y-3">
-                  <li className="flex items-center gap-2">
-                    <span className="font-medium">Phone:</span> 
-                    <span className="text-pink-500">+1-000-000-0000</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <span className="font-medium">Email:</span>
-                    <a
-                      href="mailto:ambikanovelty@gmail.com"
-                      className="text-pink-500 hover:underline transition duration-300"
-                    >
-                      ambikanovelty@gmail.com
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      className="flex items-center gap-2 text-pink-500 hover:underline transition duration-300"
-                    >
-                      <img
-                        src="/images/insta.jpg"
-                        alt="Instagram"
-                        className="h-5 w-5"
-                      />
-                      Instagram
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-
-          {/* Footer Bottom */}
-          <div className="mt-10 text-center text-gray-600 text-sm">
-            <p className="flex flex-col md:flex-row justify-center items-center gap-2">
-              <span>
-                Copyright 2025©{" "}
-                <a
-                  href="http://localhost:3000"
-                  className="text-pink-500 hover:underline transition duration-300"
-                >
-                  ambikanovelty.com
-                </a>
-              </span>
-              <span className="hidden md:inline-block">|</span>
-              <span>All Rights Reserved.</span>
-            </p>
-          </div>
-        </div>
-      </footer>
+  <div className="container mx-auto">
+    <div className="flex flex-col md:flex-row items-center justify-between">
+      <div className="text-center md:text-left mb-6 md:mb-0">
+        <h2 className="text-3xl font-bold text-gray-800 mb-2">Limited Time Offer!</h2>
+        <p className="text-lg text-gray-600">Get an extra 10% off on your first purchase</p>
+        <p className="text-sm text-gray-500 mt-2">Use code: WELCOME10</p>
+      </div>
+      <button
+        onClick={() => window.location.href = "http://localhost:3000/products"}
+        className="bg-black text-white px-8 py-3 rounded-full hover:bg-gray-800 transform hover:scale-105 transition-all duration-200"
+      >
+        Shop Now
+      </button>
     </div>
-  )
-}
+  </div>
+</section>
 
+</main>
+
+<StationeryGiftChatBot />
+<Footer />
+</div>
+)
+}

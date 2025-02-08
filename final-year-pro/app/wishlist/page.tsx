@@ -15,6 +15,8 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/AlertDialog";
+import Header from "../head/foot/Header";
+import Footer from "../head/foot/Footer";
 
 interface WishlistItem {
   id: number;
@@ -33,6 +35,7 @@ export default function WishlistPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50">
+      <Header />
       <main className="container mx-auto px-4 py-8">
         <div className="flex items-center justify-between mb-8">
           <h1 className="text-3xl font-bold text-gray-800">My Wishlist</h1>
@@ -47,9 +50,9 @@ export default function WishlistPage() {
             <h2 className="text-xl font-semibold text-gray-800 mb-2">Your wishlist is empty</h2>
             <p className="text-gray-500 mb-6">Start adding items you love to your wishlist</p>
             <Link href="/homepage" passHref>
-                  <Button className="bg-gradient-to-r from-purple-600 to-pink-600 text-white">
-                       Explore Products
-                </Button>
+              <Button className="bg-gradient-to-r from-purple-600 to-pink-600 text-white">
+                Explore Products
+              </Button>
             </Link>
           </div>
         ) : (
@@ -117,6 +120,7 @@ export default function WishlistPage() {
           </div>
         )}
       </main>
+      <Footer />
     </div>
   );
 }

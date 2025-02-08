@@ -1,50 +1,283 @@
-import React from 'react';
-import { Search, ShoppingCart, User, Heart, Shield } from 'lucide-react';
-import Link from 'next/link';
+"use client"
+import { Search, ShoppingCart, User, Heart, Shield } from "lucide-react"
+import Link from "next/link"
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+} from "@/components/ui/navigation-menu"
 
-const Header = () => {
+export default function Header() {
   return (
-    <header className="bg-white shadow-sm">
-      <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-        <Link href="/homepage" passHref>
-          <h1 className="text-2xl font-bold text-gray-800 cursor-pointer">
-            Ambika Novelty
-          </h1>
-        </Link>
+    <>
+      <header className="sticky top-0 z-50 backdrop-blur-xl bg-white/60 border-b border-white/20 shadow-lg">
+        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
+          <Link href="/homepage" passHref>
+            <h1 className="text-2xl font-bold text-gray-800 cursor-pointer">Ambika Novelty</h1>
+          </Link>
 
-        <div className="flex items-center space-x-4">
-          <Input type="search" placeholder="Search..." className="w-64" />
-          <Button variant="ghost" size="icon">
-            <Search className="h-5 w-5" />
-            <span className="sr-only">Search</span>
-          </Button>
-          <Button variant="ghost" size="icon">
-            <ShoppingCart className="h-5 w-5" />
-            <span className="sr-only">Cart</span>
-          </Button>
-          <Link href="/login" passHref>
+          <div className="flex items-center space-x-4">
+            <Input type="search" placeholder="Search..." className="w-64" />
             <Button variant="ghost" size="icon">
-              <User className="h-5 w-5" />
-              <span className="sr-only">Profile</span>
+              <Search className="h-5 w-5" />
+              <span className="sr-only">Search</span>
             </Button>
-          </Link>
-          <Button variant="ghost" size="icon">
-            <Heart className="h-5 w-5" />
-            <span className="sr-only">Wishlist</span>
-          </Button>
-          <Link href="/admin" passHref>
+            <Link href="/cart" passHref>
             <Button variant="ghost" size="icon">
-              <Shield className="h-5 w-5 text-red-600" />
-              <span className="sr-only">Admin Page</span>
+              <ShoppingCart className="h-5 w-5" />
+              <span className="sr-only">Cart</span>
             </Button>
-          </Link>
+            </Link>
+            <Link href="/login" passHref>
+              <Button variant="ghost" size="icon">
+                <User className="h-5 w-5" />
+                <span className="sr-only">Profile</span>
+              </Button>
+            </Link>
+            <Link href="/wishlist" passHref>
+              <Button variant="ghost" size="icon">
+                <Heart className="h-5 w-5" />
+                <span className="sr-only">Wishlist</span>
+              </Button>
+            </Link>
+            <Link href="/admin" passHref>
+              <Button variant="ghost" size="icon">
+                <Shield className="h-5 w-5 text-red-600" />
+                <span className="sr-only">Admin Page</span>
+              </Button>
+            </Link>
+          </div>
         </div>
-      </div>
-    </header>
-  );
-};
+      </header>
 
-export default Header;
+      <nav className="relative backdrop-blur-xl bg-white/50 border-b border-white/20 shadow-md">
+        <div
+          className="absolute inset-0 opacity-[0.03]"
+          style={{
+            backgroundImage: `linear-gradient(#000 1px, transparent 1px), linear-gradient(to right, #000 1px, transparent 1px)`,
+            backgroundSize: "20px 20px",
+          }}
+        ></div>
+        <div className="container mx-auto px-4 py-3 relative">
+          <NavigationMenu className="animate-in">
+            <NavigationMenuList className="flex gap-6">
+              <NavigationMenuItem>
+                <NavigationMenuTrigger className="bg-transparent hover:bg-purple-100 text-purple-600 group">
+                  <span className="flex items-center gap-2">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-4 w-4"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+                      />
+                    </svg>
+                    Stationery
+                  </span>
+                </NavigationMenuTrigger>
+                <NavigationMenuContent className="bg-white rounded-xl shadow-lg border border-purple-700">
+                  <div className="grid grid-cols-2 gap-4 p-6 w-[500px]">
+                    <div className="col-span-2">
+                      <div className="relative overflow-hidden rounded-lg">
+                        <img
+                          src="https://images.unsplash.com/photo-1456735190827-d1262f71b8a3"
+                          alt="Featured Stationery"
+                          className="w-full h-48 object-cover"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-4">
+                          <h3 className="text-white text-xl font-bold">New Arrivals</h3>
+                        </div>
+                      </div>
+                    </div>
+                    <div>
+                      <h4 className="font-medium mb-2 text-gray-700">Categories</h4>
+                      <ul className="space-y-2">
+                        <li>
+                          <NavigationMenuLink
+                            href="#"
+                            className="text-gray-600 hover:text-pink-500 flex items-center gap-2"
+                          >
+                            <span>Premium Notebooks</span>
+                          </NavigationMenuLink>
+                        </li>
+                        <li>
+                          <NavigationMenuLink
+                            href="#"
+                            className="text-gray-600 hover:text-pink-500 flex items-center gap-2"
+                          >
+                            <span>Writing Instruments</span>
+                          </NavigationMenuLink>
+                        </li>
+                        <li>
+                          <NavigationMenuLink
+                            href="#"
+                            className="text-gray-600 hover:text-pink-500 flex items-center gap-2"
+                          >
+                            <span>Art Supplies</span>
+                          </NavigationMenuLink>
+                        </li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h4 className="font-medium mb-2 text-gray-700">Collections</h4>
+                      <ul className="space-y-2">
+                        <li>
+                          <NavigationMenuLink
+                            href="#"
+                            className="text-gray-600 hover:text-pink-500 flex items-center gap-2"
+                          >
+                            <span>Student Essentials</span>
+                          </NavigationMenuLink>
+                        </li>
+                        <li>
+                          <NavigationMenuLink
+                            href="#"
+                            className="text-gray-600 hover:text-pink-500 flex items-center gap-2"
+                          >
+                            <span>Professional Series</span>
+                          </NavigationMenuLink>
+                        </li>
+                        <li>
+                          <NavigationMenuLink
+                            href="#"
+                            className="text-gray-600 hover:text-pink-500 flex items-center gap-2"
+                          >
+                            <span>Limited Editions</span>
+                          </NavigationMenuLink>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </NavigationMenuContent>
+              </NavigationMenuItem>
+
+              <NavigationMenuItem>
+                <NavigationMenuTrigger className="bg-transparent hover:bg-purple-100 text-purple-600 group">
+                  <span className="flex items-center gap-2">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-4 w-4"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M20 12v6a2 2 0 01-2 2H6a2 2 0 01-2-2v-6M12 2v8m0 0l4-4m-4 4L8 6"
+                      />
+                    </svg>
+                    Gifts
+                  </span>
+                </NavigationMenuTrigger>
+                <NavigationMenuContent className="bg-white rounded-xl shadow-lg border border-gray-200">
+                  <div className="grid grid-cols-3 gap-4 p-6 w-[600px]">
+                    {[
+                      {
+                        name: "Birthday",
+                        image: "https://images.unsplash.com/photo-1513885535751-8b9238bd345a?ixlib=rb-4.0.3",
+                      },
+                      {
+                        name: "Anniversary",
+                        image: "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?ixlib=rb-4.0.3",
+                      },
+                      {
+                        name: "Corporate",
+                        image: "https://images.unsplash.com/photo-1512909006721-3d6018887383?ixlib=rb-4.0.3",
+                      },
+                    ].map((category) => (
+                      <div key={category.name} className="group relative overflow-hidden rounded-lg">
+                        <img
+                          src={category.image || "/placeholder.svg"}
+                          alt={category.name}
+                          className="w-full h-32 object-cover group-hover:scale-110 transition-transform duration-300"
+                        />
+                        <div className="absolute inset-0 bg-black/40 group-hover:bg-black/50 transition-colors flex items-center justify-center">
+                          <span className="text-white font-medium">{category.name}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </NavigationMenuContent>
+              </NavigationMenuItem>
+
+              <NavigationMenuItem>
+                <NavigationMenuLink href="#" className="text-purple-600 hover:text-pink-500 flex items-center gap-2">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-4 w-4"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+                    />
+                  </svg>
+                  Office Stationery
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+
+              <NavigationMenuItem>
+                <NavigationMenuLink href="#" className="text-purple-600 hover:text-pink-500 flex items-center gap-2">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-4 w-4"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"
+                    />
+                  </svg>
+                  Packing Supplies
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+
+              <NavigationMenuItem>
+                <NavigationMenuLink href="#" className="text-purple-600 hover:text-pink-500 flex items-center gap-2">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-4 w-4"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+                    />
+                  </svg>
+                  Craft Materials
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+            </NavigationMenuList>
+          </NavigationMenu>
+        </div>
+      </nav>
+    </>
+  )
+}
+
