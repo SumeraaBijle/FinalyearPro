@@ -26,7 +26,24 @@ export default function AmbikaNoveltySite() {
           <p className="text-center text-gray-700 mb-8 text-lg">
             Discover our newest stationery and gift items!
           </p>
-
+{/* Enhanced Limited Time Offer Banner */}
+<section className="mb-16 backdrop-blur-xl bg-gradient-to-r from-yellow-100/70 via-orange-100/70 to-pink-100/70 p-12 rounded-2xl border border-yellow-200/50 shadow-xl transform hover:scale-[1.02] transition-transform duration-300">
+  <div className="container mx-auto">
+    <div className="flex flex-col md:flex-row items-center justify-between">
+      <div className="text-center md:text-left mb-6 md:mb-0">
+        <h2 className="text-3xl font-bold text-gray-800 mb-2">Limited Time Offer!</h2>
+        <p className="text-lg text-gray-600">Get an extra 10% off on your first purchase</p>
+        <p className="text-sm text-gray-500 mt-2">Use code: WELCOME10</p>
+      </div>
+      <button
+        onClick={() => window.location.href = "http://localhost:3000/products"}
+        className="bg-black text-white px-8 py-3 rounded-full hover:bg-gray-800 transform hover:scale-105 transition-all duration-200"
+      >
+        Shop Now
+      </button>
+    </div>
+  </div>
+</section>
           {/* Enhanced Product cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
             {[

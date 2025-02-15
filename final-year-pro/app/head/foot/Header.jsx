@@ -14,6 +14,13 @@ import {
 } from "@/components/ui/navigation-menu"
 
 export default function Header() {
+  const navigation = [
+    { name: 'Home', href: '/' },
+    { name: 'Products', href: '/products' },
+    { name: 'About', href: '/about' },
+    { name: 'Contact', href: '/contact' },
+  ]
+
   return (
     <>
       <header className="sticky top-0 z-50 backdrop-blur-xl bg-white/60 border-b border-white/20 shadow-lg">
@@ -23,11 +30,7 @@ export default function Header() {
           </Link>
 
           <div className="flex items-center space-x-4">
-            <Input type="search" placeholder="Search..." className="w-64" />
-            <Button variant="ghost" size="icon">
-              <Search className="h-5 w-5" />
-              <span className="sr-only">Search</span>
-            </Button>
+            
             <Link href="/cart" passHref>
             <Button variant="ghost" size="icon">
               <ShoppingCart className="h-5 w-5" />
@@ -68,25 +71,7 @@ export default function Header() {
           <NavigationMenu className="animate-in">
             <NavigationMenuList className="flex gap-6">
               <NavigationMenuItem>
-                <NavigationMenuTrigger className="bg-transparent hover:bg-purple-100 text-purple-600 group">
-                  <span className="flex items-center gap-2">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-4 w-4"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
-                      />
-                    </svg>
-                    Stationery
-                  </span>
-                </NavigationMenuTrigger>
+                
                 <NavigationMenuContent className="bg-white rounded-xl shadow-lg border border-purple-700">
                   <div className="grid grid-cols-2 gap-4 p-6 w-[500px]">
                     <div className="col-span-2">
@@ -159,57 +144,6 @@ export default function Header() {
                         </li>
                       </ul>
                     </div>
-                  </div>
-                </NavigationMenuContent>
-              </NavigationMenuItem>
-
-              <NavigationMenuItem>
-                <NavigationMenuTrigger className="bg-transparent hover:bg-purple-100 text-purple-600 group">
-                  <span className="flex items-center gap-2">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-4 w-4"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M20 12v6a2 2 0 01-2 2H6a2 2 0 01-2-2v-6M12 2v8m0 0l4-4m-4 4L8 6"
-                      />
-                    </svg>
-                    Gifts
-                  </span>
-                </NavigationMenuTrigger>
-                <NavigationMenuContent className="bg-white rounded-xl shadow-lg border border-gray-200">
-                  <div className="grid grid-cols-3 gap-4 p-6 w-[600px]">
-                    {[
-                      {
-                        name: "Birthday",
-                        image: "https://images.unsplash.com/photo-1513885535751-8b9238bd345a?ixlib=rb-4.0.3",
-                      },
-                      {
-                        name: "Anniversary",
-                        image: "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?ixlib=rb-4.0.3",
-                      },
-                      {
-                        name: "Corporate",
-                        image: "https://images.unsplash.com/photo-1512909006721-3d6018887383?ixlib=rb-4.0.3",
-                      },
-                    ].map((category) => (
-                      <div key={category.name} className="group relative overflow-hidden rounded-lg">
-                        <img
-                          src={category.image || "/placeholder.svg"}
-                          alt={category.name}
-                          className="w-full h-32 object-cover group-hover:scale-110 transition-transform duration-300"
-                        />
-                        <div className="absolute inset-0 bg-black/40 group-hover:bg-black/50 transition-colors flex items-center justify-center">
-                          <span className="text-white font-medium">{category.name}</span>
-                        </div>
-                      </div>
-                    ))}
                   </div>
                 </NavigationMenuContent>
               </NavigationMenuItem>
