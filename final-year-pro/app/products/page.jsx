@@ -1,14 +1,14 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import Image from "next/image"
-import Link from "next/link"
-import { Heart, CheckCircle, AlertCircle, ShoppingCart } from 'lucide-react'
-import { useCart } from "../contexts/cartContext"
-import Header from "../head/foot/Header"
-import Footer from "../head/foot/Footer"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardFooter } from "@/components/ui/card"
+import { useState, useEffect } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { Heart, CheckCircle, AlertCircle, ShoppingCart } from "lucide-react";
+import { useCart } from "../contexts/cartContext";
+import Header from "../head/foot/Header";
+import Footer from "../head/foot/Footer";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -19,67 +19,72 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/AlertDialog"
+} from "@/components/ui/AlertDialog";
 
-const categories = ["Boys", "Girls", "Office Gifting", "Stationery"]
+const categories = ["Gift-items", "Office-essentials", "School-supplies"];
 
 export default function ProductPage() {
-  const [products, setProducts] = useState([])
-  const [filters, setFilters] = useState([])
-  const [sortOrder, setSortOrder] = useState("default")
-  const [wishlistItems, setWishlistItems] = useState([])
-  const { cart, addToCart } = useCart()
-  const [popup, setPopup] = useState({ visible: false, message: "" })
-  const [selectedProduct, setSelectedProduct] = useState(null)
-  const [selectedImage, setSelectedImage] = useState(0)
+  const [products, setProducts] = useState([]);
+  const [filters, setFilters] = useState([]);
+  const [sortOrder, setSortOrder] = useState("default");
+  const [wishlistItems, setWishlistItems] = useState([]);
+  const { cart, addToCart } = useCart();
+  const [popup, setPopup] = useState({ visible: false, message: "" });
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(0);
 
   useEffect(() => {
     fetch("/api/prod_page")
       .then((res) => res.json())
-      .then((data) => setProducts(data.products || []))
-      .catch((error) => console.error("Error fetching products:", error))
-  }, [])
+      .then((data) => {
+        console.log("Fetched products:", data.products); // Debugging
+        setProducts(data.products || []);
+      })
+      .catch((error) => console.error("Error fetching products:", error));
+  }, []);
 
   const handleFilterChange = (category) => {
-    setFilters(category === "All" ? [] : [category])
-  }
+    setFilters(category === "All" ? [] : [category]);
+  };
 
   const toggleWishlist = (product) => {
     setWishlistItems((prev) => {
-      const isInWishlist = prev.some(item => item.id === product.id)
+      const isInWishlist = prev.some((item) => item.id === product.id);
       const newWishlist = isInWishlist
         ? prev.filter((item) => item.id !== product.id)
-        : [...prev, { ...product, stock: "In Stock" }]
-      
+        : [...prev, { ...product, stock: "In Stock" }];
+
       showPopup(
         isInWishlist
           ? "Item removed from your wishlist."
           : "Item added to your wishlist."
-      )
+      );
 
-      return newWishlist
-    })
-  }
+      return newWishlist;
+    });
+  };
 
   const showPopup = (message) => {
-    setPopup({ visible: true, message })
-    setTimeout(() => setPopup({ visible: false, message: "" }), 3000)
-  }
+    setPopup({ visible: true, message });
+    setTimeout(() => setPopup({ visible: false, message: "" }), 3000);
+  };
 
-  const filteredProducts = products.filter((product) => filters.length === 0 || filters.includes(product.category))
+  const filteredProducts = products.filter(
+    (product) => filters.length === 0 || filters.includes(product.category)
+  );
 
   const sortedProducts = [...filteredProducts].sort((a, b) => {
-    if (sortOrder === "priceLowToHigh") return a.price - b.price
-    if (sortOrder === "priceHighToLow") return b.price - a.price
-    return 0
-  })
+    if (sortOrder === "priceLowToHigh") return a.price - b.price;
+    if (sortOrder === "priceHighToLow") return b.price - a.price;
+    return 0;
+  });
 
   const formatPrice = (price) => {
     return new Intl.NumberFormat("en-IN", {
       style: "currency",
       currency: "INR",
-    }).format(price)
-  }
+    }).format(price);
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50 relative">
@@ -97,8 +102,8 @@ export default function ProductPage() {
               <h2 className="text-xl font-bold">{selectedProduct.name}</h2>
               <button
                 onClick={() => {
-                  setSelectedProduct(null)
-                  setSelectedImage(0)
+                  setSelectedProduct(null);
+                  setSelectedImage(0);
                 }}
                 className="text-gray-500 hover:text-gray-700"
               >
@@ -141,9 +146,14 @@ export default function ProductPage() {
                 <p className="text-lg font-bold mb-4">{formatPrice(selectedProduct.price)}</p>
                 <button
                   onClick={() => {
-                    addToCart(selectedProduct)
-                    setSelectedProduct(null)
-                    setSelectedImage(0)
+                    const productWithId = {
+                      ...selectedProduct,
+                      id: selectedProduct.id || `product-${Date.now()}`, // Fallback to a unique id
+                    };
+                    console.log("Adding product from product page:", productWithId); // Debugging
+                    addToCart(productWithId);
+                    setSelectedProduct(null);
+                    setSelectedImage(0);
                   }}
                   className="bg-gradient-to-r from-purple-600 to-pink-600 text-white py-2 px-4 rounded hover:from-purple-700 hover:to-pink-700"
                 >
@@ -211,26 +221,32 @@ export default function ProductPage() {
                 <div className="flex gap-2">
                   <Button
                     className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 text-white"
-                    onClick={() => addToCart(product)}
+                    onClick={() => {
+                      const productWithId = {
+                        ...product,
+                        id: product.id || `product-${Date.now()}`, // Fallback to a unique id
+                      };
+                      console.log("Adding product from product page:", productWithId); // Debugging
+                      addToCart(productWithId);
+                    }}
                     disabled={product.stock === "Out of Stock"}
                   >
                     <ShoppingCart className="w-4 h-4 mr-2" />
                     Add to Cart
                   </Button>
                   <Button
-  variant="outline"
-  size="icon"
-  onClick={() => toggleWishlist(product)}
->
-  <Heart
-    className={`h-5 w-5 ${
-      wishlistItems.some(item => item.id === product.id)
-        ? "fill-current text-red-500"
-        : "text-gray-500"
-    }`}
-  />
-</Button>
-
+                    variant="outline"
+                    size="icon"
+                    onClick={() => toggleWishlist(product)}
+                  >
+                    <Heart
+                      className={`h-5 w-5 ${
+                        wishlistItems.some((item) => item.id === product.id)
+                          ? "fill-current text-red-500"
+                          : "text-gray-500"
+                      }`}
+                    />
+                  </Button>
                 </div>
               </CardFooter>
             </Card>
@@ -239,5 +255,5 @@ export default function ProductPage() {
       </main>
       <Footer />
     </div>
-  )
+  );
 }

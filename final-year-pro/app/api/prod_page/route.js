@@ -21,8 +21,7 @@ export async function GET() {
         message: "Error fetching products",
         error: error.message,
       },
-      { status: 500 },
+      { status: 500 }
     )
   }
 }
-

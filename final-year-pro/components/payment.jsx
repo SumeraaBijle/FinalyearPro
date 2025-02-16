@@ -10,6 +10,9 @@ import Link from "next/link";
 import { Search, ShoppingCart, User } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { useCart } from "/app/contexts/cartContext"; // Adjust the path if necessary
+import Header from "../app/head/foot/Header";
+import Footer from "../app/head/foot/Footer";
+
 
 export default function Payment() {
   const searchParams = useSearchParams();
@@ -87,27 +90,8 @@ export default function Payment() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <header className="bg-white shadow-sm">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <Link href="/" passHref>
-            <h1 className="text-2xl font-bold text-gray-800 cursor-pointer">Ambika Novelty</h1>
-          </Link>
-          <div className="flex items-center space-x-4">
-            <Input type="search" placeholder="Search..." className="w-64" />
-            <Button variant="ghost" size="icon">
-              <Search className="h-5 w-5" />
-            </Button>
-            <Button variant="ghost" size="icon">
-              <ShoppingCart className="h-5 w-5" />
-            </Button>
-            <Link href="/login" passHref>
-              <Button variant="ghost" size="icon">
-                <User className="h-5 w-5" />
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </header>
+      {/* Use the imported Header component */}
+      <Header />
 
       <div className="container mx-auto px-4 py-8 max-w-6xl">
         <div className="grid gap-8 md:grid-cols-2">
@@ -173,6 +157,9 @@ export default function Payment() {
           </div>
         </div>
       </div>
+
+      {/* Use the imported Footer component */}
+      <Footer />
     </div>
   );
 }
