@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation"; // Import useSearchParams
 import Image from "next/image";
 import Link from "next/link";
 import { Heart, CheckCircle, AlertCircle, ShoppingCart } from "lucide-react";
@@ -33,7 +34,12 @@ export default function ProductPage() {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [selectedImage, setSelectedImage] = useState(0);
 
+  // Use useSearchParams to read the category query parameter
+  const searchParams = useSearchParams();
+  const category = searchParams.get("category");
+
   useEffect(() => {
+    // Fetch products
     fetch("/api/prod_page")
       .then((res) => res.json())
       .then((data) => {
@@ -42,6 +48,13 @@ export default function ProductPage() {
       })
       .catch((error) => console.error("Error fetching products:", error));
   }, []);
+
+  // Set the filter based on the category query parameter
+  useEffect(() => {
+    if (category) {
+      setFilters([category]);
+    }
+  }, [category]);
 
   const handleFilterChange = (category) => {
     setFilters(category === "All" ? [] : [category]);

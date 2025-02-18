@@ -1,5 +1,6 @@
 "use client"
 import Header from "../head/foot/Header"
+import Link from "next/link"
 import Footer from "../head/foot/Footer"
 import StationeryGiftChatBot from "@/components/ui/StationeryGiftChatBot"
 import FeaturedProducts from "@/components/ui/FeaturedProducts";
@@ -45,62 +46,72 @@ export default function AmbikaNoveltySite() {
           </div>
         </section>
 
-        
         {/* Enhanced Categories Banner */}
         <section className="mb-16">
-          <h2 className="text-4xl font-bold text-center mb-10">
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-violet-600 via-purple-600 to-pink-600">
-              Shop by Category
-            </span>
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="relative h-80 rounded-2xl overflow-hidden group transform hover:scale-105 transition-transform duration-300 shadow-xl">
-              <img
-                src="https://images.unsplash.com/photo-1497633762265-9d179a990aa6"
-                alt="School Supplies"
-                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
-              />
-              <div className="absolute inset-0 backdrop-blur-sm bg-black/40 flex items-center justify-center group-hover:bg-black/50 transition-colors">
-                <div className="text-center text-white transform translate-y-4 group-hover:translate-y-0 transition-transform">
-                  <h3 className="text-2xl font-bold mb-2">School Supplies</h3>
-                  <button className="backdrop-blur-md bg-white/80 text-black px-6 py-2 rounded-full hover:bg-white transform hover:scale-105 transition-all duration-300">
-                    Shop Now
-                  </button>
-                </div>
-              </div>
-            </div>
-            <div className="relative h-80 rounded-2xl overflow-hidden group transform hover:scale-105 transition-transform duration-300 shadow-xl">
-              <img
-                src="https://images.unsplash.com/photo-1497032628192-86f99bcd76bc"
-                alt="Office Essentials"
-                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
-              />
-              <div className="absolute inset-0 backdrop-blur-sm bg-black/40 flex items-center justify-center group-hover:bg-black/50 transition-colors">
-                <div className="text-center text-white transform translate-y-4 group-hover:translate-y-0 transition-transform">
-                  <h3 className="text-2xl font-bold mb-2">Office Essentials</h3>
-                  <button className="backdrop-blur-md bg-white/80 text-black px-6 py-2 rounded-full hover:bg-white transform hover:scale-105 transition-all duration-300">
-                    Shop Now
-                  </button>
-                </div>
-              </div>
-            </div>
-            <div className="relative h-80 rounded-2xl overflow-hidden group transform hover:scale-105 transition-transform duration-300 shadow-xl">
-              <img
-                src="https://images.unsplash.com/photo-1549465220-1a8b9238cd48"
-                alt="Gift Items"
-                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
-              />
-              <div className="absolute inset-0 backdrop-blur-sm bg-black/40 flex items-center justify-center group-hover:bg-black/50 transition-colors">
-                <div className="text-center text-white transform translate-y-4 group-hover:translate-y-0 transition-transform">
-                  <h3 className="text-2xl font-bold mb-2">Gift Items</h3>
-                  <button className="backdrop-blur-md bg-white/80 text-black px-6 py-2 rounded-full hover:bg-white transform hover:scale-105 transition-all duration-300">
-                    Shop Now
-                  </button>
-                </div>
-              </div>
-            </div>
+  <h2 className="text-4xl font-bold text-center mb-10">
+    <span className="bg-clip-text text-transparent bg-gradient-to-r from-violet-600 via-purple-600 to-pink-600">
+      Shop by Category
+    </span>
+  </h2>
+  <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+    {/* School Supplies */}
+    <Link href="/products?category=School-supplies">
+      <div className="relative h-80 rounded-2xl overflow-hidden group transform hover:scale-105 transition-transform duration-300 shadow-xl cursor-pointer">
+        <img
+          src="https://images.unsplash.com/photo-1497633762265-9d179a990aa6"
+          alt="School Supplies"
+          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+        />
+        <div className="absolute inset-0 backdrop-blur-sm bg-black/40 flex items-center justify-center group-hover:bg-black/50 transition-colors">
+          <div className="text-center text-white transform translate-y-4 group-hover:translate-y-0 transition-transform">
+            <h3 className="text-2xl font-bold mb-2">School Supplies</h3>
+            <button className="backdrop-blur-md bg-white/80 text-black px-6 py-2 rounded-full hover:bg-white transform hover:scale-105 transition-all duration-300">
+              Shop Now
+            </button>
           </div>
-        </section>
+        </div>
+      </div>
+    </Link>
+
+    {/* Office Essentials */}
+    <Link href="/products?category=Office-essentials">
+      <div className="relative h-80 rounded-2xl overflow-hidden group transform hover:scale-105 transition-transform duration-300 shadow-xl cursor-pointer">
+        <img
+          src="https://images.unsplash.com/photo-1497032628192-86f99bcd76bc"
+          alt="Office Essentials"
+          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+        />
+        <div className="absolute inset-0 backdrop-blur-sm bg-black/40 flex items-center justify-center group-hover:bg-black/50 transition-colors">
+          <div className="text-center text-white transform translate-y-4 group-hover:translate-y-0 transition-transform">
+            <h3 className="text-2xl font-bold mb-2">Office Essentials</h3>
+            <button className="backdrop-blur-md bg-white/80 text-black px-6 py-2 rounded-full hover:bg-white transform hover:scale-105 transition-all duration-300">
+              Shop Now
+            </button>
+          </div>
+        </div>
+      </div>
+    </Link>
+
+    {/* Gift Items */}
+    <Link href="/products?category=Gift-items">
+      <div className="relative h-80 rounded-2xl overflow-hidden group transform hover:scale-105 transition-transform duration-300 shadow-xl cursor-pointer">
+        <img
+          src="https://images.unsplash.com/photo-1549465220-1a8b9238cd48"
+          alt="Gift Items"
+          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+        />
+        <div className="absolute inset-0 backdrop-blur-sm bg-black/40 flex items-center justify-center group-hover:bg-black/50 transition-colors">
+          <div className="text-center text-white transform translate-y-4 group-hover:translate-y-0 transition-transform">
+            <h3 className="text-2xl font-bold mb-2">Gift Items</h3>
+            <button className="backdrop-blur-md bg-white/80 text-black px-6 py-2 rounded-full hover:bg-white transform hover:scale-105 transition-all duration-300">
+              Shop Now
+            </button>
+          </div>
+        </div>
+      </div>
+    </Link>
+  </div>
+</section>
 
         {/* Enhanced Featured Collection */}
         <section className="mb-16">

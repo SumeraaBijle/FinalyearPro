@@ -14,6 +14,8 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/AlertDialog";
+import Footer from "@/app/head/foot/Footer";
+import Header from "@/app/head/foot/Header";
 
 interface WishlistItem {
   id: number;
@@ -114,6 +116,8 @@ const WishlistPage = () => {
           </div>
         )}
       </main>
+      {/* Add the Footer component here */}
+      <Footer />
     </div>
   );
 };
