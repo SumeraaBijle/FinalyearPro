@@ -272,29 +272,23 @@ export default function UserDashboard() {
                 <div className={styles.section}>
                   <div className={styles.sectionHeader}>
                     <h2>Order History</h2>
-                    <div className={styles.orderFilters}>
-                      <select className={styles.filterSelect}>
-                        <option>All Orders</option>
-                        <option>Recent Orders</option>
-                        <option>Past Orders</option>
-                      </select>
-                    </div>
                   </div>
                   <div className={styles.ordersList}>
-                    <motion.div className={styles.emptyState} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-                      <FiShoppingBag size={64} />
-                      <h3>No Orders Yet</h3>
-                      <p>Start shopping to see your orders here</p>
-                      <Link href="/products">
-                        <motion.button
-                          className={styles.primaryButton}
-                          whileHover={{ scale: 1.05 }}
-                          whileTap={{ scale: 0.95 }}
-                        >
-                          Browse Products
-                        </motion.button>
-                      </Link>
-                    </motion.div>
+                  <motion.div className={styles.emptyState} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+  <FiShoppingBag size={64} />
+  <h3>No Orders Yet</h3>
+  <p>Start shopping to see your orders here</p>
+  <Link href="/products">
+    <motion.button
+      className={styles.primaryButton}
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
+    >
+      Browse Products
+    </motion.button>
+  </Link>
+</motion.div>
+
                   </div>
                 </div>
               )}

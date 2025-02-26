@@ -10,17 +10,6 @@ import Header from "../head/foot/Header";
 import Footer from "../head/foot/Footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/AlertDialog";
 
 const categories = ["Gift-items", "Office-essentials", "School-supplies"];
 

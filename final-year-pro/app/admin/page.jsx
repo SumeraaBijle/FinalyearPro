@@ -1,16 +1,16 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { Plus } from "lucide-react"
-import Header from "../head/foot/Header"
-import Footer from "../head/foot/Footer"
-import { useRouter } from "next/navigation"
+import { useState, useEffect } from "react";
+import { Plus } from "lucide-react";
+import Header from "../head/foot/Header";
+import Footer from "../head/foot/Footer";
+import { useRouter } from "next/navigation";
 
 export default function AdminDashboard() {
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [error, setError] = useState("")
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [productData, setProductData] = useState({
     name: "",
     description: "",
@@ -18,76 +18,103 @@ export default function AdminDashboard() {
     quantity: "",
     category: "",
     image: null,
-  })
-  const [imagePreview, setImagePreview] = useState(null)
-  const [isLoggingOut, setIsLoggingOut] = useState(false)
-  const [products, setProducts] = useState([])
-  const [users, setUsers] = useState([])
-  const router = useRouter()
-  const [isEditing, setIsEditing] = useState(false)
-  const [editingProduct, setEditingProduct] = useState(null)
-  const [formTitle, setFormTitle] = useState("Add New Product")
-  const [submitButtonText, setSubmitButtonText] = useState("Add Product")
-
-  const [orders] = useState([
-    { id: 101, user: "John Doe", status: "Pending" },
-    { id: 102, user: "Jane Smith", status: "Delivered" },
-  ])
+  });
+  const [imagePreview, setImagePreview] = useState(null);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const [products, setProducts] = useState([]);
+  const [users, setUsers] = useState([]);
+  const [orders, setOrders] = useState([]); // Add orders state
+  const router = useRouter();
+  const [isEditing, setIsEditing] = useState(false);
+  const [editingProduct, setEditingProduct] = useState(null);
+  const [formTitle, setFormTitle] = useState("Add New Product");
+  const [submitButtonText, setSubmitButtonText] = useState("Add Product");
 
   useEffect(() => {
-    const loggedIn = localStorage.getItem("isAdminLoggedIn") === "true"
-    setIsLoggedIn(loggedIn)
+    const loggedIn = localStorage.getItem("isAdminLoggedIn") === "true";
+    setIsLoggedIn(loggedIn);
     if (loggedIn) {
-      fetchUsers()
-      fetchProducts()
+      fetchUsers();
+      fetchProducts();
+      fetchOrders(); // Fetch orders
     }
-  }, [])
+  }, []);
 
   const fetchUsers = async () => {
     try {
-      const response = await fetch("/api/users")
-      const data = await response.json()
+      const response = await fetch("/api/users");
+      const data = await response.json();
       if (data.users) {
-        setUsers(data.users)
+        setUsers(data.users);
       }
     } catch (error) {
-      console.error("Error fetching users:", error)
+      console.error("Error fetching users:", error);
     }
-  }
+  };
 
   const fetchProducts = async () => {
     try {
-      const response = await fetch("/api/products")
-      const data = await response.json()
+      const response = await fetch("/api/products");
+      const data = await response.json();
       if (data.products) {
-        setProducts(data.products)
+        setProducts(data.products);
       }
     } catch (error) {
-      console.error("Error fetching products:", error)
+      console.error("Error fetching products:", error);
     }
-  }
+  };
+
+  const fetchOrders = async () => {
+    try {
+      const response = await fetch("/api/orders");
+  
+      // Check if response is OK (200-299)
+      if (!response.ok) {
+        console.error("API Error:", response.status, response.statusText);
+        return;
+      }
+  
+      // Check if response has content before parsing JSON
+      const text = await response.text();
+      if (!text) {
+        console.warn("Empty response from API");
+        return;
+      }
+  
+      // Parse JSON safely
+      const data = JSON.parse(text);
+  
+      if (data.orders) {
+        setOrders(data.orders);
+      }
+    } catch (error) {
+      console.error("Error fetching orders:", error);
+    }
+  };
+  
 
   const handleLogin = (e) => {
-    e.preventDefault()
+    e.preventDefault();
     if (email === "admin@gmail.com" && password === "admin") {
-      setIsLoggedIn(true)
-      localStorage.setItem("isAdminLoggedIn", "true")
-      setError("")
+      setIsLoggedIn(true);
+      localStorage.setItem("isAdminLoggedIn", "true");
+      setError("");
     } else {
-      setError("Invalid credentials")
+      setError("Invalid credentials");
     }
-  }
+  };
 
   const handleImageChange = (file) => {
     if (file) {
-      setProductData({ ...productData, image: file })
-      const previewUrl = URL.createObjectURL(file)
-      setImagePreview(previewUrl)
+      setProductData({ ...productData, image: file });
+      const previewUrl = URL.createObjectURL(file);
+      setImagePreview(previewUrl);
     }
-  }
+  };
+
   const handleSubmitProduct = async (e) => {
     e.preventDefault();
-  
+
     try {
       const formData = new FormData();
       formData.append("name", productData.name);
@@ -95,23 +122,16 @@ export default function AdminDashboard() {
       formData.append("price", productData.price);
       formData.append("quantity", productData.quantity);
       formData.append("category", productData.category);
-  
+
       // Append image if it's a File
       if (productData.image instanceof File) {
         formData.append("image", productData.image);
       } else {
         console.warn("Image is not a File. Value:", productData.image);
       }
-  
-      // Debugging: Log FormData entries
-      console.log("FormData Entries:");
-      for (let [key, value] of formData.entries()) {
-        console.log(key, value);
-      }
-  
+
       let response;
       if (isEditing && editingProduct) {
-        // Ensure ID is passed as a query parameter
         response = await fetch(`/api/products?id=${editingProduct._id}`, {
           method: "PUT",
           body: formData,
@@ -122,14 +142,14 @@ export default function AdminDashboard() {
           body: formData,
         });
       }
-  
+
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.error || "Failed to process product");
       }
-  
+
       alert(isEditing ? "Product updated successfully" : "Product added successfully");
-  
+
       // Reset form
       setProductData({
         name: "",
@@ -139,7 +159,7 @@ export default function AdminDashboard() {
         category: "",
         image: null,
       });
-  
+
       setImagePreview(null);
       fetchProducts();
       setIsEditing(false);
@@ -151,11 +171,10 @@ export default function AdminDashboard() {
       alert("Failed to process product: " + error.message);
     }
   };
-  
-  
+
   const handleEditProduct = (product) => {
-    setIsEditing(true)
-    setEditingProduct(product)
+    setIsEditing(true);
+    setEditingProduct(product);
     setProductData({
       name: product.name,
       description: product.description,
@@ -163,43 +182,43 @@ export default function AdminDashboard() {
       quantity: product.quantity.toString(),
       category: product.category,
       image: null,
-    })
-    setImagePreview(product.image)
-    setFormTitle("Edit Product")
-    setSubmitButtonText("Update Product")
-  }
+    });
+    setImagePreview(product.image);
+    setFormTitle("Edit Product");
+    setSubmitButtonText("Update Product");
+  };
 
   const handleDeleteProduct = async (productId) => {
     if (window.confirm("Are you sure you want to delete this product?")) {
       try {
         const response = await fetch(`/api/products?id=${productId}`, {
           method: "DELETE",
-        })
+        });
 
         if (!response.ok) {
-          const errorData = await response.json()
-          throw new Error(errorData.message || "Failed to delete product")
+          const errorData = await response.json();
+          throw new Error(errorData.message || "Failed to delete product");
         }
 
-        alert("Product deleted successfully")
-        fetchProducts()
+        alert("Product deleted successfully");
+        fetchProducts();
       } catch (error) {
-        console.error("Error deleting product:", error)
-        alert("Failed to delete product: " + error.message)
+        console.error("Error deleting product:", error);
+        alert("Failed to delete product: " + error.message);
       }
     }
-  }
+  };
 
   const handleLogout = () => {
-    setIsLoggingOut(true)
+    setIsLoggingOut(true);
     setTimeout(() => {
-      setIsLoggedIn(false)
-      localStorage.removeItem("isAdminLoggedIn")
-      setIsLoggingOut(false)
-      setEmail("")
-      setPassword("")
-    }, 1000)
-  }
+      setIsLoggedIn(false);
+      localStorage.removeItem("isAdminLoggedIn");
+      setIsLoggingOut(false);
+      setEmail("");
+      setPassword("");
+    }, 1000);
+  };
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -297,17 +316,37 @@ export default function AdminDashboard() {
                 <table className="min-w-full divide-y divide-gray-200">
                   <thead>
                     <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">ID</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">User</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Order ID</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Customer</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Products</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Total Amount</th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200">
                     {orders.map((order) => (
-                      <tr key={order.id}>
-                        <td className="px-6 py-4">{order.id}</td>
-                        <td className="px-6 py-4">{order.user}</td>
-                        <td className="px-6 py-4">{order.status}</td>
+                      <tr key={order._id}>
+                        <td className="px-6 py-4">#{order._id.substring(order._id.length - 6)}</td>
+                        <td className="px-6 py-4">
+                          <div>
+                            <p>{order.customer.name}</p>
+                            <p>{order.customer.email}</p>
+                            <p>{order.customer.phone}</p>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4">
+                          {order.products.map((product) => (
+                            <div key={product.productId}>
+                              <p>{product.name} (Qty: {product.quantity})</p>
+                            </div>
+                          ))}
+                        </td>
+                        <td className="px-6 py-4">₹{order.totalAmount}</td>
+                        <td className="px-6 py-4">
+                          <span className="px-2 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm">
+                            {order.status}
+                          </span>
+                        </td>
                       </tr>
                     ))}
                   </tbody>

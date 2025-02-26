@@ -347,10 +347,12 @@
 }
 
 .emptyState {
+    display: grid;
+    place-items: center;
     text-align: center;
-    padding: 4rem 2rem;
-    color: #64748b;
-}
+    height: 100%;
+  }
+  
 
 .emptyState svg {
     color: #4a90e2;
