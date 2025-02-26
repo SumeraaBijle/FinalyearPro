@@ -371,6 +371,73 @@
     transition: all 0.3s ease;
 }
 
+.orderCard {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 16px;
+    margin-bottom: 16px;
+  }
+  
+  .orderHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+  
+  .orderStatus {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+  }
+  
+  .orderStatus.cancelled {
+    background: #ffebee;
+    color: #c62828;
+  }
+  
+  .orderDetails {
+    margin-bottom: 12px;
+  }
+  
+  .orderDetails p {
+    margin: 4px 0;
+    font-size: 14px;
+  }
+  
+  .orderProducts {
+    margin-bottom: 12px;
+  }
+  
+  .orderProducts h4 {
+    margin-bottom: 8px;
+    font-size: 16px;
+  }
+  
+  .productItem {
+    margin-bottom: 4px;
+    font-size: 14px;
+  }
+  
+  .cancelButton {
+    background: #ffebee;
+    color: #c62828;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+  }
+  
+  .cancelButton:hover {
+    background: #ffcdd2;
+  }
+
 .primaryButton:hover {
     background: #357abd;
     transform: translateY(-2px);

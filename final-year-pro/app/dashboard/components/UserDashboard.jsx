@@ -1,26 +1,27 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { signOut, useSession } from "next-auth/react"
-import { motion, AnimatePresence } from "framer-motion"
-import { FiUser, FiShoppingBag, FiSettings, FiLogOut, FiEdit2, FiBell, FiPhone, FiMapPin } from "react-icons/fi"
-import Header from "@/app/aboutus/Header"
-import styles from "../../../styles/UserDashboard.module.css"
-import Link from "next/link"
+import { useState, useEffect } from "react";
+import { signOut, useSession } from "next-auth/react";
+import { motion, AnimatePresence } from "framer-motion";
+import { FiUser, FiShoppingBag, FiSettings, FiLogOut, FiEdit2, FiBell, FiPhone, FiMapPin, FiXCircle } from "react-icons/fi";
+import Header from "@/app/aboutus/Header";
+import styles from "../../../styles/UserDashboard.module.css";
+import Link from "next/link";
 
 export default function UserDashboard() {
-  const { data: session, status, update } = useSession()
-  const [activeTab, setActiveTab] = useState("profile")
-  const [isLoading, setIsLoading] = useState(false)
-  const [isEditing, setIsEditing] = useState(false)
-  const [notifications, setNotifications] = useState(true)
-  const [orderUpdates, setOrderUpdates] = useState(true)
+  const { data: session, status, update } = useSession();
+  const [activeTab, setActiveTab] = useState("profile");
+  const [isLoading, setIsLoading] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [notifications, setNotifications] = useState(true);
+  const [orderUpdates, setOrderUpdates] = useState(true);
   const [profileData, setProfileData] = useState({
     name: "",
     phone: "",
     address: "",
-  })
-  const [updateStatus, setUpdateStatus] = useState("")
+  });
+  const [updateStatus, setUpdateStatus] = useState("");
+  const [orders, setOrders] = useState([]); // Add state for orders
 
   useEffect(() => {
     if (session?.user) {
@@ -28,22 +29,65 @@ export default function UserDashboard() {
         name: session.user.name || "",
         phone: session.user.phone || "",
         address: session.user.address || "",
-      })
+      });
     }
-  }, [session])
+  }, [session]);
+
+  // Fetch orders when the "orders" tab is active
+  useEffect(() => {
+    if (activeTab === "orders" && session?.user?.email) {
+      fetchOrders();
+    }
+  }, [activeTab, session]);
+
+  const fetchOrders = async () => {
+    try {
+      const response = await fetch(`/api/orders?email=${session.user.email}`);
+      if (!response.ok) {
+        throw new Error("Failed to fetch orders");
+      }
+      const data = await response.json();
+      setOrders(data.orders);
+    } catch (error) {
+      console.error("Error fetching orders:", error);
+      alert("Failed to fetch orders: " + error.message);
+    }
+  };
+
+  const handleCancelOrder = async (orderId) => {
+    if (window.confirm("Are you sure you want to cancel this order?")) {
+      try {
+        console.log("Cancelling order:", orderId); // Debugging
+        const response = await fetch(`/api/orders?id=${orderId}`, {
+          method: "DELETE",
+        });
+  
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.message || "Failed to cancel order");
+        }
+  
+        alert("Order cancelled successfully");
+        fetchOrders(); // Refresh the orders list
+      } catch (error) {
+        console.error("Error cancelling order:", error);
+        alert("Failed to cancel order: " + error.message);
+      }
+    }
+  };
 
   const handleSignOut = async () => {
-    setIsLoading(true)
-    await signOut({ callbackUrl: "/" })
-  }
+    setIsLoading(true);
+    await signOut({ callbackUrl: "/" });
+  };
 
   const handleProfileUpdate = async () => {
     try {
-      setUpdateStatus("")
+      setUpdateStatus("");
 
       if (!profileData.phone || !profileData.address) {
-        setUpdateStatus("Phone number and address are required")
-        return
+        setUpdateStatus("Phone number and address are required");
+        return;
       }
 
       const response = await fetch("/api/user/update", {
@@ -56,19 +100,19 @@ export default function UserDashboard() {
           phone: profileData.phone,
           address: profileData.address,
         }),
-      })
+      });
 
       if (!response.ok) {
-        const errorText = await response.text()
-        console.error("Server response:", errorText)
-        throw new Error(`HTTP error! status: ${response.status}`)
+        const errorText = await response.text();
+        console.error("Server response:", errorText);
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      const data = await response.json()
+      const data = await response.json();
 
       if (data.success) {
-        setUpdateStatus("Profile updated successfully")
-        setIsEditing(false)
+        setUpdateStatus("Profile updated successfully");
+        setIsEditing(false);
 
         // Update the session
         await update({
@@ -78,34 +122,34 @@ export default function UserDashboard() {
             phone: profileData.phone,
             address: profileData.address,
           },
-        })
+        });
       } else {
-        setUpdateStatus(data.message || "Failed to update profile")
+        setUpdateStatus(data.message || "Failed to update profile");
       }
     } catch (error) {
-      console.error("Error updating profile:", error)
-      setUpdateStatus("Error connecting to server. Please try again.")
+      console.error("Error updating profile:", error);
+      setUpdateStatus("Error connecting to server. Please try again.");
     }
-  }
+  };
 
   const tabs = [
     { id: "profile", label: "Profile", icon: <FiUser /> },
     { id: "orders", label: "Order History", icon: <FiShoppingBag /> },
     { id: "settings", label: "Settings", icon: <FiSettings /> },
-  ]
+  ];
 
   const fadeInUp = {
     initial: { opacity: 0, y: 20 },
     animate: { opacity: 1, y: 0 },
     exit: { opacity: 0, y: -20 },
-  }
+  };
 
   if (status === "loading") {
-    return <div>Loading...</div>
+    return <div>Loading...</div>;
   }
 
   if (status === "unauthenticated") {
-    return <div>Access Denied</div>
+    return <div>Access Denied</div>;
   }
 
   return (
@@ -129,7 +173,7 @@ export default function UserDashboard() {
               <p className={styles.userEmail}>{session?.user?.email}</p>
               <div className={styles.userStats}>
                 <div className={styles.statItem}>
-                  <span className={styles.statNumber}>0</span>
+                  <span className={styles.statNumber}>{orders.length}</span>
                   <span className={styles.statLabel}>Orders</span>
                 </div>
                 <div className={styles.statItem}>
@@ -251,7 +295,7 @@ export default function UserDashboard() {
                         <div className={styles.statCard}>
                           <FiShoppingBag className={styles.statIcon} />
                           <div className={styles.statInfo}>
-                            <span className={styles.statValue}>0</span>
+                            <span className={styles.statValue}>{orders.length}</span>
                             <span className={styles.statLabel}>Total Orders</span>
                           </div>
                         </div>
@@ -274,21 +318,56 @@ export default function UserDashboard() {
                     <h2>Order History</h2>
                   </div>
                   <div className={styles.ordersList}>
-                  <motion.div className={styles.emptyState} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-  <FiShoppingBag size={64} />
-  <h3>No Orders Yet</h3>
-  <p>Start shopping to see your orders here</p>
-  <Link href="/products">
-    <motion.button
-      className={styles.primaryButton}
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.95 }}
-    >
-      Browse Products
-    </motion.button>
-  </Link>
-</motion.div>
-
+                    {orders.length === 0 ? (
+                      <motion.div className={styles.emptyState} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+                        <FiShoppingBag size={64} />
+                        <h3>No Orders Yet</h3>
+                        <p>Start shopping to see your orders here</p>
+                        <Link href="/products">
+                          <motion.button
+                            className={styles.primaryButton}
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                          >
+                            Browse Products
+                          </motion.button>
+                        </Link>
+                      </motion.div>
+                    ) : (
+                      <div className={styles.orderGrid}>
+                        {orders.map((order) => (
+                          <div key={order._id} className={styles.orderCard}>
+                            <div className={styles.orderHeader}>
+                              <h3>Order #{order._id.substring(order._id.length - 6)}</h3>
+                              <span className={`${styles.orderStatus} ${order.status === "Cancelled" ? styles.cancelled : ""}`}>
+                                {order.status}
+                              </span>
+                            </div>
+                            <div className={styles.orderDetails}>
+                              <p><strong>Total:</strong> ₹{order.totalAmount}</p>
+                              <p><strong>Payment Method:</strong> {order.paymentMethod}</p>
+                              <p><strong>Date:</strong> {new Date(order.createdAt).toLocaleDateString()}</p>
+                            </div>
+                            <div className={styles.orderProducts}>
+                              <h4>Products:</h4>
+                              {order.products.map((product) => (
+                                <div key={product.productId} className={styles.productItem}>
+                                  <p>{product.name} (Qty: {product.quantity})</p>
+                                </div>
+                              ))}
+                            </div>
+                            {order.status !== "Cancelled" && (
+                              <button
+                                className={styles.cancelButton}
+                                onClick={() => handleCancelOrder(order._id)}
+                              >
+                                <FiXCircle /> Cancel Order
+                              </button>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </div>
               )}
@@ -338,6 +417,5 @@ export default function UserDashboard() {
         </motion.div>
       </div>
     </>
-  )
+  );
 }
-
