@@ -33,14 +33,7 @@ export default function Footer() {
                   </Link>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-pink-500 hover:underline transition duration-300">
-                    Delivery
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-pink-500 hover:underline transition duration-300">
-                    Privacy Policy
-                  </a>
+                <Link href="/privacy" className="hover:text-pink-500 hover:underline transition duration-300">Privacy Policy</Link>
                 </li>
               </ul>
             </div>
@@ -51,15 +44,15 @@ export default function Footer() {
               <ul className="space-y-3">
                 <li className="flex items-center gap-2">
                   <span className="font-medium">Phone:</span>
-                  <span className="text-pink-500">+1-000-000-0000</span>
+                  <span className="text-pink-500">+91-123-456-7890</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <span className="font-medium">Email:</span>
                   <a
-                    href="mailto:ambikanovelty@gmail.com"
+                    href="mailto:ambikanovelty.biz@gmail.com"
                     className="text-pink-500 hover:underline transition duration-300"
                   >
-                    ambikanovelty@gmail.com
+                    ambikanovelty.biz@gmail.com
                   </a>
                 </li>
                 <li>

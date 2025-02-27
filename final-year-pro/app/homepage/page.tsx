@@ -113,71 +113,7 @@ export default function AmbikaNoveltySite() {
   </div>
 </section>
 
-        {/* Enhanced Featured Collection */}
-        <section className="mb-16">
-          <h2 className="text-4xl font-bold text-center mb-10">
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-violet-600 via-purple-600 to-pink-600">
-              Featured Collection
-            </span>
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {[
-              { 
-                id: 9, 
-                name: "Marvel Avengers Diary", 
-                price: "₹399", 
-                image: "https://images.unsplash.com/photo-1608889825103-eb5ed706fc64?ixlib=rb-4.0.3",
-                description: "Limited Edition Superhero Collection"
-              },
-              { 
-                id: 10, 
-                name: "Birthday Surprise Box", 
-                price: "₹799", 
-                image: "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?ixlib=rb-4.0.3",
-                description: "Curated Gift Box with Premium Items"
-              },
-              { 
-                id: 11, 
-                name: "Parker Premium Set", 
-                price: "₹1299", 
-                image: "https://images.unsplash.com/photo-1583485088034-697b5bc54ccd?ixlib=rb-4.0.3",
-                description: "Luxury Pen & Pencil Collection"
-              },
-              { 
-                id: 12, 
-                name: "Disney Princess Pack", 
-                price: "₹899", 
-                image: "https://images.unsplash.com/photo-1535572290543-960a8046f5af?ixlib=rb-4.0.3",
-                description: "Complete School Stationery Set"
-              },
-            ].map((product) => (
-              <div key={product.id} className="bg-white shadow-lg rounded-xl overflow-hidden transform transition-all duration-300 hover:scale-105 hover:shadow-xl">
-                <div className="relative">
-                  <img
-                    src={product.image}
-                    alt={product.name}
-                    className="w-full h-48 object-cover"
-                  />
-                  <div className="absolute top-2 right-2">
-                    <span className="bg-gradient-to-r from-pink-500 to-violet-500 text-white px-3 py-1 rounded-full text-sm font-medium">
-                      New
-                    </span>
-                  </div>
-                </div>
-                <div className="p-4">
-                  <h3 className="text-lg font-bold text-gray-800">{product.name}</h3>
-                  <p className="text-sm text-gray-600 mb-2">{product.description}</p>
-                  <div className="flex items-center justify-between">
-                    <p className="text-lg font-bold text-pink-600">{product.price}</p>
-                    <button className="bg-gradient-to-r from-pink-500 to-violet-500 text-white px-4 py-2 rounded-lg hover:from-pink-600 hover:to-violet-600 transition-colors">
-                      Add to Cart
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
+       
 
         {/* Enhanced Limited Time Offer Banner */}
         <section className="mb-16 backdrop-blur-xl bg-gradient-to-r from-yellow-100/70 via-orange-100/70 to-pink-100/70 p-12 rounded-2xl border border-yellow-200/50 shadow-xl transform hover:scale-[1.02] transition-transform duration-300">
