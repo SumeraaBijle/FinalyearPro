@@ -26,7 +26,11 @@ export default function Header() {
       <header className="sticky top-0 z-50 backdrop-blur-xl bg-white/60 border-b border-white/20 shadow-lg">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <Link href="/homepage" passHref>
-            <h1 className="text-2xl font-bold text-gray-800 cursor-pointer">Ambika Novelty</h1>
+            <img 
+              src="/logo.png" 
+              alt="Ambika Novelty" 
+              className="h-20 cursor-pointer ml-[30px]"
+            />
           </Link>
 
           <div className="flex items-center space-x-4">

@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { signOut, useSession } from "next-auth/react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FiUser, FiShoppingBag, FiSettings, FiLogOut, FiEdit2, FiBell, FiPhone, FiMapPin, FiXCircle } from "react-icons/fi";
-import Header from "@/app/aboutus/Header";
+import Header from "@/app/head/foot/Header";
 import styles from "../../../styles/UserDashboard.module.css";
 import Link from "next/link";
 
