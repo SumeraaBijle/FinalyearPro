@@ -33,9 +33,11 @@ export default function Header() {
       />
     </Link>
 
+  <Link href="/homepage" passHref>
     <div className="flex-grow text-center">
   <h1 className="text-4xl font-bold text-purple-700">Ambika Gift and Novelty</h1>
-</div>
+    </div>
+  </Link>
 
 
     <div className="flex items-center space-x-4">
