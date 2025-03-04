@@ -24,44 +24,48 @@ export default function Header() {
   return (
     <>
       <header className="sticky top-0 z-50 backdrop-blur-xl bg-white/60 border-b border-white/20 shadow-lg">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <Link href="/homepage" passHref>
-            <img 
-              src="/logo.png" 
-              alt="Ambika Novelty" 
-              className="h-20 cursor-pointer ml-[30px]"
-            />
-          </Link>
+  <div className="container mx-auto px-4 py-4 flex items-center justify-between">
+    <Link href="/homepage" passHref>
+      <img 
+        src="/logo.png" 
+        alt="Ambika Novelty" 
+        className="h-20 cursor-pointer ml-[30px]"
+      />
+    </Link>
 
-          <div className="flex items-center space-x-4">
-            
-            <Link href="/cart" passHref>
-            <Button variant="ghost" size="icon">
-              <ShoppingCart className="h-5 w-5" />
-              <span className="sr-only">Cart</span>
-            </Button>
-            </Link>
-            <Link href="/login" passHref>
-              <Button variant="ghost" size="icon">
-                <User className="h-5 w-5" />
-                <span className="sr-only">Profile</span>
-              </Button>
-            </Link>
-            <Link href="/wishlist" passHref>
-              <Button variant="ghost" size="icon">
-                <Heart className="h-5 w-5" />
-                <span className="sr-only">Wishlist</span>
-              </Button>
-            </Link>
-            <Link href="/admin" passHref>
-              <Button variant="ghost" size="icon">
-                <Shield className="h-5 w-5 text-red-600" />
-                <span className="sr-only">Admin Page</span>
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </header>
+    <div className="flex-grow text-center">
+  <h1 className="text-4xl font-bold text-purple-700">Ambika Gift and Novelty</h1>
+</div>
+
+
+    <div className="flex items-center space-x-4">
+      <Link href="/cart" passHref>
+        <Button variant="ghost" size="icon">
+          <ShoppingCart className="h-5 w-5" />
+          <span className="sr-only">Cart</span>
+        </Button>
+      </Link>
+      <Link href="/login" passHref>
+        <Button variant="ghost" size="icon">
+          <User className="h-5 w-5" />
+          <span className="sr-only">Profile</span>
+        </Button>
+      </Link>
+      <Link href="/wishlist" passHref>
+        <Button variant="ghost" size="icon">
+          <Heart className="h-5 w-5" />
+          <span className="sr-only">Wishlist</span>
+        </Button>
+      </Link>
+      <Link href="/admin" passHref>
+        <Button variant="ghost" size="icon">
+          <Shield className="h-5 w-5 text-red-600" />
+          <span className="sr-only">Admin Page</span>
+        </Button>
+      </Link>
+    </div>
+  </div>
+</header>
 
       <nav className="relative backdrop-blur-xl bg-white/50 border-b border-white/20 shadow-md">
         <div
