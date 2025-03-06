@@ -49,7 +49,7 @@ export default function Header() {
     <div className="flex items-center space-x-4">
       <div className="relative">
         <Link href="/cart">
-          <ShoppingCart className="h-6 w-6" />
+          <ShoppingCart className="h-5 w-5" />
           {cartItemCount > 0 && (
             <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
               {cartItemCount}
@@ -59,7 +59,7 @@ export default function Header() {
       </div>
       <Link href="/login" passHref>
         <Button variant="ghost" size="icon">
-          <User className="h-5 w-5" />
+          <User className="h-6 w-6" />
           <span className="sr-only">Profile</span>
         </Button>
       </Link>
