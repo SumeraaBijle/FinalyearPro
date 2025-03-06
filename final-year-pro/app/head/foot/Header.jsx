@@ -1,6 +1,7 @@
 "use client"
 import { Search, ShoppingCart, User, Heart, Shield } from "lucide-react"
 import Link from "next/link"
+import { useCart } from "../../contexts/cartContext"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -14,6 +15,11 @@ import {
 } from "@/components/ui/navigation-menu"
 
 export default function Header() {
+  const { cart } = useCart();
+  
+  // Calculate total items in cart
+  const cartItemCount = cart.reduce((total, item) => total + (item.quantity || 1), 0);
+
   const navigation = [
     { name: 'Home', href: '/' },
     { name: 'Products', href: '/products' },
@@ -41,12 +47,16 @@ export default function Header() {
 
 
     <div className="flex items-center space-x-4">
-      <Link href="/cart" passHref>
-        <Button variant="ghost" size="icon">
-          <ShoppingCart className="h-5 w-5" />
-          <span className="sr-only">Cart</span>
-        </Button>
-      </Link>
+      <div className="relative">
+        <Link href="/cart">
+          <ShoppingCart className="h-6 w-6" />
+          {cartItemCount > 0 && (
+            <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
+              {cartItemCount}
+            </span>
+          )}
+        </Link>
+      </div>
       <Link href="/login" passHref>
         <Button variant="ghost" size="icon">
           <User className="h-5 w-5" />

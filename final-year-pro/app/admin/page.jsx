@@ -1,10 +1,22 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Plus } from "lucide-react";
+import { Plus, TrendingUp, Users, Package, ShoppingCart } from "lucide-react";
 import Header from "../head/foot/Header";
 import Footer from "../head/foot/Footer";
 import { useRouter } from "next/navigation";
+import {
+  LineChart,
+  Line,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer
+} from 'recharts';
 
 export default function AdminDashboard() {
   const [email, setEmail] = useState("");
@@ -29,6 +41,17 @@ export default function AdminDashboard() {
   const [editingProduct, setEditingProduct] = useState(null);
   const [formTitle, setFormTitle] = useState("Add New Product");
   const [submitButtonText, setSubmitButtonText] = useState("Add Product");
+  const [analytics, setAnalytics] = useState({
+    dailyRevenue: [],
+    topProducts: [],
+    salesByCategory: [],
+    metrics: {
+      totalRevenue: 0,
+      totalOrders: 0,
+      totalUsers: 0,
+      averageOrderValue: 0,
+    }
+  });
 
   useEffect(() => {
     const loggedIn = localStorage.getItem("isAdminLoggedIn") === "true";
@@ -39,6 +62,12 @@ export default function AdminDashboard() {
       fetchOrders(); // Fetch orders
     }
   }, []);
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      calculateAnalytics();
+    }
+  }, [orders, products, users]);
 
   const fetchUsers = async () => {
     try {
@@ -220,6 +249,171 @@ export default function AdminDashboard() {
     }, 1000);
   };
 
+  const calculateDailyRevenue = (orders) => {
+    const last7Days = Array.from({length: 7}, (_, i) => {
+      const d = new Date();
+      d.setDate(d.getDate() - i);
+      return d.toISOString().split('T')[0];
+    }).reverse();
+
+    return last7Days.map(date => ({
+      date,
+      revenue: orders
+        .filter(order => order.createdAt.split('T')[0] === date)
+        .reduce((sum, order) => sum + (parseFloat(order.totalAmount) || 0), 0)
+        .toFixed(2)
+    }));
+  };
+
+  const calculateTopProducts = (orders) => {
+    const productSales = {};
+    orders.forEach(order => {
+      order.products.forEach(product => {
+        if (!productSales[product.productId]) {
+          productSales[product.productId] = {
+            name: product.name,
+            quantity: 0,
+            revenue: 0
+          };
+        }
+        productSales[product.productId].quantity += product.quantity;
+        productSales[product.productId].revenue += product.price * product.quantity;
+      });
+    });
+    return Object.values(productSales)
+      .sort((a, b) => b.revenue - a.revenue)
+      .slice(0, 5);
+  };
+
+  const calculateSalesByCategory = (products, orders) => {
+    const categorySales = {};
+    orders.forEach(order => {
+      order.products.forEach(orderProduct => {
+        const product = products.find(p => p._id === orderProduct.productId);
+        if (product) {
+          if (!categorySales[product.category]) {
+            categorySales[product.category] = 0;
+          }
+          categorySales[product.category] += orderProduct.quantity;
+        }
+      });
+    });
+    return Object.entries(categorySales).map(([category, sales]) => ({
+      category,
+      sales
+    }));
+  };
+
+  const calculateAnalytics = () => {
+    // Calculate total revenue with proper decimal handling
+    const totalRevenue = orders.reduce((sum, order) => {
+      const amount = parseFloat(order.totalAmount) || 0;
+      return sum + amount;
+    }, 0);
+
+    // Calculate average order value with proper decimal handling
+    const averageOrderValue = orders.length > 0 
+      ? totalRevenue / orders.length 
+      : 0;
+
+    // Calculate daily revenue for the past 7 days
+    const dailyRevenue = calculateDailyRevenue(orders);
+
+    // Calculate top selling products
+    const topProducts = calculateTopProducts(orders);
+
+    // Calculate sales by category
+    const salesByCategory = calculateSalesByCategory(products, orders);
+
+    setAnalytics({
+      dailyRevenue,
+      topProducts,
+      salesByCategory,
+      metrics: {
+        totalRevenue: Number(totalRevenue.toFixed(2)),
+        totalOrders: orders.length,
+        totalUsers: users.length,
+        averageOrderValue: Number(averageOrderValue.toFixed(2)),
+      }
+    });
+  };
+
+  const renderDashboardMetrics = () => (
+    <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+      <div className="bg-white p-6 rounded-lg shadow-md">
+        <div className="flex items-center">
+          <TrendingUp className="h-8 w-8 text-green-500" />
+          <div className="ml-4">
+            <p className="text-gray-500 text-sm">Total Revenue</p>
+            <h3 className="text-2xl font-bold">₹{analytics.metrics.totalRevenue.toLocaleString()}</h3>
+          </div>
+        </div>
+      </div>
+      
+      <div className="bg-white p-6 rounded-lg shadow-md">
+        <div className="flex items-center">
+          <ShoppingCart className="h-8 w-8 text-blue-500" />
+          <div className="ml-4">
+            <p className="text-gray-500 text-sm">Total Orders</p>
+            <h3 className="text-2xl font-bold">{analytics.metrics.totalOrders}</h3>
+          </div>
+        </div>
+      </div>
+
+      <div className="bg-white p-6 rounded-lg shadow-md">
+        <div className="flex items-center">
+          <Users className="h-8 w-8 text-purple-500" />
+          <div className="ml-4">
+            <p className="text-gray-500 text-sm">Total Users</p>
+            <h3 className="text-2xl font-bold">{analytics.metrics.totalUsers}</h3>
+          </div>
+        </div>
+      </div>
+
+      <div className="bg-white p-6 rounded-lg shadow-md">
+        <div className="flex items-center">
+          <Package className="h-8 w-8 text-orange-500" />
+          <div className="ml-4">
+            <p className="text-gray-500 text-sm">Avg. Order Value</p>
+            <h3 className="text-2xl font-bold">₹{analytics.metrics.averageOrderValue.toFixed(2)}</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderAnalyticsCharts = () => (
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+      <div className="bg-white p-6 rounded-lg shadow-md">
+        <h3 className="text-lg font-semibold mb-4">Revenue Trend</h3>
+        <ResponsiveContainer width="100%" height={300}>
+          <LineChart data={analytics.dailyRevenue}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="date" />
+            <YAxis />
+            <Tooltip />
+            <Legend />
+            <Line type="monotone" dataKey="revenue" stroke="#2563eb" />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
+
+      <div className="bg-white p-6 rounded-lg shadow-md">
+        <h3 className="text-lg font-semibold mb-4">Sales by Category</h3>
+        <ResponsiveContainer width="100%" height={300}>
+          <BarChart data={analytics.salesByCategory}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="category" />
+            <YAxis />
+            <Tooltip />
+            <Legend />
+            <Bar dataKey="sales" fill="#4f46e5" />
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
+    </div>
+  );
+
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
@@ -269,21 +463,20 @@ export default function AdminDashboard() {
             </div>
           </div>
         ) : (
-          <div className="max-w-4xl mx-auto">
-            <h1 className="text-4xl font-bold text-center mb-8">Admin Dashboard</h1>
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-bold">Ambika Novelty</h2>
-              <div className="flex items-center space-x-4">
-                <button
-                  onClick={handleLogout}
-                  disabled={isLoggingOut}
-                  className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 focus:ring-2 focus:ring-red-300 disabled:opacity-50"
-                >
-                  {isLoggingOut ? "Logging out..." : "Logout"}
-                </button>
-              </div>
+          <div className="max-w-7xl mx-auto">
+            <div className="flex justify-between items-center mb-8">
+              <h1 className="text-3xl font-bold">Admin Dashboard</h1>
+              <button
+                onClick={handleLogout}
+                className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
+              >
+                {isLoggingOut ? "Logging out..." : "Logout"}
+              </button>
             </div>
 
+            {renderDashboardMetrics()}
+            {renderAnalyticsCharts()}
+            
             <div className="bg-white p-6 rounded-lg shadow-md mb-6">
               <h2 className="text-xl font-semibold mb-4">Users</h2>
               <div className="overflow-x-auto">
