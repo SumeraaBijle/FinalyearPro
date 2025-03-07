@@ -27,10 +27,12 @@ export default function Payment() {
   const [phone, setPhone] = useState("");
   const router = useRouter();
 
+  // Format price in INR
   const formatPrice = (price) => {
     return new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" }).format(price);
   };
 
+  // Load Razorpay SDK dynamically
   const loadRazorpay = () => {
     return new Promise((resolve) => {
       const script = document.createElement("script");
@@ -41,6 +43,7 @@ export default function Payment() {
     });
   };
 
+  // Send email invoice to the customer
   const sendEmailInvoice = async (orderDetails) => {
     try {
       const response = await fetch("/api/send-email", {
@@ -61,6 +64,7 @@ export default function Payment() {
     }
   };
 
+  // Create an order in the database
   const createOrder = async () => {
     const orderDetails = {
       customer: {
@@ -99,6 +103,7 @@ export default function Payment() {
     }
   };
 
+  // Handle checkout based on the selected payment method
   const handleCheckout = async () => {
     if (paymentMethod === "razorpay") {
       const res = await loadRazorpay();
@@ -265,7 +270,6 @@ export default function Payment() {
               </h2>
 
               <RadioGroup defaultValue="razorpay" onValueChange={setPaymentMethod} className="space-y-4">
-
                 <div className="flex items-center space-x-4 border rounded-lg p-4">
                   <RadioGroupItem value="razorpay" id="razorpay" />
                   <Label htmlFor="razorpay">
@@ -287,7 +291,6 @@ export default function Payment() {
         </div>
       </div>
 
-      {/* Use the imported Footer component */}
       <Footer />
     </div>
   );
