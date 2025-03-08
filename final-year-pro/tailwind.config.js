@@ -55,6 +55,10 @@ const config = {
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
       },
+      animation: {
+        bounce: 'bounce 0.5s ease-in-out',
+        ping: 'ping 1s cubic-bezier(0, 0, 0.2, 1)',
+      },
     },
   },
   plugins: [require("tailwindcss-animate")],

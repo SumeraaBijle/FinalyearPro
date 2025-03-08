@@ -22,6 +22,8 @@ export default function ProductPage() {
   const [popup, setPopup] = useState({ visible: false, message: "" });
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [selectedImage, setSelectedImage] = useState(0);
+  const [cartAnimations, setCartAnimations] = useState({});
+  const [productQuantities, setProductQuantities] = useState({});
 
   // Use useSearchParams to read the category query parameter
   const searchParams = useSearchParams();
@@ -86,6 +88,36 @@ export default function ProductPage() {
       style: "currency",
       currency: "INR",
     }).format(price);
+  };
+
+  const handleAddToCart = (product, isIncrement = true) => {
+    const productWithId = {
+      ...product,
+      id: product.id || `product-${Date.now()}`,
+    };
+    
+    // Update quantities
+    setProductQuantities(prev => ({
+      ...prev,
+      [productWithId.id]: (prev[productWithId.id] || 0) + (isIncrement ? 1 : -1)
+    }));
+
+    // Start the animation
+    setCartAnimations(prev => ({
+      ...prev,
+      [productWithId.id]: isIncrement ? '+1' : '-1'
+    }));
+
+    // Add/remove from cart
+    addToCart(productWithId, isIncrement);
+
+    // Reset animation after 1 second
+    setTimeout(() => {
+      setCartAnimations(prev => ({
+        ...prev,
+        [productWithId.id]: false
+      }));
+    }, 1000);
   };
 
   return (
@@ -155,10 +187,9 @@ export default function ProductPage() {
                     onClick={() => {
                       const productWithId = {
                         ...selectedProduct,
-                        id: selectedProduct.id || `product-${Date.now()}`, // Fallback to a unique id
+                        id: selectedProduct.id || `product-${Date.now()}`,
                       };
-                      console.log("Adding product from product page:", productWithId); // Debugging
-                      addToCart(productWithId);
+                      handleAddToCart(productWithId);
                       setSelectedProduct(null);
                       setSelectedImage(0);
                     }}
@@ -175,7 +206,6 @@ export default function ProductPage() {
 
       <Header />
       
-      {/* Main Content */}
       <main className="container mx-auto px-4 py-12">
         {/* Filters Bar */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-12 sticky top-0 bg-white/80 backdrop-blur-sm p-4 rounded-lg shadow-sm">
@@ -216,10 +246,7 @@ export default function ProductPage() {
         {/* Products Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
           {sortedProducts.map((product) => (
-            <Card 
-              key={product.id} 
-              className="group relative overflow-hidden border-0 shadow-lg hover:shadow-xl transition-shadow duration-300"
-            >
+            <Card key={product.id} className="group relative overflow-hidden border-0 shadow-lg hover:shadow-xl transition-shadow duration-300">
               <CardContent className="p-0">
                 <div 
                   className="relative aspect-square cursor-pointer"
@@ -253,21 +280,42 @@ export default function ProductPage() {
                 </div>
 
                 <div className="flex gap-3">
-                  <Button
-                    className="flex-1 bg-purple-600 hover:bg-purple-700 transition-colors"
-                    onClick={() => {
-                      const productWithId = {
-                        ...product,
-                        id: product.id || `product-${Date.now()}`,
-                      };
-                      addToCart(productWithId);
-                    }}
-                    disabled={product.stock === "Out of Stock"}
-                  >
-                    <ShoppingCart className="w-4 h-4 mr-2" />
-                    Add to Cart
-                  </Button>
-
+                  <div className="flex-1 flex items-center gap-2">
+                    {productQuantities[product.id] > 0 ? (
+                      <>
+                        <Button
+                          size="icon"
+                          className="bg-purple-600 hover:bg-purple-700 h-10 w-10 relative"
+                          onClick={() => handleAddToCart(product, false)}
+                        >
+                          -
+                        </Button>
+                        <span className="font-medium">{productQuantities[product.id] || 0}</span>
+                        <Button
+                          size="icon"
+                          className="bg-purple-600 hover:bg-purple-700 h-10 w-10 relative"
+                          onClick={() => handleAddToCart(product)}
+                        >
+                          +
+                        </Button>
+                      </>
+                    ) : (
+                      <Button
+                        className="w-full bg-purple-600 hover:bg-purple-700 transition-colors relative"
+                        onClick={() => handleAddToCart(product)}
+                        disabled={product.stock === "Out of Stock"}
+                      >
+                        <ShoppingCart className="w-4 h-4 mr-2" />
+                        Add to Cart
+                      </Button>
+                    )}
+                    {cartAnimations[product.id] && (
+                      <span className="absolute -top-2 -right-2 bg-pink-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center animate-ping">
+                        {cartAnimations[product.id]}
+                      </span>
+                    )}
+                  </div>
+                  
                   <Button
                     variant="outline"
                     size="icon"

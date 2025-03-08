@@ -64,6 +64,33 @@ export default function Payment() {
     }
   };
 
+  // Add this function after sendEmailInvoice
+  const sendWhatsAppNotification = async (orderDetails) => {
+    try {
+      const response = await fetch("/api/send-whatsapp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          phone,
+          orderDetails: {
+            totalAmount: orderDetails.total,
+            paymentMethod: orderDetails.paymentMethod,
+            customer: {
+              name: `${firstName} ${lastName}`,
+              phone: phone
+            }
+          }
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to send WhatsApp notification");
+      }
+    } catch (error) {
+      console.error("WhatsApp Error:", error);
+    }
+  };
+
   // Create an order in the database
   const createOrder = async () => {
     const orderDetails = {
@@ -94,12 +121,10 @@ export default function Payment() {
         throw new Error("Failed to create order");
       }
 
-      alert("Order created successfully!");
       clearCart();
       router.push("/");
     } catch (error) {
       console.error("Error creating order:", error);
-      alert("Failed to create order: " + error.message);
     }
   };
 
@@ -137,11 +162,13 @@ export default function Payment() {
           name: "Ambika Novelty",
           description: "Thank you for shopping with us!",
           handler: async function (response) {
-            alert("Payment Successful! Payment ID: " + response.razorpay_payment_id);
-            await createOrder(); // Create order in the database
-            sendEmailInvoice({ email, total, paymentMethod, cart });
-            clearCart(); // Clear the cart after successful payment
-            router.push("/"); // Redirect to homepage
+            await createOrder();
+            await Promise.all([
+              sendEmailInvoice({ email, total, paymentMethod, cart }),
+              sendWhatsAppNotification({ email, total, paymentMethod, cart })
+            ]);
+            clearCart();
+            router.push("/");
           },
           prefill: {
             name: `${firstName} ${lastName}`,
@@ -160,14 +187,15 @@ export default function Payment() {
     } else if (paymentMethod === "cash") {
       // Handle Cash on Delivery
       try {
-        await createOrder(); // Create order in the database
-        sendEmailInvoice({ email, total, paymentMethod, cart });
-        alert("Order placed successfully! You will pay upon delivery.");
-        clearCart(); // Clear the cart after successful order
-        router.push("/"); // Redirect to homepage
+        await createOrder();
+        await Promise.all([
+          sendEmailInvoice({ email, total, paymentMethod, cart }),
+          sendWhatsAppNotification({ total, paymentMethod })
+        ]);
+        clearCart();
+        router.push("/");
       } catch (error) {
         console.error("Order Error:", error);
-        alert("Something went wrong. Try again.");
       }
     } else {
       alert("Please select a valid payment method.");
