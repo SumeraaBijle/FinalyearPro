@@ -21,6 +21,7 @@ export async function POST(req) {
     const message = `Thank you for shopping at Ambika Gift and Novelty!
 
 Order Details:
+- Product: ${orderDetails.productName}
 - Total Amount: ₹${orderDetails.totalAmount}
 - Payment Method: ${orderDetails.paymentMethod}
 - Order Status: Confirmed
